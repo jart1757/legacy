@@ -82,7 +82,7 @@ class SaleCreate extends Component
             foreach(\Cart::session(userID())->getContent() as $product){
                 $item = new Item();
                 $item->name = $product->name;
-                $item->price = $product->price;
+                //$item->price = $product->price;
                 $item->qty = $product->quantity;
                 $item->image = $product->associatedModel->imagen;
                 $item->product_id = $product->id;

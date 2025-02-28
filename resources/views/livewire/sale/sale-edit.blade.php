@@ -5,11 +5,11 @@
        <x-slot:cardTools>
 
           <a href="{{route('sales.list')}}" class="btn btn-primary btn-sm mr-2">
-            <i class="fas fa-shopping-cart"></i> Ir a ventas 
+            <i class="fas fa-shopping-cart"></i> Ver Salidas
           </a>
 
           <a href="#" class="btn btn-sm btn-danger {{isset($sale) ? 'disabled' : ''}}" wire:click='clear'>
-            <i class="fas fa-trash"></i> Cancelar venta 
+            <i class="fas fa-trash"></i> Crear Salidas
           </a>
 
        </x-slot>

@@ -84,19 +84,20 @@
                     </tr>                      
                     @endforelse
 
-                    <!-- En la sección donde muestras el total -->
-                <tr>
-                    <td colspan="4"></td>
-                    <td>
-                        <h5>Total:</h5>
-                    </td>
-                    <td>
-                        <!-- Campo de entrada para el total manual -->
-                        <input type="number" wire:model="manualTotal" class="form-control" placeholder="Escribe el total">
-                    </td>
-                    <td></td>
-                </tr>
-
+                    <tr>
+                        <td colspan="4"></td>
+                        <td>
+                            <h5>Total:</h5>
+                        </td>
+                        <td>
+                            <h5>
+                                <span class="badge badge-pill badge-secondary">
+                                    {{money($total)}}
+                                </span>
+                            </h5>
+                        </td>
+                        <td></td>
+                    </tr>
                     <tr>
 
                         <td colspan="7">

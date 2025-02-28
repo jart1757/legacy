@@ -97,7 +97,7 @@ class Inicio extends Component
     }
     // Consulta productos mas vendidos
     public function products_reports($filtraDia=0,$filtrarMes=0){
-        $productsQuery = Item::select('items.id','items.name','items.price','items.image','items.product_id',DB::raw('SUM(items.qty) as total_quantity'))->groupBy('product_id')
+        $productsQuery = Item::select('items.id','items.name','items.image','items.product_id',DB::raw('SUM(items.qty) as total_quantity'))->groupBy('product_id')
         ->whereYear('items.fecha',date("Y"));
 
         if($filtraDia){

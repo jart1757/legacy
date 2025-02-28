@@ -68,7 +68,7 @@
     <table class="" width="100%">
         <tr>
             <td width="25%">
-                <img src="{{public_path().'/'.'storage/'.$shop->image->url}}" width="150px">
+                {{--<img src="{{public_path().'/'.'storage/'.$shop->image->url}}" width="150px">--}}
 
             </td>
             <td width="50%" style="text-align: center">

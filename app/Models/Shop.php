@@ -9,9 +9,11 @@ class Shop extends Model
 {
     use HasFactory;
 
-    // Relacion poliformica image
-    public function image(){
-        return $this->morphOne('App\Models\Image','imageable');
-    }
+    // Definir los atributos que se pueden asignar masivamente
+    protected $fillable = ['name', 'slogan', 'telefono', 'email', 'direccion', 'ciudad'];
 
+    // Relación polimórfica con Image
+    public function image(){
+        return $this->morphOne('App\Models\Image', 'imageable');
+    }
 }

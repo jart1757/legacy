@@ -28,8 +28,8 @@ class ProductComponent extends Component
     public $name;
     public $category_id;
     public $descripcion;
-    public $precio_compra;
-    public $precio_venta;
+    //public $precio_compra;
+    //public $precio_venta;
     public $codigo_barras;
     public $stock=0;
     public $stock_minimo=10;
@@ -37,7 +37,7 @@ class ProductComponent extends Component
     public $active=1;
     public $image;
     public $imageModel;
-    public $manualTotal = 0;
+
     
 
     public function render()
@@ -50,14 +50,16 @@ class ProductComponent extends Component
             ->paginate($this->cant);
 
         return view('livewire.product.product-component',[
-            'products' => $products,
-            'manualTotal' => $this->manualTotal,
+            'products' => $products
         ]);
     }
 
     #[Computed()]
     public function categories(){
         return Category::all();
+
+
+        
     }
 
     public function create(){
@@ -76,8 +78,8 @@ class ProductComponent extends Component
         $rules = [
             'name' => 'required|min:3|max:255|unique:products',
             'descripcion' => 'max:255',
-            'precio_compra' => 'numeric|nullable',
-            'precio_venta' => 'numeric|nullable',
+            //'precio_compra' => 'numeric|nullable',
+            //'precio_venta' => 'numeric|nullable',
             'stock' => 'required|numeric',
             'stock_minimo' => 'numeric|nullable',
             'image' => 'image|max:1024|nullable',
@@ -91,8 +93,8 @@ class ProductComponent extends Component
      
          $product->name = $this->name; 
          $product->descripcion = $this->descripcion;
-         $product->precio_compra = $this->precio_compra;
-         $product->precio_venta = $this->precio_venta;
+         //$product->precio_compra = $this->precio_compra;
+         //$product->precio_venta = $this->precio_venta;
          $product->stock = $this->stock;
          $product->stock_minimo = $this->stock_minimo;
          $product->codigo_barras = $this->codigo_barras;
@@ -120,8 +122,8 @@ class ProductComponent extends Component
         $this->Id = $product->id;
         $this->name = $product->name;
         $this->descripcion = $product->descripcion;
-        $this->precio_compra = $product->precio_compra;
-        $this->precio_venta = $product->precio_venta;        
+        //$this->precio_compra = $product->precio_compra;
+        //$this->precio_venta = $product->precio_venta;        
         $this->stock = $product->stock;
         $this->stock_minimo = $product->stock_minimo;
         $this->imageModel = $product->imagen;
@@ -142,7 +144,7 @@ class ProductComponent extends Component
             'name' => 'required|min:5|max:255|unique:products,id,'.$this->Id,
             'descripcion' => 'max:255',
             'precio_compra' => 'numeric|nullable',
-            'precio_venta' => 'required|numeric',
+            //'precio_venta' => 'required|numeric',
             'stock' => 'required|numeric',
             'stock_minimo' => 'numeric|nullable',
             'image' => 'image|max:1024|nullable',
@@ -154,8 +156,8 @@ class ProductComponent extends Component
 
         $product->name = $this->name;
         $product->descripcion = $this->descripcion;
-        $product->precio_compra = $this->precio_compra;
-        $product->precio_venta = $this->precio_venta;
+        //$product->precio_compra = $this->precio_compra;
+        //$product->precio_venta = $this->precio_venta;
         $product->stock = $this->stock;
         $product->stock_minimo = $this->stock_minimo;
         //$product->image = $this->imageModel;
@@ -203,7 +205,7 @@ class ProductComponent extends Component
 
     // Metodo encargado de la limpieza
     public function clean(){
-        $this->reset(['Id','name','image','descripcion','precio_compra','precio_venta','stock','stock_minimo','codigo_barras','fecha_vencimiento','active','category_id']);
+        $this->reset(['Id','name','image','descripcion','stock','stock_minimo','codigo_barras','fecha_vencimiento','active','category_id']);
         $this->resetErrorBag();
     }
 

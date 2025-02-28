@@ -30,15 +30,7 @@ class Product extends Model
             }
         );
     }
- 
-    protected function precio() : Attribute
-    {
-        return Attribute::make(
-            get: function(){
-                return '<b>$'.number_format($this->attributes['precio_venta'],0,',','.').'</b>'; 
-            }
-        );
-    }
+
    
     protected function activeLabel() : Attribute
     {

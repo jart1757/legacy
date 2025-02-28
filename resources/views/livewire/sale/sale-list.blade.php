@@ -24,7 +24,7 @@
 
 
             <a href="{{route('sales.create')}}" class="btn btn-primary">
-                <i class="fas fa-cart-plus"></i> Crear venta
+                <i class="fas fa-cart-plus"></i> Crear Salida
             </a>
 
         </div>

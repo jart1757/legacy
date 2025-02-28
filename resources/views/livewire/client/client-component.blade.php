@@ -8,11 +8,11 @@
 
        <x-table>
           <x-slot:thead>
-             <th>ID</th>
+
+             <th>Codigo</th>
              <th>Nombre</th>
-             <th>Identificacion</th>
-             <th>Email</th>
-             <th>Telefono</th>
+             <th>Carnet</th>
+             <th>Tipo de cliente</th>
              <th width="3%">...</th>
              <th width="3%">...</th>
              <th width="3%">...</th>
@@ -22,11 +22,10 @@
           @forelse ($clientes as $cliente)
               
              <tr>
-                <td>{{$cliente->id}}</td>
-                <td>{{$cliente->name}}</td>
                 <td>{{$cliente->identificacion}}</td>
-                <td>{{$cliente->email}}</td>
+                <td>{{$cliente->name}}</td>
                 <td>{{$cliente->telefono}}</td>
+                <td>{{$cliente->empresa}}</td>
                 <td>
                     <a href="{{route('clients.show',$cliente)}}" class="btn btn-success btn-sm" title="Ver">
                         <i class="far fa-eye"></i>

@@ -36,6 +36,13 @@
                 </div>
             </div>
         </div>
+        <div class="col-12">
+            <label for="archivo">Archivo Escaneado o Fotografía:</label>
+            <div class="input-group">
+                <input type="file" wire:model="archivo" class="form-control" id="archivo">
+            </div>
+        </div>
+        
     </div>
     
 </div>

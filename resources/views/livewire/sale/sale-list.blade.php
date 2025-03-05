@@ -38,6 +38,8 @@
              <th>Productos</th>
              <th>Articulos</th>
              <th>Fecha</th>
+             <th>Fecha de Ingreso</th>
+             <th>documento</th>
              <th width="3%">...</th>
              <th width="3%">...</th>
              <th width="3%">...</th>
@@ -70,6 +72,16 @@
                     </span>
                 </td>
                 <td>{{$sale->fecha}}</td>
+                <td>
+                    <a href="{{route('sales.invoice',$sale)}}" class="btn bg-navy btn-sm" title="Generar PDF" target="_blank">
+                        <i class="far fa-file-pdf"></i>
+                    </a>
+                </td>
+                <td>
+                    <a href="{{route('sales.invoice',$sale)}}" class="btn bg-navy btn-sm" title="Generar PDF" target="_blank">
+                        <i class="far fa-file-pdf"></i>
+                    </a>
+                </td>
                 <td>
                     <a href="{{route('sales.invoice',$sale)}}" class="btn bg-navy btn-sm" title="Generar PDF" target="_blank">
                         <i class="far fa-file-pdf"></i>

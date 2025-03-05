@@ -26,6 +26,9 @@ class ClientComponent extends Component
     public $email;
     public $empresa;
     public $nit;
+
+    public $clients = [];
+    public $selectedClientId;
     
     public function render()
     {
@@ -131,10 +134,29 @@ class ClientComponent extends Component
         $this->dispatch('msg','Cliente eliminado correctamente.');
     }
     
-
+    public function updatedSearch()
+    {
+        $this->clients = Client::where('name', 'like', '%' . $this->search . '%')
+            ->orWhere('identificacion', 'like', '%' . $this->search . '%')
+            ->orderBy('name', 'asc')
+            ->take(10)
+            ->get();
+    }
+    
+    public function selectClient($clientId)
+    {
+        $client = Client::find($clientId);
+        if ($client) {
+            $this->selectedClientId = $client->id;
+            $this->search = $client->name; // Mostrar el nombre seleccionado en el input
+            $this->clients = []; // Limpiar la lista de sugerencias
+        }
+    }
 
     public function clean(){
         $this->reset(['name','identificacion','telefono','email','empresa','nit']);
         $this->resetErrorBag();
     }
+
+
 }

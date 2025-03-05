@@ -70,7 +70,7 @@ class SaleCreate extends Component
     
         // Obtener el total del carrito
         $total = Cart::getTotal();
-        dd($total);
+       // dd($total);
     
         if ($this->pago < $total) {
             $this->pago = $total;

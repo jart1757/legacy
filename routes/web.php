@@ -16,6 +16,8 @@ use App\Livewire\Client\ClientComponent;
 use App\Livewire\Product\ProductComponent;
 use App\Livewire\Category\CategoryComponent;
 use App\Livewire\Sale\SaleEdit;
+use App\Livewire\Delivery\DeliveryComponent;
+use App\Livewire\Delivery\DeliveryShow;
 
 /*
 |--------------------------------------------------------------------------
@@ -41,6 +43,9 @@ Route::get('/',Inicio::class)->name('home')->middleware(['auth']);
 
 Route::get('/categorias',CategoryComponent::class)->name('categories')->middleware(['auth','admin']);
 Route::get('/categorias/{category}',CategoryShow::class)->name('categories.show')->middleware(['auth','admin']);
+
+Route::get('/entregas', DeliveryComponent::class)->name('deliveries')->middleware(['auth', 'admin']);
+Route::get('/entregas/{delivery}', DeliveryShow::class)->name('deliveries.show')->middleware(['auth', 'admin']);
 
 Route::get('/productos',ProductComponent::class)->name('products')->middleware(['auth','admin']);
 Route::get('/productos/{product}',ProductShow::class)->name('products.show')->middleware(['auth','admin']);

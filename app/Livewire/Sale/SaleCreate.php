@@ -12,11 +12,13 @@ use Livewire\WithPagination;
 use Livewire\Attributes\Title;
 use Livewire\Attributes\Computed;
 use Illuminate\Support\Facades\DB;
+use Livewire\WithFileUploads;
+
 
 #[Title('Ventas')]
 class SaleCreate extends Component
 {
-    use WithPagination;
+    use WithPagination, WithFileUploads;
 
     //Propiedades clase
     public $search='';
@@ -31,6 +33,12 @@ class SaleCreate extends Component
 
     public $totalManual = 0;
 
+
+    // 🔹 PROPIEDADES NUEVAS
+    public $fechaing;
+    public $delivery_id;
+    public $file_path;
+    public $tipo;
 
     public function render()
     {
@@ -86,6 +94,10 @@ class SaleCreate extends Component
             $sale->user_id = userID();
             $sale->client_id = $this->client;
             $sale->fecha = date('Y-m-d');
+            $sale->fechaing = $this->fechaing; // Usar la fecha ingresada por el usuario
+            $sale->delivery_id = $this->delivery; // Asignar el delivery_id ingresado
+            $sale->file_path = $this->file_path; // Asignar el file_path ingresado
+            $sale->tipo = $this->tipo; // Asignar el tipo ingresado
             $sale->save();
     
             // Agregar los items a la venta

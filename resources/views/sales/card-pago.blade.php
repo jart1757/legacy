@@ -13,15 +13,15 @@
     <div class="card-body">
         <div class="row">
             <div class="col-6">
-                <label for="fecha_entrega">Fecha de Entrega:</label>
+                <label for="fechaing">Fecha de Entrega:</label>
                 <div class="input-group">
-                    <input type="date" wire:model="fecha_entrega" class="form-control" id="fecha_entrega">
+                    <input type="date" wire:model="fechaing" class="form-control" id="fechaing">
                 </div>
             </div>
             <div class="col-6">
-                <label for="repartidor">Repartidor:</label>
+                <label for="delivery_id">Repartidor:</label>
                 <div class="input-group">
-                    <select wire:model="repartidor" class="form-control" id="repartidor">
+                    <select wire:model="delivery_id" class="form-control" id="repartidor">
                         <option value="">Seleccione un repartidor</option>
                         <option value="FLORENCIA">FLORENCIA</option>
                         <option value="GERMAN">GERMAN</option>
@@ -36,12 +36,23 @@
                 </div>
             </div>
         </div>
-        <div class="col-12">
-            <label for="archivo">Archivo Escaneado o Fotografía:</label>
+        <div class="col-6">
+            <label for="tipo">Incentivo:</label>
             <div class="input-group">
-                <input type="file" wire:model="archivo" class="form-control" id="archivo">
+                <select wire:model="tipo" class="form-control" id="tipo">
+                    <option value="">SELECCIONE INCENTIVO</option>
+                    <option value="RECONSUMO">RECONSUMO</option>
+                    <option value="CAJA GRATIS">CAJA GRATIS</option>
+                </select>
             </div>
         </div>
+        <div class="col-12">
+            <label for="file_path">Seleccione Archivo...</label>
+            <div class="input-group">
+                <input type="file" wire:model="file_path" class="form-control" id="archivo">
+            </div>
+        </div>
+      
         
     </div>
     

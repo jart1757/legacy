@@ -78,6 +78,16 @@
             </p>
           </a>
        </li>
+       
+
+       <li class="nav-item">
+         <a href="{{route('deliveries')}}" class="nav-link {{$title=='Entregas'?'active':''}}">
+          <i class="nav-icon fas fa-user"></i>
+           <p>
+             Entregas
+           </p>
+         </a>
+     </li>
 
        <li class="nav-item"> 
         <a href="{{route('clients')}}" class="nav-link {{$title=='Clientes'?'active':''}}">

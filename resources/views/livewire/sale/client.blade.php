@@ -28,17 +28,7 @@
                   </select>
 
                 </div>
-                <!-- /.input group -->
-                <div class="col-6">
-                  <label for="incentivo">Repartidor:</label>
-                  <div class="input-group">
-                      <select wire:model="incentivo" class="form-control" id="incentivo">
-                          <option value="">Seleccione un incentivo</option>
-                          <option value="CAJA GRATIS">CAJA GRATIS</option>
-                          <option value="RECONSUMO">RECONSUMO</option>
-                      </select>
-                  </div>
-              </div>
+            
               </div>
         </div>
       </div>

@@ -22,6 +22,8 @@
             @include('sales.card-pago')
             {{-- Card cliente --}}
             @livewire('sale.client')
+   
+   
          </div>
          {{-- COLUMNA PRODUCTOS --}}
          <div class="col-md-6">

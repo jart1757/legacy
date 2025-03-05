@@ -58,7 +58,7 @@ class ClientComponent extends Component
         $rules = [
             'name' => 'required|min:5|max:255',
             'identificacion' => 'required|max:15|unique:clients',
-            'email' => 'max:255|email|nullable'
+            'email' => 'max:255|nullable'
         ];
 
 

@@ -17,6 +17,7 @@ return new class extends Migration
             $table->decimal('pago',10,2)->nullable();
             $table->date('fecha')->nullable();
             $table->date('fechaing')->nullable();
+            $table->date('tipo')->nullable();
             $table->foreignId('user_id')->constrained();
             $table->foreignId('client_id')->constrained();
             $table->foreignId('delivery_id')->nullable()->constrained();

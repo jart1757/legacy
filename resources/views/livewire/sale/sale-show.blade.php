@@ -26,32 +26,32 @@
 
                         <ul class="list-group  mb-3">
                             <li class="list-group-item">
-                                <b>Documento</b> 
+                                <b>Codigo</b> 
                                 <a class="float-right">
                                     {{$sale->client->identificacion}}
                                 </a>
                             </li>
                             <li class="list-group-item">
-                                <b>Telefono</b> 
+                                <b>Carnet</b> 
                                 <a class="float-right">
                                     {{$sale->client->telefono}}
                                 </a>
                             </li>
-                            <li class="list-group-item">
+                           {{--   <li class="list-group-item">
                                 <b>Email</b> 
                                 <a class="float-right">
                                     {{$sale->client->email}}
                                 </a>
-                            </li>
+                            </li>--}}
 
                             <li class="list-group-item">
-                                <b>Empresa</b> 
+                                <b>Tipo</b> 
                                 <a class="float-right">
                                     {{$sale->client->empresa}}
                                 </a>
                             </li>
                             <li class="list-group-item">
-                                <b>NIT</b> <a class="float-right">
+                                <b>Ciudad</b> <a class="float-right">
                                     {{$sale->client->nit}}
                                 </a>
                             </li>

@@ -24,6 +24,9 @@
                             <b>Tipo de Cliente</b> <a class="float-right">{{$client->empresa}}</a>
                         </li>
                         <li class="list-group-item">
+                            <b>Tipo de Incentivo</b> <a class="float-right">{{$client->email}}</a>
+                        </li>
+                        <li class="list-group-item">
                             <b>Ciudad</b> <a class="float-right">{{$client->nit}}</a>
                         </li>
                         <li class="list-group-item">

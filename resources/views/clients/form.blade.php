@@ -26,7 +26,7 @@
                 @error('email')
                     <div class="alert alert-danger w-100 mt-2">{{$message}}</div>
                 @enderror
-            </div>--}}
+            </div>
             {{-- Input Telefono --}}
             <div class="form-group col-md-6">
                 <label for="telefono">Carnet de Identidad:</label>
@@ -41,8 +41,9 @@
         <label for="empresa">Tipo de Cliente:</label>
         <select wire:model='empresa' class="form-control" id="empresa">
             <option value="">Seleccione...</option>
-            <option value="RECONSUMO">RECONSUMO</option>
-            <option value="NUEVO">NUEVO</option>
+            <option value="CLIENTE BONIFICADO">CLIENTE BONIFICADO</option>
+            <option value="PRODUCTOR MAYORISTA">PRODUCTOR MAYORISTA</option>
+            <option value="CONSUMIDOR PREFERENTE">CONSUMIDOR PREFERENTE</option>
         </select>
         @error('empresa')
             <div class="alert alert-danger w-100 mt-2">{{$message}}</div>
@@ -52,16 +53,16 @@
             <div class="form-group col-md-6">
                 <label for="nit">Departamento:</label>
                 <select wire:model="nit" class="form-control" id="nit">
-                    <option value="">Seleccione un departamento</option>
-                    <option value="La Paz">La Paz</option>
-                    <option value="Cochabamba">Cochabamba</option>
-                    <option value="Santa Cruz">Santa Cruz</option>
-                    <option value="Oruro">Oruro</option>
-                    <option value="Potosí">Potosí</option>
-                    <option value="Chuquisaca">Chuquisaca</option>
-                    <option value="Tarija">Tarija</option>
-                    <option value="Beni">Beni</option>
-                    <option value="Pando">Pando</option>
+                    <option value="">SELECCIONE UN DEPARTAMENTO</option>
+                    <option value="LA PAZ">LA PAZ</option>
+                    <option value="COCHABAMBA">COCHABAMBA</option>
+                    <option value="SANTA CRUZ">SANTA CRUZ</option>
+                    <option value="ORURO">ORURO</option>
+                    <option value="POTOSÍ">POTOSÍ</option>
+                    <option value="CHUQUISACA">CHUQUISACA</option>
+                    <option value="TARIJA">TARIJA</option>
+                    <option value="BENI">BENI</option>
+                    <option value="PANDO">PANDO</option>
                 </select>
             </div>
 

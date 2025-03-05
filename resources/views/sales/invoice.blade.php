@@ -111,21 +111,23 @@
             <td width=33%>
                 <h2 style="margin-bottom: .5rem">Cliente:</h2>
 
+                @if($sale->client->identificacion)
+                <span class="shop-info">
+                    <b>Codigo: </b>{{$sale->client->identificacion}}
+                </span>
+                @endif  
+                
                 @if($sale->client->name)
                 <span class="shop-info">
-                    <b>Nombre: </b>{{$sale->client->name}}
+                    <b>Nombre Completo: </b>{{$sale->client->name}}
                 </span>
                 @endif  
 
-                @if($sale->client->identificacion)
-                <span class="shop-info">
-                    <b>Identificacion: </b>{{$sale->client->identificacion}}
-                </span>
-                @endif  
+               
 
                 @if($sale->client->telefono)
                 <span class="shop-info">
-                    <b>Telefono: </b>{{$sale->client->telefono}}
+                    <b>Carnet de Identidad: </b>{{$sale->client->telefono}}
                 </span>
                 @endif  
 
@@ -137,13 +139,13 @@
 
                 @if($sale->client->empresa)
                 <span class="shop-info">
-                    <b>Empresa: </b>{{$sale->client->empresa}}
+                    <b>Tipo de Cliente: </b>{{$sale->client->empresa}}
                 </span>
                 @endif 
 
                 @if($sale->client->nit)
                 <span class="shop-info">
-                    <b>Nit: </b>{{$sale->client->nit}}
+                    <b>Ciudad: </b>{{$sale->client->nit}}
                 </span>
                 @endif 
             </td>

@@ -29,6 +29,9 @@ class SaleCreate extends Component
 
     public $client=1;
 
+    public $totalManual = 0;
+
+
     public function render()
     {
         if($this->search!=''){
@@ -51,56 +54,66 @@ class SaleCreate extends Component
         ]);
     }
 
+    public function updatingTotalManual($value)
+        {
+            $this->totalManual = $value;
+        }
+
     // Crear venta
     public function createSale(){
-
         $cart = Cart::getCart();
-
-        if(count($cart)==0){
+    
+        if(count($cart) == 0){
             $this->dispatch('msg','No hay productos',"danger");
             return;
-            // dump(count($cart));
         }
-
-        if($this->pago<Cart::getTotal()){
-            $this->pago = Cart::getTotal();
-            $this->devuelve=0;
+    
+        // Obtener el total del carrito
+        $total = Cart::getTotal();
+        dd($total);
+    
+        if ($this->pago < $total) {
+            $this->pago = $total;
+            $this->devuelve = 0;
         }
-
-        DB::transaction(function () {
+    
+        // Comenzar la transacción para crear la venta
+        DB::transaction(function () use ($total) {
+            // Crear la venta
             $sale = new Sale();
-            $sale->total = Cart::getTotal();
+            $sale->total = $total;  // Asegúrate de que el total se está asignando correctamente
             $sale->pago = $this->pago;
             $sale->user_id = userID();
             $sale->client_id = $this->client;
             $sale->fecha = date('Y-m-d');
             $sale->save();
-
-            // global $cart;
-
-            //agregar items a la venta
-            foreach(\Cart::session(userID())->getContent() as $product){
+    
+            // Agregar los items a la venta
+            foreach (\Cart::session(userID())->getContent() as $product) {
                 $item = new Item();
                 $item->name = $product->name;
-                //$item->price = $product->price;
                 $item->qty = $product->quantity;
                 $item->image = $product->associatedModel->imagen;
                 $item->product_id = $product->id;
                 $item->fecha = date('Y-m-d');
                 $item->save();
-
-                $sale->items()->attach($item->id,['qty'=>$product->quantity,'fecha'=>date('Y-m-d')]);
-
-                Product::find($product->id)->decrement('stock',$product->quantity);
-
+    
+                $sale->items()->attach($item->id, ['qty' => $product->quantity, 'fecha' => date('Y-m-d')]);
+    
+                Product::find($product->id)->decrement('stock', $product->quantity);
             }
-
+    
+            // Limpiar el carrito
             Cart::clear();
-            $this->reset(['pago','devuelve','client']);
+    
+            // Restablecer los valores
+            $this->reset(['pago', 'devuelve', 'client']);
+            
+            // Mostrar el mensaje de éxito
             $this->dispatch('msg','Venta creada correctamente','success',$sale->id);
         });
-        
     }
+    
 
     // Eschuchar evento para establecer id de cliente
     #[On('client_id')]

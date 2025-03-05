@@ -1,6 +1,6 @@
 <div class="card card-info">
     <div class="card-header">
-        <h3 class="card-title"><i class="fas fa-cart-plus"></i> Detalles venta  
+        <h3 class="card-title"><i class="fas fa-cart-plus"></i> Detalles de Salida de Productos
         </h3>
         <div class="card-tools">
             <!-- Conteo de productos -->
@@ -15,7 +15,7 @@
             <button wire:click="{{isset($sale) ? 'editSale' : 'createSale'}}
             " class="btn bg-purple ml-2">
                 <i class="fas fa-cart-plus"></i>
-                {{isset($sale) ? 'Editar venta' : 'Generar venta'}}
+                {{isset($sale) ? 'Editar venta' : 'Generar Salida'}}
             </button>
             
         </div>
@@ -89,7 +89,8 @@
                         <td>
                             <h5>
                                 <span class="badge badge-pill badge-secondary">
-                                    {{money($total)}}
+                                    <input type="text" wire:model="totalManual" class="form-control text-center">
+
                                 </span>
                             </h5>
                         </td>
@@ -99,7 +100,7 @@
 
                         <td colspan="7">
                             <strong>Total en letras:</strong>
-                            {{numeroLetras($total)}}
+                            {{numeroLetras($totalManual)}}
                         </td>
                     </tr>
                 </tbody>

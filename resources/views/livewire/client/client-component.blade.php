@@ -13,6 +13,7 @@
              <th>Nombre</th>
              <th>Carnet</th>
              <th>Tipo de cliente</th>
+             <th>Ciudad</th>
              <th width="3%">...</th>
              <th width="3%">...</th>
              <th width="3%">...</th>
@@ -26,6 +27,8 @@
                 <td>{{$cliente->name}}</td>
                 <td>{{$cliente->telefono}}</td>
                 <td>{{$cliente->empresa}}</td>
+                <td>{{$cliente->nit}}</td>
+
                 <td>
                     <a href="{{route('clients.show',$cliente)}}" class="btn btn-success btn-sm" title="Ver">
                         <i class="far fa-eye"></i>

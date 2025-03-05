@@ -48,14 +48,22 @@
             <div class="alert alert-danger w-100 mt-2">{{$message}}</div>
         @enderror
     </div>
-            {{-- Input Nit 
+            {{-- Input Nit --}}
             <div class="form-group col-md-6">
-                <label for="nit">Nit:</label>
-                <input wire:model='nit' type="text" class="form-control" placeholder="Nit" id="nit">
-                @error('nit')
-                    <div class="alert alert-danger w-100 mt-2">{{$message}}</div>
-                @enderror
-            </div>--}}
+                <label for="nit">Departamento:</label>
+                <select wire:model="nit" class="form-control" id="nit">
+                    <option value="">Seleccione un departamento</option>
+                    <option value="La Paz">La Paz</option>
+                    <option value="Cochabamba">Cochabamba</option>
+                    <option value="Santa Cruz">Santa Cruz</option>
+                    <option value="Oruro">Oruro</option>
+                    <option value="Potosí">Potosí</option>
+                    <option value="Chuquisaca">Chuquisaca</option>
+                    <option value="Tarija">Tarija</option>
+                    <option value="Beni">Beni</option>
+                    <option value="Pando">Pando</option>
+                </select>
+            </div>
 
         </div>
         

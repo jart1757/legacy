@@ -15,13 +15,16 @@
                 
                     <ul class="list-group mb-3">
                         <li class="list-group-item">
-                            <b>Carnet de Identidad</b> <a class="float-right">{{$client->identificacion}}</a>
+                            <b>Codigo</b> <a class="float-right">{{$client->identificacion}}</a>
                         </li>
                         <li class="list-group-item">
                             <b>Carnet de Identidad</b> <a class="float-right">{{$client->telefono}}</a>
                         </li>
                         <li class="list-group-item">
                             <b>Tipo de Cliente</b> <a class="float-right">{{$client->empresa}}</a>
+                        </li>
+                        <li class="list-group-item">
+                            <b>Ciudad</b> <a class="float-right">{{$client->nit}}</a>
                         </li>
                         <li class="list-group-item">
                             <b>Creado</b> <a class="float-right">{{$client->created_at}}</a>

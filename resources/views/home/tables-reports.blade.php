@@ -17,9 +17,8 @@
               <tr>
                 <th style="width: 10px">#</th>
                 <th>Nombre</th>
-                <th>Precio Total</th>
                 <th>Cantidad</th>
-                <th>Total</th>
+
               </tr>
             </thead>
             <tbody>
@@ -28,15 +27,12 @@
               <tr>
                 <td>{{$product->product_id}}</td>
                 <td>{{$product->name}}</td>
-                <td>{{money($product->price)}}</td>
                 <td>
                   <span class="badge bg-success">
                     {{$product->total_quantity}}
                   </span>
                 </td>
-                <td>
-                  {{money($product->price*$product->total_quantity)}}
-                </td>
+      
               </tr>
                   
               @empty
@@ -78,9 +74,7 @@
               <tr>
                 <th style="width: 10px">#</th>
                 <th>Nombre</th>
-                <th>Precio Total</th>
                 <th>Cantidad</th>
-                <th>Total</th>
               </tr>
             </thead>
             <tbody>
@@ -90,14 +84,10 @@
               <tr>
                 <td>{{$product->product_id}}</td>
                 <td>{{$product->name}}</td>
-                <td>{{money($product->price)}}</td>
                 <td>
                   <span class="badge bg-success">
                     {{$product->total_quantity}}
                   </span>
-                </td>
-                <td>
-                  {{money($product->price*$product->total_quantity)}}
                 </td>
               </tr>
                   
@@ -128,7 +118,7 @@
         <div class="card-header">
           <h3 class="card-title">
             <b>
-            Productos mas vendidos
+            Productos mas vendidos en General
           </b>
           </h3>
   
@@ -144,9 +134,7 @@
               <tr>
                 <th style="width: 10px">#</th>
                 <th>Nombre</th>
-                <th>Precio Total</th>
                 <th>Cantidad</th>
-                <th>Total</th>
               </tr>
             </thead>
             <tbody>           
@@ -155,14 +143,10 @@
               <tr>
                 <td>{{$product->product_id}}</td>
                 <td>{{$product->name}}</td>
-                <td>{{money($product->price)}}</td>
                 <td>
                   <span class="badge bg-success">
                     {{$product->total_quantity}}
                   </span>
-                </td>
-                <td>
-                  {{money($product->price*$product->total_quantity)}}
                 </td>
               </tr>
                   

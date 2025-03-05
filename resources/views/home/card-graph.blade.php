@@ -5,7 +5,7 @@
               <div class="card-header border-0">
                 <h3 class="card-title">
                   <i class="fas fa-chart-bar mr-1"></i>
-                  Grafica SALIDAS por mes
+                  Grafica Salidas por mes
                 </h3>
 
                 <div class="card-tools">

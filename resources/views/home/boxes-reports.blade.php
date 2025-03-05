@@ -4,7 +4,7 @@
         <span class="info-box-icon bg-primary elevation-1"><i class="fas fa-file-invoice-dollar"></i></span>
 
         <div class="info-box-content">
-          <span class="info-box-text">Ventas</span>
+          <span class="info-box-text">Salidas</span>
           <span class="info-box-number">
             {{$cantidadVentas}}
             

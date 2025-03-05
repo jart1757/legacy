@@ -15,7 +15,7 @@
             <button wire:click="{{isset($sale) ? 'editSale' : 'createSale'}}
             " class="btn bg-purple ml-2">
                 <i class="fas fa-cart-plus"></i>
-                {{isset($sale) ? 'Editar venta' : 'Generar Salida'}}
+                {{isset($sale) ? 'Editar Salida' : 'Generar Salida'}}
             </button>
             
         </div>
@@ -82,25 +82,25 @@
                     @endforelse
 
                     <tr>
-                        <td colspan="3"></td>
-                        <td>
+                        <td colspan="5"></td>
+                        <<td>
                             <h5>Total:</h5>
                         </td>
                         <td>
                             <h5>
                                 <span class="badge badge-pill badge-secondary">
-                                    <input type="text" wire:model="totalManual" class="form-control text-center">
-
+                                    <input type="text" class="form-control text-center" id="manualTotal" value="{{ money($total) }}">
                                 </span>
                             </h5>
                         </td>
+                        
                         <td></td>
                     </tr>
                     <tr>
 
                         <td colspan="7">
                             <strong>Total en letras:</strong>
-                            {{numeroLetras($totalManual)}}
+                            {{numeroLetras($total)}}
                         </td>
                     </tr>
                 </tbody>

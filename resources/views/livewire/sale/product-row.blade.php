@@ -2,7 +2,7 @@
     <td>{{$product->id}}</td>
 
     <td>{{$product->name}}</td>
-    <td>{!!$product->precio!!}</td>
+    {{--  <td>{!!$product->precio!!}</td>--}}
     <td>{!!$stockLabel!!}</td>
     <td>
 

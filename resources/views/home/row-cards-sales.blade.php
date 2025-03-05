@@ -35,7 +35,7 @@
         <div class="inner">
           <h3>{{$articulosHoy}}</h3>
 
-          <p>Articulos EN SALIDA DE HOY</p>
+          <p>Salidas de Hoy</p>
         </div>
         <div class="icon">
             <i class="fas fa-shopping-basket"></i>

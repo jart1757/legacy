@@ -11,7 +11,7 @@
       </li>
       <li class="nav-item d-none d-sm-inline-block">
         <a href="{{route('sales.create')}}" class="nav-link {{$title=='Ventas'?'active':''}}">
-          <i class="fas fa-cart-plus"></i> Crear venta
+          <i class="fas fa-cart-plus"></i> Crear Salida
         </a>
       </li>
     </ul>

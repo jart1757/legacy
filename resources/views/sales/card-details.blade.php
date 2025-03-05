@@ -28,9 +28,7 @@
                     <tr>
                         <th scope="col">#</th>
                         <th scope="col">Nombre</th>
-                        <th scope="col">Precio.vt</th>
                         <th scope="col" width="15%">Cantidad</th>
-                        <th scope="col">Sub total</th>
                         <th scope="col">...</th>
                     </tr>
 
@@ -41,7 +39,6 @@
                     <tr>
                         <td>{{$product->id}}</td>
                         <td>{{$product->name}}</td>
-                        <td>{!!$product->associatedModel->precio!!}</td>
                         <td>
                             <!-- Botones para aumentar o disminuir la cantidad del producto en el carrito -->
                             <button
@@ -66,7 +63,7 @@
                             </button>
                             
                         </td>
-                        <td>{{money($product->quantity*$product->price)}}</td>
+     
                         <td>
                             <!-- Boton para eliminar el producto del carrito -->
                             <button 
@@ -85,7 +82,7 @@
                     @endforelse
 
                     <tr>
-                        <td colspan="4"></td>
+                        <td colspan="3"></td>
                         <td>
                             <h5>Total:</h5>
                         </td>

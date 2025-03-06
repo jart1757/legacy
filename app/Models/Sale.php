@@ -20,4 +20,9 @@ class Sale extends Model
     public function items(){
         return $this->belongsToMany(Item::class)->withPivot(['qty','fecha']);
     }
+    public function delivery()
+    {
+        return $this->belongsTo(Delivery::class);
+    }
+
 }

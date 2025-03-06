@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('name');
             $table->string('image')->nullable();
+            $table->decimal('price',10,2);
             $table->unsignedInteger('qty');
             $table->date('fecha');
             $table->bigInteger('product_id');

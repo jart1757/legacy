@@ -36,10 +36,12 @@
              <th>Cliente</th>
              <th>Total</th>
              <th>Productos</th>
-             <th>Articulos</th>
-             <th>Fecha</th>
+             <th>Fecha de Salida</th>
              <th>Fecha de Ingreso</th>
-             <th>documento</th>
+             <th>Usuario</th>
+             <th>Tipo</th>
+             <th>Incentivo</th>
+             
              <th width="3%">...</th>
              <th width="3%">...</th>
              <th width="3%">...</th>
@@ -63,25 +65,16 @@
                 </td>
                 <td>
                     <span class="badge badge-pill bg-purple">
-                        {{$sale->items->count()}}
-                    </span>
-                </td>
-                <td>
-                    <span class="badge badge-pill bg-purple">
-                        {{$sale->items->sum('pivot.qty')}}
+                        {{$sale->items>count()}}
                     </span>
                 </td>
                 <td>{{$sale->fecha}}</td>
-                <td>
-                    <a href="{{route('sales.invoice',$sale)}}" class="btn bg-navy btn-sm" title="Generar PDF" target="_blank">
-                        <i class="far fa-file-pdf"></i>
-                    </a>
-                </td>
-                <td>
-                    <a href="{{route('sales.invoice',$sale)}}" class="btn bg-navy btn-sm" title="Generar PDF" target="_blank">
-                        <i class="far fa-file-pdf"></i>
-                    </a>
-                </td>
+                <td>{{$sale->fechaing}}</td>
+                <td>{{$sale->delivery->name}}</td>
+                <td>{{$sale->client->empresa  }}</td>
+                <td>{{$sale->tipo  }}</td>
+            
+        
                 <td>
                     <a href="{{route('sales.invoice',$sale)}}" class="btn bg-navy btn-sm" title="Generar PDF" target="_blank">
                         <i class="far fa-file-pdf"></i>

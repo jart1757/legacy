@@ -72,7 +72,7 @@ class ProductComponent extends Component
         //  dump('Crear producto');
 
         $rules = [
-            'name' => 'required|min:5|max:255|unique:products',
+            'name' => 'required|min:2|max:255|',
             'descripcion' => 'max:255',
             'precio_compra' => 'numeric|nullable',
             'precio_venta' => 'required|numeric',
@@ -137,7 +137,7 @@ class ProductComponent extends Component
     public function update(Product $product){
         // dump($category);
         $rules = [
-            'name' => 'required|min:5|max:255|unique:products,id,'.$this->Id,
+            'name' => 'required|min:2|max:255',
             'descripcion' => 'max:255',
             'precio_compra' => 'numeric|nullable',
             'precio_venta' => 'required|numeric',

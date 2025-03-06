@@ -31,8 +31,6 @@ class SaleCreate extends Component
 
     public $client=1;
 
-    public $totalManual = 0;
-
 
     // 🔹 PROPIEDADES NUEVAS
     public $fechaing;
@@ -62,13 +60,10 @@ class SaleCreate extends Component
         ]);
     }
 
-    public function updatingTotalManual($value)
-        {
-            $this->totalManual = $value;
-        }
 
     // Crear venta
     public function createSale(){
+        
         $cart = Cart::getCart();
     
         if(count($cart) == 0){
@@ -76,20 +71,18 @@ class SaleCreate extends Component
             return;
         }
     
-        // Obtener el total del carrito
-        $total = Cart::getTotal();
-       // dd($total);
-    
-        if ($this->pago < $total) {
-            $this->pago = $total;
-            $this->devuelve = 0;
+        if($this->pago<Cart::getTotal()){
+            $this->pago = Cart::getTotal();
+            $this->devuelve=0;
         }
+
+    
     
         // Comenzar la transacción para crear la venta
-        DB::transaction(function () use ($total) {
+        DB::transaction(function () {
             // Crear la venta
             $sale = new Sale();
-            $sale->total = $total;  // Asegúrate de que el total se está asignando correctamente
+            $sale->total = Cart::getTotal();  // Asegúrate de que el total se está asignando correctamente
             $sale->pago = $this->pago;
             $sale->user_id = userID();
             $sale->client_id = $this->client;
@@ -104,6 +97,7 @@ class SaleCreate extends Component
             foreach (\Cart::session(userID())->getContent() as $product) {
                 $item = new Item();
                 $item->name = $product->name;
+                $item->price = $product->price;
                 $item->qty = $product->quantity;
                 $item->image = $product->associatedModel->imagen;
                 $item->product_id = $product->id;

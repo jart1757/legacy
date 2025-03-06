@@ -1,6 +1,6 @@
 <div class="card card-info">
     <div class="card-header">
-        <h3 class="card-title"><i class="fas fa-cart-plus"></i> Detalles venta  
+        <h3 class="card-title"><i class="fas fa-cart-plus"></i> Detalles Salidas
         </h3>
         <div class="card-tools">
             <!-- Conteo de productos -->
@@ -27,7 +27,7 @@
                 <thead>
                     <tr>
                         <th scope="col">#</th>
-                        <th scope="col"><i class="fas fa-image"></i></th>
+                        {{--  <th scope="col"><i class="fas fa-image"></i></th>--}}
                         <th scope="col">Nombre</th>
                         <th scope="col">Precio.vt</th>
                         <th scope="col" width="15%">Qty</th>
@@ -41,10 +41,10 @@
                        
                     <tr>
                         <td>{{$product->id}}</td>
-                        <td>
+                        {{--  <td>
                             <x-image :item="$product->associatedModel" size="60" />
 
-                        </td>
+                        </td>--}}
                         <td>{{$product->name}}</td>
                         <td>{!!$product->associatedModel->precio!!}</td>
                         <td>

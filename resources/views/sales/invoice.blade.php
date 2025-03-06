@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Factura venta</title>
+    <title>Comprobante</title>
 
     <style>
         .b{
@@ -148,15 +148,20 @@
                     <b>Ciudad: </b>{{$sale->client->nit}}
                 </span>
                 @endif 
+                @if($sale->tipo)
+                <span class="shop-info">
+                    <b>Incentivo: </b>{{$sale->tipo}}
+                </span>
+                @endif 
             </td>
             <td width="33%">
                 <h2 style="text-align: center">
-                    Factura: <span class="factura-id">FV-{{$sale->id}}</span>
+                   Comprobante: <span class="factura-id">FV-{{$sale->id}}</span>
                 </h2>
             </td>
             <td width="33%">
                 <h3>
-                    Fecha: <span class="factura-fecha">{{$sale->created_at}}</span>
+                    Fecha Salida: <span class="factura-fecha">{{$sale->created_at}}</span>
                 </h3>
             </td>
         </tr>
@@ -210,13 +215,22 @@
             <td>
                 ___________________________ <br> 
                 <b>{{$sale->user->name}}</b> <br>
-                Vendedor
+                        Realizo entrega
+            </td>
+        </tr>
+
+    </table>
+    <table width="100%" style="text-align: center; margin-top:5rem;">
+        <tr>
+            <td>
+                ___________________________ <br> 
+                <b>{{$sale->delivery->name}}</b> <br>
+                        Realizo Salida
             </td>
         </tr>
 
     </table>
 
-    <p style="text-align: center">Muchas gracias por tu compra!</p>
     
 </body>
 </html>

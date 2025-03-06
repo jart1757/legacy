@@ -95,7 +95,7 @@ class SaleCreate extends Component
             $sale->client_id = $this->client;
             $sale->fecha = date('Y-m-d');
             $sale->fechaing = $this->fechaing; // Usar la fecha ingresada por el usuario
-            $sale->delivery_id = $this->delivery; // Asignar el delivery_id ingresado
+            $sale->delivery_id = $this->delivery_id; // CORRECTO
             $sale->file_path = $this->file_path; // Asignar el file_path ingresado
             $sale->tipo = $this->tipo; // Asignar el tipo ingresado
             $sale->save();

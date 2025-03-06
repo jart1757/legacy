@@ -21,20 +21,15 @@
             <div class="col-6">
                 <label for="delivery_id">Repartidor:</label>
                 <div class="input-group">
-                    <select wire:model="delivery_id" class="form-control" id="repartidor">
-                        <option value="">Seleccione un repartidor</option>
-                        <option value="FLORENCIA">FLORENCIA</option>
-                        <option value="GERMAN">GERMAN</option>
-                        <option value="CELINA">CELINA</option>
-                        <option value="JULIA">JULIA</option>
-                        <option value="ANDREA">ANDREA</option>
-                        <option value="CELIO JUSTINA">CELIO JUSTINA</option>
-                        <option value="LURDES">LURDES</option>
-                        <option value="DANIELA">DANIELA</option>
-                        <option value="NANCY">NANCY</option>
+                    <select wire:model="delivery_id" class="form-control">
+                        <option value="">Sin repartidor</option>
+                        @foreach (\App\Models\Delivery::all() as $delivery)
+                            <option value="{{ $delivery->id }}">{{ $delivery->name }}</option>
+                        @endforeach
                     </select>
                 </div>
             </div>
+            
         </div>
         <div class="col-6">
             <label for="tipo">Incentivo:</label>
@@ -55,5 +50,5 @@
       
         
     </div>
-    
+
 </div>

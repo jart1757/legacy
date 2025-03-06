@@ -41,6 +41,15 @@ class Product extends Model
         );
     }  
 
+    protected function precio() : Attribute
+    {
+        return Attribute::make(
+            get: function(){
+                return '<b>Bs.'.number_format($this->attributes['precio_venta'],0,',','.').'</b>'; 
+            }
+        );
+    }
+   
    
     protected function imagen() : Attribute
     {

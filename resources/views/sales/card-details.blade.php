@@ -1,6 +1,6 @@
 <div class="card card-info">
     <div class="card-header">
-        <h3 class="card-title"><i class="fas fa-cart-plus"></i> Detalles de Salida de Productos
+        <h3 class="card-title"><i class="fas fa-cart-plus"></i> Detalles venta  
         </h3>
         <div class="card-tools">
             <!-- Conteo de productos -->
@@ -15,7 +15,7 @@
             <button wire:click="{{isset($sale) ? 'editSale' : 'createSale'}}
             " class="btn bg-purple ml-2">
                 <i class="fas fa-cart-plus"></i>
-                {{isset($sale) ? 'Editar Salida' : 'Generar Salida'}}
+                {{isset($sale) ? 'Editar venta' : 'Generar venta'}}
             </button>
             
         </div>
@@ -27,8 +27,11 @@
                 <thead>
                     <tr>
                         <th scope="col">#</th>
+                        <th scope="col"><i class="fas fa-image"></i></th>
                         <th scope="col">Nombre</th>
-                        <th scope="col" width="15%">Cantidad</th>
+                        <th scope="col">Precio.vt</th>
+                        <th scope="col" width="15%">Qty</th>
+                        <th scope="col">Sub total</th>
                         <th scope="col">...</th>
                     </tr>
 
@@ -38,7 +41,12 @@
                        
                     <tr>
                         <td>{{$product->id}}</td>
+                        <td>
+                            <x-image :item="$product->associatedModel" size="60" />
+
+                        </td>
                         <td>{{$product->name}}</td>
+                        <td>{!!$product->associatedModel->precio!!}</td>
                         <td>
                             <!-- Botones para aumentar o disminuir la cantidad del producto en el carrito -->
                             <button
@@ -63,7 +71,7 @@
                             </button>
                             
                         </td>
-     
+                        <td>{{money($product->quantity*$product->price)}}</td>
                         <td>
                             <!-- Boton para eliminar el producto del carrito -->
                             <button 
@@ -82,18 +90,17 @@
                     @endforelse
 
                     <tr>
-                        <td colspan="5"></td>
-                        <<td>
+                        <td colspan="4"></td>
+                        <td>
                             <h5>Total:</h5>
                         </td>
                         <td>
                             <h5>
                                 <span class="badge badge-pill badge-secondary">
-                                    <input type="text" class="form-control text-center" id="manualTotal" value="{{ money($total) }}">
+                                    {{money($total)}}
                                 </span>
                             </h5>
                         </td>
-                        
                         <td></td>
                     </tr>
                     <tr>

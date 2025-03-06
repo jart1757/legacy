@@ -51,7 +51,7 @@
                 @enderror
             </div>--}}
 
-            {{-- Input precio venta 
+            {{-- Input precio venta--}} 
             <div class="form-group col-md-4">
                 <label for="precio_venta">Precio venta:</label>
                 <input wire:model='precio_venta' min="0" step="any" type="number" class="form-control" placeholder="Precio venta" id="precio_venta">
@@ -59,7 +59,7 @@
                 @error('precio_venta')
                     <div class="alert alert-danger w-100 mt-2">{{$message}}</div>
                 @enderror
-            </div>--}}
+            </div>
 
             {{-- Input codigo barras 
             <div class="form-group col-md-4">
@@ -127,7 +127,7 @@
                 @enderror
             </div> --}}
             
-            {{-- imagen --}}
+            {{-- imagen 
             <div class="form-group col-md-6">
 
                 @if ($Id>0)
@@ -137,7 +137,7 @@
                 @if ($this->image)
                 <img src="{{$image->temporaryUrl()}}" class="rounded float-right" width="200">
                 @endif
-            </div>
+            </div>--}}
 
 
 

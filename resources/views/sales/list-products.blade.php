@@ -1,6 +1,6 @@
 <div class="card card-info">
     <div class="card-header">
-        <h3 class="card-title"><i class="fas fa-tshirt"></i> Lista de Productos</h3>
+        <h3 class="card-title"><i class="fas fa-tshirt"></i> Productos</h3>
     </div>
 
     <div class="card-body">
@@ -10,6 +10,7 @@
             <x-slot:thead>
                 <th scope="col">#</th>
                 <th scope="col">Nombre</th>
+                <th scope="col">Precio.vt</th>
                 <th scope="col">Stock</th>
                 <th scope="col">...</th>
 

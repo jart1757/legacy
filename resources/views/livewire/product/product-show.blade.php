@@ -123,7 +123,7 @@
                 </div>
 
               </div>
-{{--  
+
             <div class="row">
               <div class="bg-lightblue py-2 px-3 mt-4 col-md-6">
                 <h2 class="mb-0">
@@ -133,16 +133,9 @@
                   <small>Precio venta </small>
                 </h4>
               </div>
-              <div class="bg-gray py-2 px-3 mt-4 col-md-6">
-                <h2 class="mb-0">
-                    ${{$product->precio_compra}}
-                </h2>
-                <h4 class="mt-0">
-                  <small>Precio compra</small>
-                </h4>
-              </div>
+ 
             </div>
-            --}}
+            
 
             </div>
           </div>

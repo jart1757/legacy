@@ -34,7 +34,7 @@ class SaleCreate extends Component
     public $totalManual = 0;
 
 
-    // 🔹 PROPIEDADES NUEVAS
+    // PROPIEDADES NUEVAS
     public $fechaing;
     public $delivery_id;
     public $file_path;

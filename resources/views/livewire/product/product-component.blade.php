@@ -11,6 +11,7 @@
              <th>ID</th>
              <th>Nombre</th>
              <th>Stock</th>
+             <th>Precio</th>
              <th>Categoria</th>
              <th>Estado</th>
              <th width="3%">...</th>
@@ -24,8 +25,8 @@
              <tr>
                 <td>{{$product->id}}</td>
                 <td>{{$product->name}}</td>
-    
                 <td>{!! $product->stockLabel !!}</td>
+                <td>{!! $product->precio !!}</td>
                 <td>
                    <a class="badge badge-secondary" href="{{route('categories.show',$product->category->id)}}">{{$product->category->name}}</a> 
                 </td>

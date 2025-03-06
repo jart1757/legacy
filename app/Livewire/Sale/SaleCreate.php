@@ -34,7 +34,7 @@ class SaleCreate extends Component
     public $totalManual = 0;
 
 
-    // PROPIEDADES NUEVAS
+    // 🔹 PROPIEDADES NUEVAS
     public $fechaing;
     public $delivery_id;
     public $file_path;
@@ -95,7 +95,7 @@ class SaleCreate extends Component
             $sale->client_id = $this->client;
             $sale->fecha = date('Y-m-d');
             $sale->fechaing = $this->fechaing; // Usar la fecha ingresada por el usuario
-            $sale->delivery_id = $this->delivery_id; // CORRECTO
+            $sale->delivery_id = $this->delivery_id; // Asignar el delivery_id ingresado
             $sale->file_path = $this->file_path; // Asignar el file_path ingresado
             $sale->tipo = $this->tipo; // Asignar el tipo ingresado
             $sale->save();

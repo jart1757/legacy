@@ -35,7 +35,7 @@
              <th>ID</th>
              <th>Cliente</th>
              <th>Total</th>
-             <th>Productos</th>
+             <th>Cantidad de Productos</th>
              <th>Fecha de Salida</th>
              <th>Fecha de Ingreso</th>
              <th>Usuario</th>
@@ -65,7 +65,7 @@
                 </td>
                 <td>
                     <span class="badge badge-pill bg-purple">
-                        {{ count($sale->items) }}
+                        {{$sale->items->sum('pivot.qty')}}
                     </span>
                 </td>
                 <td>{{$sale->fecha}}</td>

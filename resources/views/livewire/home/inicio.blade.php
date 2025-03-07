@@ -3,12 +3,12 @@
       <x-slot:cardTools>
          @if (isAdmin())
             <a href="{{route('sales.list')}}" class="btn btn-primary">
-               <i class="fas fa-shopping-cart"></i> Ir a ventas
+               <i class="fas fa-shopping-cart"></i> Ir a Salidas
             </a>           
          @endif
 
          <a href="{{route('sales.create')}}" class="btn bg-purple">
-            <i class="fas fa-cart-plus"></i> Crear venta
+            <i class="fas fa-cart-plus"></i> Crear Salidas
          </a>
       </x-slot>
 

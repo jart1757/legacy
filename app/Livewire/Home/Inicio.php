@@ -9,6 +9,7 @@ use App\Models\Client;
 use App\Models\Product;
 use Livewire\Component;
 use App\Models\Category;
+use App\Models\Delivery;
 use Livewire\Attributes\Title;
 use Illuminate\Support\Facades\DB;
 
@@ -63,10 +64,10 @@ class Inicio extends Component
     }
 
     public function best_buyers(){
-        return Client::select('clients.id','clients.name',DB::raw('SUM(sales.total) as total'))
-        ->join('sales','sales.client_id','=','clients.id')
+        return Delivery::select('deliveries.id','deliveries.name',DB::raw('SUM(sales.total) as total'))
+        ->join('sales','sales.delivery_id','=','deliveries.id')
         ->whereYear('sales.fecha',date("Y"))
-        ->groupBy('clients.id', 'clients.name')
+        ->groupBy('deliveries.id', 'deliveries.name')
         ->orderBy('total', 'desc')
         ->take(5)
         ->get();
@@ -97,7 +98,7 @@ class Inicio extends Component
     }
     // Consulta productos mas vendidos
     public function products_reports($filtraDia=0,$filtrarMes=0){
-        $productsQuery = Item::select('items.id','items.name','items.image','items.product_id',DB::raw('SUM(items.qty) as total_quantity'))->groupBy('product_id')
+        $productsQuery = Item::select('items.id','items.name','items.price','items.image','items.product_id',DB::raw('SUM(items.qty) as total_quantity'))->groupBy('product_id')
         ->whereYear('items.fecha',date("Y"));
 
         if($filtraDia){

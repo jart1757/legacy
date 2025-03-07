@@ -15,12 +15,11 @@ class SaleList extends Component
 {
     use WithPagination;
    
-    //Propiedades clase
-    public $search='';
-    public $totalRegistros=0;
-    public $cant=5;
-
-    public $totalVentas=0;
+    // Propiedades de la clase
+    public $search = '';
+    public $totalRegistros = 0;
+    public $cant = 5;
+    public $totalVentas = 0;
     public $dateInicio;
     public $dateFin;
 
@@ -28,57 +27,53 @@ class SaleList extends Component
     {
         Cart::clear();
         
-        if($this->search!=''){
+        if ($this->search != '') {
             $this->resetPage();
         }
 
         $this->totalRegistros = Sale::count();
         
-        $salesQuery = Sale::where('id','like','%'.$this->search.'%');
+        // Solo modificamos la consulta para incluir la búsqueda en delivery
+        $salesQuery = Sale::where(function($query) {
+            $query->where('id', 'like', '%' . $this->search . '%')
+                  ->orWhereHas('delivery', function ($q) {
+                      $q->where('name', 'like', '%' . $this->search . '%');
+                  });
+        });
 
-        if($this->dateInicio && $this->dateFin){
-            $salesQuery = $salesQuery->whereBetween('fecha',[$this->dateInicio,$this->dateFin]);
-
+        if ($this->dateInicio && $this->dateFin) {
+            $salesQuery = $salesQuery->whereBetween('fecha', [$this->dateInicio, $this->dateFin]);
             $this->totalVentas = $salesQuery->sum('total');
-        }else{
+        } else {
             $this->totalVentas = Sale::sum('total');
         }
 
-        $sales = $salesQuery
-                ->orderBy('id','desc')
-                ->paginate($this->cant);
+        $sales = $salesQuery->orderBy('id', 'desc')->paginate($this->cant);
 
-        return view('livewire.sale.sale-list',[
+        return view('livewire.sale.sale-list', [
             "sales" => $sales
         ]);
     }
 
     #[On('destroySale')]
-    public function destroy($id){
-        
+    public function destroy($id)
+    {
         $sale = Sale::findOrFail($id);
 
-        foreach($sale->items as $item){
-            Product::find($item->id)->increment('stock',$item->qty);
+        foreach ($sale->items as $item) {
+            Product::find($item->id)->increment('stock', $item->qty);
             $item->delete();
-
         }
 
         $sale->delete();
 
-        $this->dispatch('msg','Venta eliminada');
+        $this->dispatch('msg', 'Venta eliminada');
     }
 
     #[On('setDates')]
-    public function setDates($fechaInicio,$fechaFinal){
-
-        //dump($fechaInicio,$fechaFinal);
-
+    public function setDates($fechaInicio, $fechaFinal)
+    {
         $this->dateInicio = $fechaInicio;
         $this->dateFin = $fechaFinal;
-
     }
-
-
-
 }

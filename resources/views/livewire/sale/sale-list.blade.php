@@ -65,7 +65,7 @@
                 </td>
                 <td>
                     <span class="badge badge-pill bg-purple">
-                        {{$sale->items>count()}}
+                        {{ count($sale->items) }}
                     </span>
                 </td>
                 <td>{{$sale->fecha}}</td>

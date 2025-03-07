@@ -3,6 +3,7 @@
 namespace App\Livewire\Client;
 
 use App\Models\Client;
+use App\Models\Category;
 use Livewire\Component;
 use Livewire\Attributes\On;
 use Livewire\WithPagination;
@@ -26,9 +27,12 @@ class ClientComponent extends Component
     public $email;
     public $empresa;
     public $nit;
+    public $category_id;
 
     public $clients = [];
     public $selectedClientId;
+    public $categories = [];
+
     
     public function render()
     {
@@ -37,16 +41,22 @@ class ClientComponent extends Component
         }
 
         $this->totalRegistros = Client::count();
+        $this->categories = Category::all(); 
         
         $clientes = Client::where('name','like','%'.$this->search.'%')
             ->orderBy('id','desc')
             ->paginate($this->cant);
        
         return view('livewire.client.client-component',[
-            'clientes' => $clientes
+            'clientes' => $clientes,
+            'categories' => $this->categories,
         ]);
     }
 
+    public function categories(){
+        return Category::all();
+    }
+    
     public function create(){
 
         $this->Id=0;
@@ -61,7 +71,8 @@ class ClientComponent extends Component
         $rules = [
             'name' => 'required|min:5|max:255',
             'identificacion' => 'required|max:15|unique:clients',
-            'email' => 'max:255|nullable'
+            'email' => 'max:255|nullable',
+            'category_id' => 'required|numeric',
         ];
 
 
@@ -73,7 +84,8 @@ class ClientComponent extends Component
         $client->telefono = $this->telefono; 
         $client->email = $this->email; 
         $client->empresa = $this->empresa; 
-        $client->nit = $this->nit; 
+        $client->nit = $this->nit;
+        $client->category_id = $this->category_id; 
 
         $client->save(); 
         
@@ -94,6 +106,7 @@ class ClientComponent extends Component
         $this->email = $client->email;
         $this->empresa = $client->empresa;
         $this->nit = $client->nit;
+        $this->category_id = $client->category_id;
 
         $this->dispatch('open-modal','modalClient');
 
@@ -104,7 +117,8 @@ class ClientComponent extends Component
         $rules = [
             'name' => 'required|min:5|max:255',
             'identificacion' => 'required|max:15|unique:clients,id,'.$this->Id,
-            'email' => 'max:255|email|nullable'
+            'email' => 'max:255|email|nullable',
+            'category_id' => 'required|numeric',
         ];
 
         $this->validate($rules);
@@ -115,6 +129,7 @@ class ClientComponent extends Component
         $client->email = $this->email;
         $client->empresa = $this->empresa;
         $client->nit = $this->nit;
+        $client->category_id = $this->category_id;
 
         $client->update();
 

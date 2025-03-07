@@ -65,6 +65,24 @@
                     <option value="PANDO">PANDO</option>
                 </select>
             </div>
+            
+            {{-- Select category --}}
+            <div class="form-group col-md-5">
+                <label for="category_id">Categoria:</label>
+
+                <select wire:model='category_id' id="category_id" class="form-control">
+                    <option value="0">Seleccionar</option>
+
+                    @foreach ($this->categories as $category)
+                    <option value="{{$category->id}}">{{$category->name}}</option>
+                    @endforeach
+
+                </select>
+
+                @error('category_id')
+                    <div class="alert alert-danger w-100 mt-2">{{$message}}</div>
+                @enderror
+            </div>
 
         </div>
         

@@ -12,9 +12,10 @@
              <th>Codigo</th>
              <th>Nombre</th>
              <th>Carnet</th>
-             <th>Tipo de cliente</th>
+             {{-- <th>Tipo de cliente</th> --}}
              {{-- <th>Tipo Incentivo</th> --}}
              <th>Ciudad</th>
+             <th>tipo</th>
              <th width="3%">...</th>
              <th width="3%">...</th>
              <th width="3%">...</th>
@@ -27,9 +28,10 @@
                 <td>{{$cliente->identificacion}}</td>
                 <td>{{$cliente->name}}</td>
                 <td>{{$cliente->telefono}}</td>
-                <td>{{$cliente->empresa}}</td>
-                 {{-- <td>{{$cliente->email}}</td>--}}
+                  {{--<td>{{$cliente->empresa}}</td>
+                <td>{{$cliente->email}}</td>--}}
                 <td>{{$cliente->nit}}</td>
+                <td>{{$cliente->category->name}}</td>
 
                 <td>
                     <a href="{{route('clients.show',$cliente)}}" class="btn btn-success btn-sm" title="Ver">

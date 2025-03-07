@@ -5,6 +5,7 @@ namespace App\Livewire\Sale;
 use Livewire\Component;
 use Livewire\Attributes\On;
 use App\Models\Client as Cliente;
+use App\Models\Category;
 
 class Client extends Component
 {
@@ -19,12 +20,21 @@ class Client extends Component
     public $email;
     public $empresa;
     public $nit;
+    public $category_id;
+
+    public $categories = [];
 
     public function render()
     {
+        $this->categories = Category::all(); 
+        
         return view('livewire.sale.client',[
             "clients" => Cliente::all()
         ]);
+    }
+
+    public function categories(){
+        return Category::all();
     }
 
     #[On('client_id')]
@@ -48,7 +58,8 @@ class Client extends Component
         $rules = [
             'name' => 'required|min:5|max:255',
             'identificacion' => 'required|max:15|unique:clients',
-            'email' => 'max:255|email|nullable'
+            'email' => 'max:255|email|nullable',
+            'category_id' => 'required|numeric',
         ];
 
 
@@ -61,6 +72,7 @@ class Client extends Component
         $client->email = $this->email; 
         $client->empresa = $this->empresa; 
         $client->nit = $this->nit; 
+        $client->category_id = $this->category_id; 
 
         $client->save(); 
         

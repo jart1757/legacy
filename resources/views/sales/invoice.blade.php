@@ -139,7 +139,7 @@
 
                 @if($sale->client->empresa)
                 <span class="shop-info">
-                    <b>Tipo de Cliente: </b>{{$sale->client->empresa}}
+                    <b>Tipo de Cliente: </b> {{$sale->client->category->name ?? 'Sin categoría'}}
                 </span>
                 @endif 
 
@@ -215,7 +215,7 @@
             <td>
                 ___________________________ <br> 
                 <b>{{$sale->user->name}}</b> <br>
-                        Realizo entrega
+                        Encargado Oficina
             </td>
         </tr>
 
@@ -225,7 +225,7 @@
             <td>
                 ___________________________ <br> 
                 <b>{{$sale->delivery->name}}</b> <br>
-                        Realizo Salida
+                        Realizo Salida de los productos
             </td>
         </tr>
 

@@ -36,7 +36,7 @@
                 @enderror
             </div>
             {{-- Input Empresa --}}
-       {{-- Input Tipo de Cliente --}}
+       {{-- Input Tipo de Cliente 
             <div class="form-group col-md-6">
         <label for="empresa">Tipo de Cliente:</label>
         <select wire:model='empresa' class="form-control" id="empresa">
@@ -48,7 +48,7 @@
         @error('empresa')
             <div class="alert alert-danger w-100 mt-2">{{$message}}</div>
         @enderror
-    </div>
+    </div>--}}
             {{-- Input Nit --}}
             <div class="form-group col-md-6">
                 <label for="nit">Departamento:</label>

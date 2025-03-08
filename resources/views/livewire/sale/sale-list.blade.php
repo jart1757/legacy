@@ -71,7 +71,7 @@
                 <td>{{$sale->fecha}}</td>
                 <td>{{$sale->fechaing}}</td>
                 <td>{{$sale->delivery->name}}</td>
-                <td>{{$sale->client->empresa  }}</td>
+                <td>{{$sale->client->category->name ?? 'Sin categoría'}}</td>
                 <td>{{$sale->tipo  }}</td>
             
         

@@ -20,13 +20,15 @@
             @include('sales.card-details')
             {{-- Card pago --}}
             @include('sales.card-pago')
-            {{-- Card cliente --}}
-            @livewire('sale.client')
+         
    
    
          </div>
-         {{-- COLUMNA PRODUCTOS --}}
+
          <div class="col-md-6">
+               {{-- Card cliente --}}
+               @livewire('sale.client')
+                        {{-- COLUMNA PRODUCTOS --}}
             @include('sales.list-products')
          </div>
 

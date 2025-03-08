@@ -41,6 +41,12 @@ class Client extends Component
     public function client_id($id=1){
         $this->client = $id;
         $this->nameClient($id);
+          // Obtener el category_id del cliente seleccionado
+        $findClient = Cliente::find($id);
+        $category_id = $findClient->category_id ?? null;
+
+        // Enviar el category_id a los productos
+        $this->dispatch('updateCategory', ['category_id' => $category_id]);
     }
 
     public function mount(){

@@ -11,6 +11,7 @@ class ProductRow extends Component
     public Product $product;
     public $stock;
     public $stockLabel;
+    public $category_id = null;
 
     protected function getListeners(){
 
@@ -19,16 +20,24 @@ class ProductRow extends Component
             "incrementStock.{$this->product->id}" => "incrementStock",
             "refreshProducts" => "mount",
             "devolverStock.{$this->product->id}" => "devolverStock",
+            "updateCategory" => "updateCategory",  // Escuchar evento para actualizar categoría
             
         ];
     }
-
     public function render()
-    {
-        $this->stockLabel = $this->stockLabel();
+{
+    $productos = Product::when($this->category_id, function ($query) {
+        $query->where('category_id', $this->category_id);
+    })->get();
 
-        return view('livewire.sale.product-row');
-    }
+    $this->stockLabel = $this->stockLabel();
+
+    return view('livewire.sale.product-row', [
+        'productos' => $productos
+    ]);
+}
+
+    
 
     public function mount(){
         $this->stock = $this->product->stock;
@@ -68,6 +77,12 @@ class ProductRow extends Component
         }else{
             return '<span class="badge badge-pill badge-success">'.$this->stock.'</span>';
         }
+    }
+    // Método para actualizar la categoría
+    public function updateCategory($data)
+    {
+        $this->category_id = $data['category_id'];
+        $this->dispatch('refreshProducts'); // Refrescar productos
     }
     
 }

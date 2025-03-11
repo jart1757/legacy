@@ -26,10 +26,9 @@ class Client extends Component
 
     public function render()
     {
-        $this->categories = Category::all(); 
-        
-        return view('livewire.sale.client',[
-            "clients" => Cliente::all()
+        return view('livewire.sale.client', [
+            "clients" => Cliente::latest()->take(50)->get(), // Solo los últimos 50 clientes
+            "categories" => Category::all()
         ]);
     }
 
@@ -96,7 +95,7 @@ class Client extends Component
     }
 
     public function clean(){
-        $this->reset(['name','identificacion','telefono','email','empresa','nit']);
+        $this->reset(['name','identificacion','telefono','email','empresa','nit','category_id']);
         $this->resetErrorBag();
     }
 }

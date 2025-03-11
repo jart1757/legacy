@@ -5,9 +5,12 @@ namespace App\Livewire\Sale;
 use App\Models\Product;
 use Livewire\Component;
 use Livewire\Attributes\On;
+use Livewire\WithPagination;
+
 
 class ProductRow extends Component
 {
+    use WithPagination; // Habilita la paginación en Livewire
     public Product $product;
     public $stock;
     public $stockLabel;
@@ -24,18 +27,20 @@ class ProductRow extends Component
             
         ];
     }
+    
     public function render()
-{
-    $productos = Product::when($this->category_id, function ($query) {
-        $query->where('category_id', $this->category_id);
-    })->get();
+    {
+        $productos = Product::when($this->category_id, function ($query) {
+            $query->where('category_id', $this->category_id);
+        })->distinct()->paginate(19);
+        
 
-    $this->stockLabel = $this->stockLabel();
+       $this->stockLabel = $this->stockLabel();
 
-    return view('livewire.sale.product-row', [
+      return view('livewire.sale.product-row', [
         'productos' => $productos
-    ]);
-}
+      ]);
+    }
 
     
 
@@ -43,15 +48,17 @@ class ProductRow extends Component
         $this->stock = $this->product->stock;
     }
 
-    public function addProduct(Product $product){
-
-        if($this->stock==0){
-            return;
-        }
-
-        $this->dispatch('add-product',$product);
-        $this->stock--;
+    public function addProduct(Product $product)
+{
+    if ($product->stock == 0) {
+        return;
     }
+
+    $product->decrement('stock'); // Disminuye directamente en la base de datos
+    $this->stock = $product->fresh()->stock; // Refresca el valor después de la actualización
+    
+    $this->dispatch('add-product', $product);
+}
 
     public function decrementStock(){
         $this->stock--;

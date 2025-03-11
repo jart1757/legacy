@@ -137,11 +137,12 @@
                 </span>
                 @endif 
 
-                @if($sale->client->empresa)
+                @if($sale->client->category_id)
                 <span class="shop-info">
                     <b>Tipo de Cliente: </b> {{$sale->client->category->name ?? 'Sin categoría'}}
                 </span>
-                @endif 
+            @endif
+            
 
                 @if($sale->client->nit)
                 <span class="shop-info">
@@ -198,6 +199,13 @@
 
             </tr> 
             @endforelse
+            <tr>
+                <td colspan="3"></td>
+                <td><b>Descuento:</b></td>
+                <td>
+                    <b>{{ money($sale->descuento) }}</b> <!-- Mostrar el descuento aplicado -->
+                </td>
+            </tr>
             <tr>
                 <td colspan="3"></td>
                 <td>Total:</td>

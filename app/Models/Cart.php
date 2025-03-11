@@ -59,5 +59,13 @@ class Cart
        return \Cart::session(userId())->getTotalQuantity();
      }
 
+        // Obtener el total con descuento
+    public static function getTotalConDescuento($descuento){
+        // Obtener el total sin descuento
+        $total = self::getTotal(); // Llama al método getTotal() para obtener el total sin descuento
+        
+        // Aplicar el descuento
+        return $total - $descuento; // Retorna el total después de aplicar el descuento
+    }
 
 }

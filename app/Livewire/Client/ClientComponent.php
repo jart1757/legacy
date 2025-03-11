@@ -43,9 +43,11 @@ class ClientComponent extends Component
         $this->totalRegistros = Client::count();
         $this->categories = Category::all(); 
         
-        $clientes = Client::where('name','like','%'.$this->search.'%')
-            ->orderBy('id','desc')
+        $clientes = Client::with('category')
+            ->where('name', 'like', '%' . $this->search . '%')
+            ->orderBy('id', 'desc')
             ->paginate($this->cant);
+
        
         return view('livewire.client.client-component',[
             'clientes' => $clientes,

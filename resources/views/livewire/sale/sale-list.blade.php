@@ -35,6 +35,7 @@
              <th>ID</th>
              <th>Cliente</th>
              <th>Total</th>
+            <th>Descuento</th>
              <th>Cantidad de Productos</th>
              <th>Fecha de Salida</th>
              <th>Fecha de Ingreso</th>
@@ -61,6 +62,11 @@
                 <td>
                     <span class="badge badge-secondary">
                         {{money($sale->total)}}
+                    </span>
+                </td>
+                <td>
+                    <span class="badge badge-secondary">
+                        {{money($sale->descuento)}}
                     </span>
                 </td>
                 <td>

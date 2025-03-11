@@ -35,6 +35,9 @@ class SaleCreate extends Component
     public $delivery_id;
     public $file_path;
     public $tipo;
+    public $departamento;
+    public $provincia;
+
     
     // Agregar propiedad descuento
     public $descuento = 0; // Valor inicial del descuento
@@ -100,6 +103,8 @@ class SaleCreate extends Component
             $sale->delivery_id = $this->delivery_id;
             $sale->file_path = $this->file_path;
             $sale->tipo = $this->tipo;
+            $sale->departamento = $this->departamento;
+            $sale->provincia = $this->provincia;
             $sale->descuento = $this->descuento;
             $sale->save();
 

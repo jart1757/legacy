@@ -19,6 +19,8 @@ return new class extends Migration
             $table->date('fecha')->nullable();
             $table->date('fechaing')->nullable();
             $table->string('tipo')->nullable();
+            $table->string('departamento')->nullable();
+            $table->string('provincia')->nullable();
             $table->foreignId('user_id')->constrained();
             $table->foreignId('client_id')->constrained();
             $table->foreignId('delivery_id')->nullable()->constrained();

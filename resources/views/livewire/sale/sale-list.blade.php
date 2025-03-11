@@ -42,6 +42,7 @@
              <th>Usuario</th>
              <th>Tipo</th>
              <th>Incentivo</th>
+             <th>Departamento</th>
              
              <th width="3%">...</th>
              <th width="3%">...</th>
@@ -78,7 +79,8 @@
                 <td>{{$sale->fechaing}}</td>
                 <td>{{$sale->delivery->name}}</td>
                 <td>{{$sale->client->category->name ?? 'Sin categoría'}}</td>
-                <td>{{$sale->tipo  }}</td>
+                <td>{{$sale->tipo}}</td>
+                <td>{{$sale->departamento}}</td>
             
         
                 <td>

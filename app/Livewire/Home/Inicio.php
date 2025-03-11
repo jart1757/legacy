@@ -46,6 +46,9 @@ class Inicio extends Component
     public $bestSellers = 0;
     public $bestBuyers = 0;
 
+    //para regiones la grafica 
+    public $salesByRegion = [];
+
     public function render()
     {
         $this->sales_today();
@@ -53,9 +56,29 @@ class Inicio extends Component
         $this->boxes_reports();
         $this->set_products_reports();
         $this->set_best_sellers_buyers();
+        $this->getSalesByRegion(); // Carga ventas por región
 
         return view('livewire.home.inicio');
     }
+    // Para calcular la región
+    public function getSalesByRegion()
+    {
+       $this->salesByRegion = DB::table('sales as s')
+           ->join('item_sale as is', 's.id', '=', 'is.sale_id')
+          ->select(
+             's.departamento',
+              's.provincia',
+              DB::raw('SUM(is.qty) as total_stock') // Eliminado DISTINCT, ya que no es necesario
+           )
+           ->groupBy('s.departamento', 's.provincia')
+           ->orderBy('total_stock', 'desc')
+            ->get()
+           ->toArray();
+    }
+
+    
+    
+    
 
     public function set_best_sellers_buyers()
     {

@@ -3,9 +3,9 @@
         <h3 class="card-title"><i class="fas fa-cart-plus"></i> Detalles Salidas
         </h3>
         <div class="card-tools">
-            <!-- Conteo de productos -->
+            <!-- Conteo de productos
             <i class="fas fa-tshirt" title="Numero productos"></i>
-            <span class="badge badge-pill bg-purple">{{$cart->count()}} </span>
+            <span class="badge badge-pill bg-purple">{{$cart->count()}} </span> -->
             <!-- Conteo de articulos -->
             <i class="fas fa-shopping-basket ml-2" title="Numero items"></i>
             <span class="badge badge-pill bg-purple">{{$totalArticulos}} </span>

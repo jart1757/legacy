@@ -156,6 +156,7 @@ class SaleCreate extends Component
     {
         $this->updating = 0;
         Cart::add($product);
+        $this->dispatch('refreshProducts'); // Emitir evento para actualizar productos
     }
 
     // Decrementar cantidad

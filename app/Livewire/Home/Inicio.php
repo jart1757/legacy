@@ -63,19 +63,19 @@ class Inicio extends Component
     // Para calcular la región
     public function getSalesByRegion()
     {
-       $this->salesByRegion = DB::table('sales as s')
-           ->join('item_sale as is', 's.id', '=', 'is.sale_id')
-          ->select(
-             's.departamento',
-              's.provincia',
-              DB::raw('SUM(is.qty) as total_stock') // Eliminado DISTINCT, ya que no es necesario
+        $this->salesByRegion = DB::table('sales as s')
+           ->join('item_sale as i_sale', 's.id', '=', 'i_sale.sale_id')
+           ->select(
+               's.departamento',
+               's.provincia',
+               DB::raw('SUM(i_sale.qty) as total_stock')
            )
            ->groupBy('s.departamento', 's.provincia')
            ->orderBy('total_stock', 'desc')
-            ->get()
+           ->get()
            ->toArray();
     }
-
+    
     
     
     

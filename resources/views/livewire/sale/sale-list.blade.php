@@ -42,7 +42,7 @@
              <th>Usuario</th>
              <th>Tipo</th>
              <th>Incentivo</th>
-             <th>Departamento</th>
+             <th>Departamento de Destino</th>
              
              <th width="3%">...</th>
              <th width="3%">...</th>

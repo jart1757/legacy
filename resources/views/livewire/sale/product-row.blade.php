@@ -3,7 +3,7 @@
     <tr>
         <td>{{$product->id}}</td>
         <td>{{$product->name}}</td>
-        <td>{!!$product->precio!!}</td>
+        <td>{!!$product->precio_venta!!}</td>
         <td>{!!$product->category->name!!}</td>
         <td>
             @if($product->stock <= $product->stock_minimo)

@@ -127,7 +127,7 @@
             <div class="row">
               <div class="bg-lightblue py-2 px-3 mt-4 col-md-6">
                 <h2 class="mb-0">
-                    {!!$product->precio!!}
+                    {!!$product->precio_venta!!}
                 </h2>
                 <h4 class="mt-0">
                   <small>Precio venta </small>

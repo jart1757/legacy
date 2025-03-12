@@ -26,7 +26,7 @@
                 <td>{{$product->id}}</td>
                 <td>{{$product->name}}</td>
                 <td>{!! $product->stockLabel !!}</td>
-                <td>{!! $product->precio !!}</td>
+                <td>{!! $product->precio_venta !!}</td>
                 <td>
                    <a class="badge badge-secondary" href="{{route('categories.show',$product->category->id)}}">{{$product->category->name}}</a> 
                 </td>

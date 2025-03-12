@@ -34,6 +34,7 @@ class ProductRow extends Component
             $query->where('category_id', $this->category_id);
         })->distinct()->paginate(19);
         
+        
 
        $this->stockLabel = $this->stockLabel();
 

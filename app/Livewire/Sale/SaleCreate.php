@@ -37,11 +37,12 @@ class SaleCreate extends Component
     public $tipo;
     public $departamento;
     public $provincia;
-    
 
     
     // Agregar propiedad descuento
     public $descuento = 0; // Valor inicial del descuento
+
+
 
     public function render()
     {
@@ -141,6 +142,7 @@ class SaleCreate extends Component
     public function client_id($id = 1)
     {
         $this->client = $id;
+        $this->dispatch('msg', 'Cliente seleccionado. Actualizando límites...', 'info');
     }
 
     // Detectar cuando se edite el input pago
@@ -171,6 +173,15 @@ class SaleCreate extends Component
     // Incrementar cantidad
     public function increment($id)
     {
+        $cart = Cart::getCart();
+        $totalQty = $cart->sum('quantity');
+        $maxQty = $this->getMaxProductsByCategory();
+    
+        if ($totalQty >= $maxQty) {
+            $this->dispatch('msg', "No puedes agregar más productos. Límite máximo: $maxQty", "warning");
+            return;
+        }
+    
         $this->updating = 0;
         Cart::increment($id);
         $this->dispatch("decrementStock.{$id}");
@@ -210,6 +221,19 @@ class SaleCreate extends Component
         return Product::where('name', 'like', '%' . $this->search . '%')
             ->orderBy('id', 'desc')
             ->paginate($this->cant);
+    }
+    // Obtener límite según categoría del cliente
+    public function getMaxProductsByCategory()
+    {
+        $client = \App\Models\Client::find($this->client);
+
+        return match ($client->category_id) {
+            1 => 5,  // Bonificado
+           2 => 20, // Mayorista
+            3 => 1,  // Preferente
+            4 => 5,  // Reconsumo (5 cajas)
+            default => 0,
+        };
     }
 
 

@@ -58,14 +58,15 @@
                             <span class="mx-1">{{$product->quantity}}</span>
 
                             <button
-                             wire:click='increment({{$product->id}})'
-                             class="btn btn-primary btn-xs"
-                             wire:loading.attr='disabled'
-                             wire:target='increment'
-                             {{$product->quantity >= $product->associatedModel->stock ? 'disabled' : ''}}
-                             >
-                                +
-                            </button>
+                            wire:click='increment({{$product->id}})'
+                            class="btn btn-primary btn-xs"
+                            wire:loading.attr='disabled'
+                            wire:target='increment'
+                            {{ $cart->sum('quantity') >= $this->getMaxProductsByCategory() ? 'disabled' : '' }}
+                            >
+                            +
+                             </button>
+                        
                             
                         </td>
                         <td>{{money($product->quantity*$product->price)}}</td>

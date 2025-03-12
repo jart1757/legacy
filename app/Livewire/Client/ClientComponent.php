@@ -14,12 +14,12 @@ class ClientComponent extends Component
 {
     use WithPagination;
 
-    //Propiedades clase
-    public $search='';
-    public $totalRegistros=0;
-    public $cant=5;
+    // Propiedades de la clase
+    public $search = '';
+    public $totalRegistros = 0;
+    public $cant = 5;
 
-    //Propiedades modelo
+    // Propiedades del modelo
     public $Id;
     public $name;
     public $identificacion;
@@ -32,73 +32,77 @@ class ClientComponent extends Component
     public $clients = [];
     public $selectedClientId;
     public $categories = [];
+    public $client; // Mantendrá el ID del cliente seleccionado
 
-    
     public function render()
     {
-        if($this->search!=''){
+        if ($this->search != '') {
             $this->resetPage();
         }
 
         $this->totalRegistros = Client::count();
-        $this->categories = Category::all(); 
-        
+        $this->categories = Category::all();
+
         $clientes = Client::with('category')
             ->where('name', 'like', '%' . $this->search . '%')
             ->orderBy('id', 'desc')
             ->paginate($this->cant);
 
-       
-        return view('livewire.client.client-component',[
+        return view('livewire.client.client-component', [
             'clientes' => $clientes,
             'categories' => $this->categories,
         ]);
     }
 
-    public function categories(){
+    public function categories()
+    {
         return Category::all();
     }
-    
-    public function create(){
 
-        $this->Id=0;
+    public function updatedClient($value)
+    {
+        $this->selectedClientId = $value;
+    }
+
+    public function create()
+    {
+        $this->Id = 0;
         $this->clean();
 
-        $this->dispatch('open-modal','modalClient');
+        $this->dispatch('open-modal', 'modalClient');
     }
 
     // Crear cliente
-    public function store(){
-        
+    public function store()
+    {
         $rules = [
             'name' => 'required|min:5|max:255',
-            'identificacion' => 'required|max:15|unique:clients',
-            'email' => 'max:255|nullable',
+            'identificacion' => 'required|max:15|unique:clients,identificacion',
+            'telefono' => 'required|max:15|unique:clients,telefono',
+            'email' => 'max:255|nullable|email',
             'category_id' => 'required|numeric',
         ];
 
-
         $this->validate($rules);
 
-        $client = new Client();
-        $client->name = $this->name; 
-        $client->identificacion = $this->identificacion;
-        $client->telefono = $this->telefono; 
-        $client->email = $this->email; 
-        $client->empresa = $this->empresa; 
-        $client->nit = $this->nit;
-        $client->category_id = $this->category_id; 
+        Client::create([
+            'name' => $this->name,
+            'identificacion' => $this->identificacion,
+            'telefono' => $this->telefono,
+            'email' => $this->email,
+            'empresa' => $this->empresa,
+            'nit' => $this->nit,
+            'category_id' => $this->category_id,
+        ]);
 
-        $client->save(); 
-        
-        $this->dispatch('close-modal','modalClient');
-        $this->dispatch('msg','Cliente creado correctamente.');
+        $this->dispatch('close-modal', 'modalClient');
+        $this->dispatch('msg', 'Cliente creado correctamente.');
 
         $this->clean();
     }
 
-    public function edit(Client $client){
-        
+    public function edit(Client $client)
+    {
         $this->clean();
 
         $this->Id = $client->id;
@@ -110,47 +114,53 @@ class ClientComponent extends Component
         $this->nit = $client->nit;
         $this->category_id = $client->category_id;
 
-        $this->dispatch('open-modal','modalClient');
-
+        $this->dispatch('open-modal', 'modalClient');
     }
 
-    public function update(Client $client){
-        
+    public function update()
+    {
+        $client = Client::find($this->Id); // Buscar el cliente con el ID almacenado
+
+        if (!$client) {
+            $this->dispatch('msg', 'Cliente no encontrado.');
+            return;
+        }
+
         $rules = [
             'name' => 'required|min:5|max:255',
-            'identificacion' => 'required|max:15|unique:clients,id,'.$this->Id,
-            'email' => 'max:255|email|nullable',
+            'identificacion' => 'required|max:15|unique:clients,identificacion,' . $this->Id,
+            'telefono' => 'required|max:15|unique:clients,telefono,' . $this->Id,
+            'email' => 'max:255|nullable|email',
             'category_id' => 'required|numeric',
         ];
 
         $this->validate($rules);
 
-        $client->name = $this->name;
-        $client->identificacion = $this->identificacion;
-        $client->telefono = $this->telefono;
-        $client->email = $this->email;
-        $client->empresa = $this->empresa;
-        $client->nit = $this->nit;
-        $client->category_id = $this->category_id;
+        $client->update([
+            'name' => $this->name,
+            'identificacion' => $this->identificacion,
+            'telefono' => $this->telefono,
+            'email' => $this->email,
+            'empresa' => $this->empresa,
+            'nit' => $this->nit,
+            'category_id' => $this->category_id,
+        ]);
 
-        $client->update();
-
-        $this->dispatch('close-modal','modalClient');
-        $this->dispatch('msg','Cliente editado correctamente.');
+        $this->dispatch('close-modal', 'modalClient');
+        $this->dispatch('msg', 'Cliente actualizado correctamente.');
 
         $this->clean();
-
     }
-    
+
     #[On('destroyClient')]
-    public function destroy($id){
-        
-        $client = Client::findOrfail($id);
+    public function destroy($id)
+    {
+        $client = Client::findOrFail($id);
         $client->delete();
 
-        $this->dispatch('msg','Cliente eliminado correctamente.');
+        $this->dispatch('msg', 'Cliente eliminado correctamente.');
     }
-    
+
     public function updatedSearch()
     {
         $this->clients = Client::where('name', 'like', '%' . $this->search . '%')
@@ -159,7 +169,7 @@ class ClientComponent extends Component
             ->take(10)
             ->get();
     }
-    
+
     public function selectClient($clientId)
     {
         $client = Client::find($clientId);
@@ -170,10 +180,9 @@ class ClientComponent extends Component
         }
     }
 
-    public function clean(){
-        $this->reset(['name','identificacion','telefono','email','empresa','nit']);
+    public function clean()
+    {
+        $this->reset(['name', 'identificacion', 'telefono', 'email', 'empresa', 'nit']);
         $this->resetErrorBag();
     }
-
-
 }

@@ -133,7 +133,12 @@ return [
         'attribute-name' => [
             'rule-name' => 'custom-message',
         ],
+        
     ],
+    'custom' => [
+    'telefono.unique' => 'El carnet de identidad ya ha sido utilizado.',
+    ],
+
 
     /*
     |--------------------------------------------------------------------------

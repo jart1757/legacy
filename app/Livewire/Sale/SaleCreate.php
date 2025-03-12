@@ -37,6 +37,7 @@ class SaleCreate extends Component
     public $tipo;
     public $departamento;
     public $provincia;
+    
 
     
     // Agregar propiedad descuento

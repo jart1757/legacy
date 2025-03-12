@@ -23,9 +23,13 @@ class Client extends Component
     public $category_id;
 
     public $categories = [];
+    public $selectedClientId = null;
+    
+
 
     public function render()
     {
+        $this->categories = Category::all(); 
         return view('livewire.sale.client', [
             "clients" => Cliente::latest()->take(50)->get(), // Solo los últimos 50 clientes
             "categories" => Category::all()
@@ -39,18 +43,25 @@ class Client extends Component
     #[On('client_id')]
     public function client_id($id=1){
         $this->client = $id;
-        $this->nameClient($id);
-          // Obtener el category_id del cliente seleccionado
+        $this->selectedClientId = $id; // ✅ Asegurar que se actualiza el cliente seleccionado
+        $this->nameClient($id); // ✅ Corregido el nombre del método
+    
+        // Obtener la categoría del cliente seleccionado
         $findClient = Cliente::find($id);
         $category_id = $findClient->category_id ?? null;
-
+    
         // Enviar el category_id a los productos
         $this->dispatch('updateCategory', ['category_id' => $category_id]);
     }
 
-    public function mount(){
-        $this->nameClient();
+    public function mount($client = null)
+{
+    if ($client) {
+        $this->isEditing = true;
+        $this->client = $client;
+        $this->name = $client->name;
     }
+}
 
     public function nameClient($id=1){
         $findClient = Cliente::find($id);
@@ -98,4 +109,28 @@ class Client extends Component
         $this->reset(['name','identificacion','telefono','email','empresa','nit','category_id']);
         $this->resetErrorBag();
     }
+    public function editClient()
+    {
+        if ($this->client) { // Asegurar que hay un cliente seleccionado
+            $client = Cliente::find($this->client); // Usar Cliente en lugar de Client
+            if ($client) {
+                // Asignar los valores del cliente a las propiedades
+                $this->selectedClientId = $client->id;
+                $this->name = $client->name;
+                $this->identificacion = $client->identificacion;
+                $this->telefono = $client->telefono;
+                $this->email = $client->email;
+                $this->empresa = $client->empresa;
+                $this->nit = $client->nit;
+                $this->category_id = $client->category_id;
+    
+                // Abrir modal de edición
+                $this->dispatch('open-modal', 'modalClient');
+            }
+        } else {
+            $this->dispatch('msg', 'Debes seleccionar un cliente para editar.');
+        }
+    }
+    
+    
 }

@@ -1,5 +1,5 @@
 <x-modal modalId="modalClient" modalTitle="Clientes">
-    <form wire:submit={{$Id==0 ? "store" : "update($Id)"}}>
+    <form wire:submit.prevent="{{$Id == 0 ? 'store' : 'update'}}">
         <div class="form-row">
 
           {{-- Input Identificacion --}}
@@ -67,22 +67,16 @@
             </div>
             
             {{-- Select category --}}
-            <div class="form-group col-md-5">
-                <label for="category_id">Categoria:</label>
-
-                <select wire:model='category_id' id="category_id" class="form-control">
-                    <option value="0">Seleccionar</option>
-
-                    @foreach ($this->categories as $category)
-                    <option value="{{$category->id}}">{{$category->name}}</option>
+            <div class="form-group">
+                <label for="category">Categoría:</label>
+                <select wire:model="category_id" class="form-control">
+                    <option value="">Seleccione una categoría</option>
+                    @foreach ($categories as $category)
+                        <option value="{{ $category->id }}">{{ $category->name }}</option>
                     @endforeach
-
                 </select>
-
-                @error('category_id')
-                    <div class="alert alert-danger w-100 mt-2">{{$message}}</div>
-                @enderror
             </div>
+            
 
         </div>
         

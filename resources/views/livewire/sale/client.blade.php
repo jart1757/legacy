@@ -7,7 +7,14 @@
             </h3>
             <div class="card-tools">
                 <button wire:click="openModal" class="btn bg-purple btn-sm">Crear cliente</button>
-            </div>
+                    <!-- Botón Editar Cliente -->
+             <!-- Botón Editar Cliente -->
+<button wire:click="editClient" class="btn btn-warning btn-sm" @disabled(!$client)">
+  Editar Cliente
+</button>
+
+            
+              </div>
         </div>
         <div class="card-body">
             <div class="form-group">
@@ -19,13 +26,13 @@
                     <span class="input-group-text"><i class="fas fa-user"></i></span>
                   </div>
                 
-                  <select wire:model.live='client' class="form-control" id="select2">
-
+                  <select wire:model="client" class="form-control" id="select2">
+                    <option value="">Seleccione un cliente</option>
                     @foreach ($clients as $client)
-                     <option value="{{$client->id}}">{{$client->name}}</option>
+                        <option value="{{$client->id}}">{{$client->name}}</option>
                     @endforeach
-                     
-                  </select>
+                </select>
+                
 
                 </div>
         
@@ -48,6 +55,24 @@
     })
   });
   </script>
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    $('#select2').select2({
+      theme: "bootstrap4"
+    });
+
+    $('#select2').on('change', function () {
+      let clientId = $(this).val();
+      Livewire.dispatch('updatedClient', { value: clientId });
+    });
+
+    Livewire.hook('message.processed', (message, component) => {
+      $('#select2').select2({ theme: "bootstrap4" });
+    });
+  });
+</script>
+
+  
 
 </div>
 

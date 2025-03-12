@@ -12,8 +12,8 @@
 
             {{-- Boton crear venta --}}
 
-            <button wire:click="{{isset($sale) ? 'editSale' : 'createSale'}}
-            " class="btn bg-purple ml-2">
+            <button wire:click="{{isset($sale) ? 'editSale' : 'createSale'}}"
+                class="btn bg-purple ml-2">
                 <i class="fas fa-cart-plus"></i>
                 {{isset($sale) ? 'Editar venta' : 'Generar venta'}}
             </button>
@@ -27,24 +27,21 @@
                 <thead>
                     <tr>
                         <th scope="col">#</th>
-                        {{--  <th scope="col"><i class="fas fa-image"></i></th>--}}
+                        {{--  <th scope="col"><i class="fas fa-image"></i></th> --}}
                         <th scope="col">Nombre</th>
                         <th scope="col">Precio.vt</th>
                         <th scope="col" width="15%">Qty</th>
                         <th scope="col">Sub total</th>
                         <th scope="col">...</th>
                     </tr>
-
                 </thead>
                 <tbody>
                    @forelse ($cart as $product)
-                       
                     <tr>
                         <td>{{$product->id}}</td>
                         {{--  <td>
                             <x-image :item="$product->associatedModel" size="60" />
-
-                        </td>--}}
+                        </td> --}}
                         <td>{{$product->name}}</td>
                         <td>{!!$product->associatedModel->precio!!}</td>
                         <td>
@@ -81,17 +78,27 @@
                                 <i class="fas fa-trash-alt"></i>
                             </button>
                         </td>
-
                     </tr>
                     @empty
                     <tr>
-                        <td colspan="10">Sin Registros</td>
+                        <td colspan="6">Sin Registros</td>
                     </tr>                      
                     @endforelse
 
                     <tr>
-                        <td colspan="4"></td>
+    
+                        <td colspan="2"> <!-- Total Cantidad -->
+                            <h5>Total Cantidad:</h5>
+                        </td>
                         <td>
+                            <h5>
+                                <span class="badge badge-pill badge-secondary">
+                                    {{$cart->sum('quantity')}}
+                                </span>
+                            </h5>
+                        </td>
+                    
+                        <td colspan="1"> <!-- Total -->
                             <h5>Total:</h5>
                         </td>
                         <td>
@@ -101,11 +108,10 @@
                                 </span>
                             </h5>
                         </td>
-                        <td></td>
                     </tr>
+                    
                     <tr>
-
-                        <td colspan="7">
+                        <td colspan="6">
                             <strong>Total en letras:</strong>
                             {{numeroLetras($total)}}
                         </td>
@@ -113,7 +119,6 @@
                 </tbody>
             </table>
         </div>
-
     </div>
 <!-- end-card-body -->
 </div>

@@ -16,6 +16,7 @@ return new class extends Migration
             $table->decimal('total',10,2);
             $table->decimal('pago',10,2)->nullable();
             $table->decimal('descuento',10,2)->nullable();
+            $table->decimal('extra',10,2)->nullable();
             $table->date('fecha')->nullable();
             $table->date('fechaing')->nullable();
             $table->string('tipo')->nullable();
@@ -24,9 +25,11 @@ return new class extends Migration
             $table->foreignId('user_id')->constrained();
             $table->foreignId('client_id')->constrained();
             $table->foreignId('delivery_id')->nullable()->constrained();
-            $table->string('file_path')->nullable(); // Campo para almacenar la ruta del archivo
+            $table->string('pedido_path')->nullable(); // Imagen del pedido
+            $table->string('boleta_path')->nullable(); // Imagen de la boleta
             $table->timestamps();
         });
+        
     }
 
     /**

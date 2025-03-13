@@ -10,7 +10,6 @@
             <x-slot:thead>
                 <th scope="col">#</th>
                 <th scope="col">Nombre</th>
-                <th scope="col">Precio.vt</th>
                 <th scope="col">Tipo</th>
                 <th scope="col">Stock</th>
                 <th scope="col">...</th>

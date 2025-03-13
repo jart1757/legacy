@@ -45,7 +45,7 @@
             </div>
 
             <!-- Descuento -->
-            <div class="col-6 mt-2">
+            <div class="col-6">
                 <label for="descuento">Descuento:</label>
                 <div class="input-group">
                     <input type="number" wire:model="descuento" class="form-control" id="descuento" placeholder="Ingrese descuento">
@@ -54,7 +54,7 @@
         </div>
 
         <div class="row">
-            <!-- Departamento -->
+            <!-- Departamento y Provincia -->
             <div class="col-6">
                 <label for="departamento">Departamento:</label>
                 <div class="input-group">
@@ -71,10 +71,7 @@
                     </select>
                 </div>
             </div>
-        </div>
 
-        <div class="row">
-            <!-- Provincia -->
             <div class="col-6">
                 <label for="provincia">Provincia:</label>
                 <div class="input-group">
@@ -85,11 +82,28 @@
             </div>
         </div>
 
-        <!-- Archivo -->
-        <div class="col-12 mt-2">
-            <label for="file_path">Seleccione Archivo...</label>
-            <div class="input-group">
-                <input type="file" wire:model="file_path" class="form-control" id="archivo">
+        <!-- Archivos Pedido y Boleta -->
+        <div class="row">
+            <div class="col-12 mt-12">
+                <label for="pedido_path">Subir Pedido:</label>
+                <div class="input-group">
+                    <input type="file" wire:model="pedido_path" class="form-control" id="pedido">
+                    <button class="btn btn-primary" onclick="document.getElementById('pedido').click();">Seleccionar Archivo</button>
+                </div>
+                <div id="drop-area-pedido" class="mt-2 p-3 border border-dashed text-center">
+                    <p>Arrastra y suelta un archivo aquí</p>
+                </div>
+            </div>
+
+            <div class="col-12 mt-12">
+                <label for="boleta_path">Subir Boleta:</label>
+                <div class="input-group">
+                    <input type="file" wire:model="boleta_path" class="form-control" id="boleta">
+                    <button class="btn btn-primary" onclick="document.getElementById('boleta').click();">Seleccionar Archivo</button>
+                </div>
+                <div id="drop-area-boleta" class="mt-2 p-3 border border-dashed text-center">
+                    <p>Arrastra y suelta un archivo aquí</p>
+                </div>
             </div>
         </div>
     </div>

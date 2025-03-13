@@ -25,4 +25,21 @@ class Sale extends Model
         return $this->belongsTo(Delivery::class);
     }
 
+    public function images()
+    {
+        return $this->morphMany(Image::class, 'imageable');
+    }
+
+    public function pedidoImage()
+    {
+        return $this->morphOne(Image::class, 'imageable')->where('type', 'pedido');
+    }
+
+    public function boletaImage()
+    {
+        return $this->morphOne(Image::class, 'imageable')->where('type', 'boleta');
+    }
 }
+
+
+

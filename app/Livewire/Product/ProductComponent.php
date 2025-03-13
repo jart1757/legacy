@@ -51,6 +51,7 @@ class ProductComponent extends Component
         return view('livewire.product.product-component',[
             'products' => $products
         ]);
+        
     }
 
     #[Computed()]

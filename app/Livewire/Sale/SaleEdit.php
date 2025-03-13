@@ -27,6 +27,8 @@ class SaleEdit extends Component
     public $cart;
 
     public $loadCart = false;
+    public $client;
+
     
     public function render()
     {
@@ -114,7 +116,7 @@ class SaleEdit extends Component
 
     public function mount()
     {
-        // $this->cart = collect();
+        $this->client = $this->sale->client_id ?? null;
     }
     
     // Agregar producto al carrito
@@ -148,6 +150,25 @@ class SaleEdit extends Component
         ->orderBy('id','desc')
         ->paginate($this->cant);
     }
+
+    //editar clientes con su cantidad
+    public function getMaxProductsByCategory()
+    {
+        $client = $this->sale->client ?? null;
+    
+        if (!$client) {
+            return 0; // Si no hay cliente, devolvemos 0 por defecto
+        }
+    
+        return match ($client->category_id) {
+            1 => 5,  // Bonificado
+            2 => 20, // Mayorista
+            3 => 1,  // Preferente
+            4 => 5,  // Reconsumo (5 cajas)
+            default => 0,
+        };
+    }
+    
     
 
 }

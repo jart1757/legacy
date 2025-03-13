@@ -149,11 +149,6 @@
                     <b>Ciudad: </b>{{$sale->client->nit}}
                 </span>
                 @endif 
-                @if($sale->tipo)
-                <span class="shop-info">
-                    <b>Incentivo: </b>{{$sale->tipo}}
-                </span>
-                @endif 
             </td>
             <td width="33%">
                 <h2 style="text-align: center">

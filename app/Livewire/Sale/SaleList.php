@@ -14,35 +14,31 @@ use Livewire\Attributes\Title;
 class SaleList extends Component
 {
     use WithPagination;
-   
-    // Propiedades de la clase
+
     public $search = '';
-    public $totalRegistros = 0;
-    public $cant = 5;
-    public $totalVentas = 0;
-    public $dateInicio;
-    public $dateFin;
+    public $dateInicio, $dateFin;
+    public $totalRegistros, $totalVentas;
+    public $cant = 10; // Número de registros por página
 
     public function render()
     {
-        Cart::clear();
-        
-        if ($this->search != '') {
-            $this->resetPage();
+        $this->totalRegistros = Sale::count();
+
+        $salesQuery = Sale::query();
+
+        // Aplicar búsqueda por ID o por nombre de delivery
+        if ($this->search) {
+            $salesQuery->where(function ($query) {
+                $query->where('id', 'like', '%' . $this->search . '%')
+                    ->orWhereHas('delivery', function ($q) {
+                        $q->where('name', 'like', '%' . $this->search . '%');
+                    });
+            });
         }
 
-        $this->totalRegistros = Sale::count();
-        
-        // Solo modificamos la consulta para incluir la búsqueda en delivery
-        $salesQuery = Sale::where(function($query) {
-            $query->where('id', 'like', '%' . $this->search . '%')
-                  ->orWhereHas('delivery', function ($q) {
-                      $q->where('name', 'like', '%' . $this->search . '%');
-                  });
-        });
-
+        // Aplicar filtro por fechas si están definidas
         if ($this->dateInicio && $this->dateFin) {
-            $salesQuery = $salesQuery->whereBetween('fecha', [$this->dateInicio, $this->dateFin]);
+            $salesQuery->whereBetween('fecha', [$this->dateInicio, $this->dateFin]);
             $this->totalVentas = $salesQuery->sum('total');
         } else {
             $this->totalVentas = Sale::sum('total');
@@ -50,9 +46,7 @@ class SaleList extends Component
 
         $sales = $salesQuery->orderBy('id', 'desc')->paginate($this->cant);
 
-        return view('livewire.sale.sale-list', [
-            "sales" => $sales
-        ]);
+        return view('livewire.sale.sale-list', compact('sales'));
     }
 
     #[On('destroySale')]
@@ -61,13 +55,16 @@ class SaleList extends Component
         $sale = Sale::findOrFail($id);
 
         foreach ($sale->items as $item) {
-            Product::find($item->id)->increment('stock', $item->qty);
+            $product = Product::find($item->product_id);
+            if ($product) {
+                $product->increment('stock', $item->qty);
+            }
             $item->delete();
         }
 
         $sale->delete();
 
-        $this->dispatch('msg', 'Venta eliminada');
+        $this->dispatch('msg', 'Venta eliminada con éxito.');
     }
 
     #[On('setDates')]

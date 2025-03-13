@@ -13,6 +13,7 @@ use Livewire\Attributes\Title;
 use Livewire\Attributes\Computed;
 use Illuminate\Support\Facades\DB;
 use Livewire\WithFileUploads;
+use App\Models\Image;
 
 #[Title('Ventas')]
 class SaleCreate extends Component
@@ -29,20 +30,22 @@ class SaleCreate extends Component
     public $devuelve = 0;
     public $updating = 0;
     public $client = 1;
+    public $category_id = null; // Agrega esta línea
 
-    // 🔹 PROPIEDADES NUEVAS
+    // Propiedades adicionales
     public $fechaing;
     public $delivery_id;
     public $file_path;
     public $tipo;
     public $departamento;
     public $provincia;
-
+    
+    // Propiedades para subir archivos (nombres deben coincidir con el wire:model en la vista)
+    public $pedido_path;
+    public $boleta_path;
     
     // Agregar propiedad descuento
     public $descuento = 0; // Valor inicial del descuento
-
-
 
     public function render()
     {
@@ -58,9 +61,9 @@ class SaleCreate extends Component
         }
 
         return view('livewire.sale.sale-create', [
-            'products' => $this->products,
-            'cart' => Cart::getCart(),
-            'total' => $this->getTotalConDescuento(), // Llamar al método correctamente
+            'products'       => $this->products,
+            'cart'           => Cart::getCart(),
+            'total'          => $this->getTotalConDescuento(),
             'totalArticulos' => Cart::totalArticulos()
         ]);
     }
@@ -71,14 +74,12 @@ class SaleCreate extends Component
         return Cart::getTotal() - $this->descuento;
     }
 
-    // Actualizar devuelve cuando cambia el descuento
     public function updatedDescuento()
     {
         $this->devuelve = $this->pago - $this->getTotalConDescuento();
-        $this->dispatch('$refresh'); // Forzar actualización en la vista
+        $this->dispatch('$refresh');
     }
 
-    // Crear venta
     public function createSale()
     {
         $cart = Cart::getCart();
@@ -93,59 +94,95 @@ class SaleCreate extends Component
             $this->devuelve = 0;
         }
 
-        // Comenzar la transacción para crear la venta
         DB::transaction(function () {
+            // 1. Crear la venta y guardarla para obtener el ID
             $sale = new Sale();
-            $sale->total = $this->getTotalConDescuento();  // Usar el total con descuento
-            $sale->pago = $this->pago;
-            $sale->user_id = userID();
-            $sale->client_id = $this->client;
-            $sale->fecha = date('Y-m-d');
-            $sale->fechaing = $this->fechaing;
-            $sale->delivery_id = $this->delivery_id;
-            $sale->file_path = $this->file_path;
-            $sale->tipo = $this->tipo;
-            $sale->departamento = $this->departamento;
-            $sale->provincia = $this->provincia;
-            $sale->descuento = $this->descuento;
+            $sale->total         = $this->getTotalConDescuento();
+            $sale->pago          = $this->pago;
+            $sale->user_id       = userID();
+            $sale->client_id     = $this->client;
+            $sale->fecha         = date('Y-m-d');
+            $sale->fechaing      = $this->fechaing;
+            $sale->delivery_id   = $this->delivery_id;
+            $sale->tipo          = $this->tipo;
+            $sale->departamento  = $this->departamento;
+            $sale->provincia     = $this->provincia;
+            $sale->descuento     = $this->descuento;
             $sale->save();
 
-            // Agregar los items a la venta
+            // 2. Subir y asignar la ruta del pedido
+            if ($this->pedido_path) {
+                $pedidoStoredPath = $this->pedido_path->store('images', 'public');
+                $sale->pedido_path = $pedidoStoredPath;
+                $sale->save(); // Actualizamos la venta con la ruta
+
+                Image::create([
+                    'url'            => $pedidoStoredPath,
+                    'imageable_id'   => $sale->id,
+                    'imageable_type' => Sale::class,
+                    'type'           => 'pedido'
+                ]);
+            }
+
+            // 3. Subir y asignar la ruta de la boleta
+            if ($this->boleta_path) {
+                $boletaStoredPath = $this->boleta_path->store('images', 'public');
+                $sale->boleta_path = $boletaStoredPath;
+                $sale->save();
+
+                Image::create([
+                    'url'            => $boletaStoredPath,
+                    'imageable_id'   => $sale->id,
+                    'imageable_type' => Sale::class,
+                    'type'           => 'boleta'
+                ]);
+            }
+
+            // 4. Guardar los items de la venta
             foreach (\Cart::session(userID())->getContent() as $product) {
                 $item = new Item();
-                $item->name = $product->name;
-                $item->price = $product->price;
-                $item->qty = $product->quantity;
-                $item->image = $product->associatedModel->imagen;
+                $item->name       = $product->name;
+                $item->price      = $product->price;
+                $item->qty        = $product->quantity;
+                $item->image      = $product->associatedModel->imagen;
                 $item->product_id = $product->id;
-                $item->fecha = date('Y-m-d');
+                $item->fecha      = date('Y-m-d');
                 $item->save();
 
-                $sale->items()->attach($item->id, ['qty' => $product->quantity, 'fecha' => date('Y-m-d')]);
+                $sale->items()->attach($item->id, [
+                    'qty'   => $product->quantity,
+                    'fecha' => date('Y-m-d')
+                ]);
 
                 Product::find($product->id)->decrement('stock', $product->quantity);
             }
 
-            // Limpiar el carrito
+            // 5. Limpiar el carrito
             Cart::clear();
 
-            // Restablecer los valores
-            $this->reset(['pago', 'devuelve', 'client']);
+            // 6. Restablecer las propiedades relacionadas a archivos y otros valores
+            $this->reset([
+                'pago',
+                'devuelve',
+                'client',
+                'pedido_path',
+                'boleta_path'
+            ]);
 
-            // Mostrar el mensaje de éxito
-            $this->dispatch('msg', 'Venta creada correctamente', 'success', $sale->id);
+            // 7. Mensaje de éxito
+            $this->dispatch('msg', 'Venta creada correctamente con imágenes', 'success', $sale->id);
         });
     }
 
-    // Escuchar evento para establecer id de cliente
     #[On('client_id')]
     public function client_id($id = 1)
     {
         $this->client = $id;
+        $client = \App\Models\Client::find($id);
+        $this->category_id = $client->category_id ?? null; // Asigna la categoría del cliente
         $this->dispatch('msg', 'Cliente seleccionado. Actualizando límites...', 'info');
     }
 
-    // Detectar cuando se edite el input pago
     public function updatingPago($value)
     {
         $this->updating = 1;
@@ -153,16 +190,14 @@ class SaleCreate extends Component
         $this->devuelve = $this->pago - $this->getTotalConDescuento();
     }
 
-    // Agregar producto al carrito
     #[On('add-product')]
     public function addProduct(Product $product)
     {
         $this->updating = 0;
         Cart::add($product);
-        $this->dispatch('refreshProducts'); // Emitir evento para actualizar productos
+        $this->dispatch('refreshProducts');
     }
 
-    // Decrementar cantidad
     public function decrement($id)
     {
         $this->updating = 0;
@@ -170,24 +205,22 @@ class SaleCreate extends Component
         $this->dispatch("incrementStock.{$id}");
     }
 
-    // Incrementar cantidad
     public function increment($id)
     {
-        $cart = Cart::getCart();
+        $cart   = Cart::getCart();
         $totalQty = $cart->sum('quantity');
         $maxQty = $this->getMaxProductsByCategory();
-    
+
         if ($totalQty >= $maxQty) {
             $this->dispatch('msg', "No puedes agregar más productos. Límite máximo: $maxQty", "warning");
             return;
         }
-    
+
         $this->updating = 0;
         Cart::increment($id);
         $this->dispatch("decrementStock.{$id}");
     }
 
-    // Eliminar item del carrito
     public function removeItem($id, $qty)
     {
         $this->updating = 0;
@@ -195,7 +228,6 @@ class SaleCreate extends Component
         $this->dispatch("devolverStock.{$id}", $qty);
     }
 
-    // Cancelar venta
     public function clear()
     {
         Cart::clear();
@@ -205,7 +237,6 @@ class SaleCreate extends Component
         $this->dispatch('refreshProducts');
     }
 
-    // Recibir valor del pago desde currency
     #[On('setPago')]
     public function setPago($valor)
     {
@@ -214,27 +245,43 @@ class SaleCreate extends Component
         $this->devuelve = $this->pago - $this->getTotalConDescuento();
     }
 
-    // Propiedad para obtener listado productos
-    #[Computed()]
+    #[Computed]
     public function products()
     {
         return Product::where('name', 'like', '%' . $this->search . '%')
             ->orderBy('id', 'desc')
             ->paginate($this->cant);
     }
-    // Obtener límite según categoría del cliente
+
     public function getMaxProductsByCategory()
     {
         $client = \App\Models\Client::find($this->client);
 
         return match ($client->category_id) {
             1 => 5,  // Bonificado
-           2 => 20, // Mayorista
+            2 => 20, // Mayorista
             3 => 1,  // Preferente
             4 => 5,  // Reconsumo (5 cajas)
             default => 0,
         };
     }
+    
+    #[Computed]
+    public function getProducts()
+    {
+        $query = \App\Models\Product::query();
 
+        // Filtra por nombre si se ha ingresado una búsqueda
+        if ($this->search != '') {
+        $query->where('name', 'like', '%' . $this->search . '%');
+    }
+    
+        // Filtrar por la categoría del cliente seleccionado
+        if ($this->category_id) {
+        $query->where('category_id', $this->category_id);
+    }
+
+    return $query->paginate(19);
+}
 
 }

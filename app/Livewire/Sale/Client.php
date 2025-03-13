@@ -24,6 +24,8 @@ class Client extends Component
 
     public $categories = [];
     public $selectedClientId = null;
+    public $categoryName;
+
     
 
 
@@ -43,17 +45,17 @@ class Client extends Component
     #[On('client_id')]
     public function client_id($id=1){
         $this->client = $id;
-        $this->selectedClientId = $id; // ✅ Asegurar que se actualiza el cliente seleccionado
-        $this->nameClient($id); // ✅ Corregido el nombre del método
+        $this->selectedClientId = $id;
+        $this->nameClient($id);
     
         // Obtener la categoría del cliente seleccionado
         $findClient = Cliente::find($id);
-        $category_id = $findClient->category_id ?? null;
+        $this->categoryName = $findClient->category->name ?? 'Sin categoría';
     
-        // Enviar el category_id a los productos
-        $this->dispatch('updateCategory', ['category_id' => $category_id]);
+        // Enviar el category_id a otros componentes si es necesario
+        $this->dispatch('updateCategory', ['category_id' => $findClient->category_id ?? null]);
     }
-
+    
     public function mount($client = null)
 {
     if ($client) {

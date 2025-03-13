@@ -8,6 +8,7 @@ use Livewire\Attributes\On;
 use Livewire\WithPagination;
 
 
+
 class ProductRow extends Component
 {
     use WithPagination; // Habilita la paginación en Livewire
@@ -15,6 +16,8 @@ class ProductRow extends Component
     public $stock;
     public $stockLabel;
     public $category_id = null;
+    public $search = ''; // Nueva variable para la búsqueda
+    public $cant = 5; // Cantidad de registros a mostrar
 
     protected function getListeners(){
 
@@ -31,18 +34,23 @@ class ProductRow extends Component
     public function render()
     {
         $productos = Product::when($this->category_id, function ($query) {
-            $query->where('category_id', $this->category_id);
-        })->distinct()->paginate(19);
-        
-        
-
-       $this->stockLabel = $this->stockLabel();
-
-      return view('livewire.sale.product-row', [
-        'productos' => $productos
-      ]);
+            $query->where('category_id', $this->category_id); // Filtra directamente por category_id
+        })
+        ->when($this->search, function ($query) {
+            $query->whereHas('category', function ($q) {
+                $q->where('id', $this->search); // Filtra por el id de la categoría
+            });
+        })
+        ->distinct()
+        ->paginate($this->cant);
+    
+        $this->stockLabel = $this->stockLabel();
+    
+        return view('livewire.sale.product-row', [
+            'productos' => $productos
+        ]);
     }
-
+    
     
 
     public function mount(){

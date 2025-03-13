@@ -4,6 +4,7 @@
             <h3 class="card-title">
               <i class="fas fa-user"></i>
                Cliente: <span class="badge badge-secondary">{{$nameClient}}</span> 
+               <span class="badge badge-primary">{{ $categoryName }}</span>
             </h3>
             <div class="card-tools">
                 <button wire:click="openModal" class="btn bg-purple btn-sm">Crear cliente</button>
@@ -25,13 +26,14 @@
                   <div class="input-group-prepend" >
                     <span class="input-group-text"><i class="fas fa-user"></i></span>
                   </div>
-                
+
                   <select wire:model="client" class="form-control" id="select2">
-                    <option value="">Seleccione un cliente</option>
-                    @foreach ($clients as $client)
-                        <option value="{{$client->id}}">{{$client->name}}</option>
+                    @foreach ($clients as $c)
+                        <option value="{{ $c->id }}" {{ $loop->first ? 'selected' : '' }}>{{ $c->name }}</option>
                     @endforeach
                 </select>
+                
+                
                 
 
                 </div>
@@ -63,14 +65,15 @@
 
     $('#select2').on('change', function () {
       let clientId = $(this).val();
-      Livewire.dispatch('updatedClient', { value: clientId });
+      Livewire.dispatch('client_id', { id: clientId });
     });
 
     Livewire.hook('message.processed', (message, component) => {
-      $('#select2').select2({ theme: "bootstrap4" });
+      $('#select2').val(@this.client).trigger('change');
     });
   });
 </script>
+
 
   
 

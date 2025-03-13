@@ -48,6 +48,8 @@ class Inicio extends Component
 
     //para regiones la grafica 
     public $salesByRegion = [];
+    //para grafica de clientes
+    public $clientsByCategory = [];
 
     public function render()
     {
@@ -57,9 +59,25 @@ class Inicio extends Component
         $this->set_products_reports();
         $this->set_best_sellers_buyers();
         $this->getSalesByRegion(); // Carga ventas por región
+        $this->getClientsByCategory(); // Nueva función
 
         return view('livewire.home.inicio');
     }
+
+    public function getClientsByCategory()
+    {
+       $this->clientsByCategory = Client::select(
+               DB::raw('MONTH(created_at) as month'),
+               'category_id',
+               DB::raw('COUNT(*) as total')
+          )
+           ->groupBy('month', 'category_id')
+           ->orderBy('month')
+           ->get()
+          ->toArray();
+    }
+
+
     // Para calcular la región
     public function getSalesByRegion()
     {

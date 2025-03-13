@@ -51,6 +51,96 @@
 </div>
 </div>
 
+<div class="card">
+    <div class="card-header">
+        <h3 class="card-title">Clientes por Categoría y Mes</h3>
+    </div>
+    <div class="card-body">
+        <canvas id="clients-chart" width="400" height="200"></canvas>
+    </div>
+</div>
+
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    var clientsByCategory = @json($clientsByCategory);
+    
+    var categories = [...new Set(clientsByCategory.map(item => item.category_id))];
+    var labels = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'];
+    
+    var datasets = categories.map(category => {
+        var data = Array(12).fill(0);
+        clientsByCategory.filter(c => c.category_id === category).forEach(c => {
+            data[c.month - 1] = c.total;
+        });
+
+        return {
+            label: 'Categoría ' + category,
+            backgroundColor: '#' + Math.floor(Math.random() * 16777215).toString(16),
+            borderColor: '#' + Math.floor(Math.random() * 16777215).toString(16),
+            borderWidth: 1,
+            data: data
+        };
+    });
+
+    var ctx = document.getElementById('clients-chart').getContext('2d');
+    new Chart(ctx, {
+        type: 'bar', // Cambiado a 'bar' para gráfico de barras
+        data: { labels: labels, datasets: datasets },
+        options: { 
+            responsive: true, 
+            maintainAspectRatio: false,
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    title: {
+                        display: true,
+                        text: 'Cantidad de Clientes'
+                    }
+                }
+            }
+        }
+    });
+});
+</script>
+
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        var clientsByCategory = @json($clientsByCategory);
+        
+        var categories = [...new Set(clientsByCategory.map(item => item.category_id))];
+        var labels = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'];
+    
+        var datasets = categories.map(category => {
+            var data = Array(12).fill(0);
+            clientsByCategory.filter(c => c.category_id === category).forEach(c => {
+                data[c.month - 1] = c.total;
+            });
+    
+            return {
+                label: 'Categoría ' + category,
+                fill: false,
+                borderWidth: 2,
+                lineTension: 0,
+                spanGaps: true,
+                borderColor: '#' + Math.floor(Math.random() * 16777215).toString(16),
+                pointRadius: 3,
+                pointHoverRadius: 7,
+                data: data
+            };
+        });
+    
+        var ctx = document.getElementById('clients-chart').getContext('2d');
+        new Chart(ctx, {
+            type: 'line',
+            data: { labels: labels, datasets: datasets },
+            options: { responsive: true, maintainAspectRatio: false }
+        });
+    });
+    </script>
+
+
 @section('styles')
 <!-- Tus estilos adicionales si los necesitas -->
 @endsection

@@ -17,6 +17,7 @@
         </div>
         
         <input type="text" wire:model.live='search' class="form-control" placeholder="Buscar...">
+
     </div>
 </div>
 <div class="table-responsive">

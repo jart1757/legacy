@@ -51,10 +51,11 @@ class Client extends Component
         // Obtener la categoría del cliente seleccionado
         $findClient = Cliente::find($id);
         $this->categoryName = $findClient->category->name ?? 'Sin categoría';
-    
-        // Enviar el category_id a otros componentes si es necesario
+        
+        // Enviar el category_id a otros componentes para filtrar productos
         $this->dispatch('updateCategory', ['category_id' => $findClient->category_id ?? null]);
     }
+    
     
     public function mount($client = null)
 {

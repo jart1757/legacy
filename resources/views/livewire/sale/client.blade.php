@@ -50,7 +50,7 @@
   document.addEventListener('DOMContentLoaded', function() {
     $("#select2").select2({
       theme:"bootstrap4"
-    });
+    }); 
 
     $("#select2").on('change', function(){
       Livewire.dispatch('client_id',{id: $(this).val()})

@@ -33,23 +33,19 @@ class ProductRow extends Component
     
     public function render()
     {
-        $productos = Product::when($this->category_id, function ($query) {
-            $query->where('category_id', $this->category_id); // Filtra directamente por category_id
+        $productos = Product::when($this->search, function ($query) {
+            $query->where('category_id', $this->search); // Filtra por category_id
         })
-        ->when($this->search, function ($query) {
-            $query->whereHas('category', function ($q) {
-                $q->where('id', $this->search); // Filtra por el id de la categoría
-            });
-        })
-        ->distinct()
         ->paginate($this->cant);
     
         $this->stockLabel = $this->stockLabel();
     
         return view('livewire.sale.product-row', [
-            'productos' => $productos
+            'productos' => $productos,
+            'categories' => \App\Models\Category::all() // Pasar las categorías a la vista
         ]);
     }
+    
     
     
 

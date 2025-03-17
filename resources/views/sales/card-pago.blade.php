@@ -1,22 +1,18 @@
 <div class="card card-info">
     <div class="card-header">
         <h3 class="card-title"><i class="fas fa-wallet"></i> Detalles </h3>
-
         <div class="card-tools d-flex justify-content-center align-self-center">
             @livewire('sale.currency',['total'=>$total])
         </div>
     </div>
     <div class="card-body">
         <div class="row">
-            <!-- Fecha de Entrega -->
             <div class="col-6">
                 <label for="fechaing">Fecha de Entrega:</label>
                 <div class="input-group">
                     <input type="date" wire:model="fechaing" class="form-control" id="fechaing">
                 </div>
             </div>
-
-            <!-- Repartidor -->
             <div class="col-6">
                 <label for="delivery_id">Repartidor:</label>
                 <div class="input-group">
@@ -31,20 +27,12 @@
         </div>
 
         <div class="row">
-            <!-- Incentivo -->
             <div class="col-6">
-                <label for="tipo">Incentivo:</label>
+                <label for="extra">Extra:</label>
                 <div class="input-group">
-                    <select wire:model="tipo" class="form-control" id="tipo">
-                        <option value="">SELECCIONE INCENTIVO</option>
-                        <option value="NUEVO">NUEVO</option>
-                        <option value="RECONSUMO">RECONSUMO</option>
-                        <option value="CAJA GRATIS">CAJA GRATIS</option>
-                    </select>
+                    <input type="number" wire:model="extra" class="form-control" id="extra" placeholder="Ingrese monto por caja extra">
                 </div>
             </div>
-
-            <!-- Descuento -->
             <div class="col-6">
                 <label for="descuento">Descuento:</label>
                 <div class="input-group">
@@ -53,12 +41,29 @@
             </div>
         </div>
 
-        <div class="row">
-            <!-- Departamento y Provincia -->
+        <div class="row mt-3">
+            <div class="col-6">
+                <label for="pedido_path">Subir Pedido:</label>
+                <div class="input-group">
+                    <input type="file" wire:model="pedido_path" class="form-control d-none" id="pedido">
+                    <button class="btn btn-primary" type="button" onclick="document.getElementById('pedido').click();">Seleccionar Archivo</button>
+                </div>
+            </div>
+            <div class="col-6">
+                <label for="boleta_path">Subir Boleta:</label>
+                <div class="input-group">
+                    <input type="file" wire:model="boleta_path" class="form-control d-none" id="boleta">
+                    <button class="btn btn-primary" type="button" onclick="document.getElementById('boleta').click();">Seleccionar Archivo</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="row mt-3">
             <div class="col-6">
                 <label for="departamento">Departamento:</label>
                 <div class="input-group">
                     <select wire:model="departamento" class="form-control" id="departamento">
+                        <option value="" selected>Seleccione Departamento</option>
                         <option value="LA PAZ">LA PAZ</option>
                         <option value="COCHABAMBA">COCHABAMBA</option>
                         <option value="SANTA CRUZ">SANTA CRUZ</option>
@@ -71,38 +76,12 @@
                     </select>
                 </div>
             </div>
-
             <div class="col-6">
                 <label for="provincia">Provincia:</label>
                 <div class="input-group">
                     <select wire:model="provincia" class="form-control" id="provincia">
                         <!-- Provincias serán llenadas dinámicamente -->
                     </select>
-                </div>
-            </div>
-        </div>
-
-        <!-- Archivos Pedido y Boleta -->
-        <div class="row">
-            <div class="col-12 mt-12">
-                <label for="pedido_path">Subir Pedido:</label>
-                <div class="input-group">
-                    <input type="file" wire:model="pedido_path" class="form-control" id="pedido">
-                    <button class="btn btn-primary" onclick="document.getElementById('pedido').click();">Seleccionar Archivo</button>
-                </div>
-                <div id="drop-area-pedido" class="mt-2 p-3 border border-dashed text-center">
-                    <p>Arrastra y suelta un archivo aquí</p>
-                </div>
-            </div>
-
-            <div class="col-12 mt-12">
-                <label for="boleta_path">Subir Boleta:</label>
-                <div class="input-group">
-                    <input type="file" wire:model="boleta_path" class="form-control" id="boleta">
-                    <button class="btn btn-primary" onclick="document.getElementById('boleta').click();">Seleccionar Archivo</button>
-                </div>
-                <div id="drop-area-boleta" class="mt-2 p-3 border border-dashed text-center">
-                    <p>Arrastra y suelta un archivo aquí</p>
                 </div>
             </div>
         </div>

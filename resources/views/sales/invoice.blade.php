@@ -113,7 +113,7 @@
 
                 @if($sale->client->identificacion)
                 <span class="shop-info">
-                    <b>Codigo: </b>{{$sale->client->identificacion}}
+                    <b>Codigo Legacy: </b>{{$sale->client->identificacion}}
                 </span>
                 @endif  
                 
@@ -141,12 +141,18 @@
                 <span class="shop-info">
                     <b>Tipo de Cliente: </b> {{$sale->client->category->name ?? 'Sin categoría'}}
                 </span>
-            @endif
+                @endif
             
 
                 @if($sale->client->nit)
                 <span class="shop-info">
-                    <b>Ciudad: </b>{{$sale->client->nit}}
+                    <b>Ciudad Destino: </b>{{$sale->departamento}} - {{$sale->provincia}}
+                </span>
+                @endif 
+
+                @if($sale->client->nit)
+                <span class="shop-info">
+                    <b>Usuario: </b>{{$sale->delivery->name}}
                 </span>
                 @endif 
             </td>

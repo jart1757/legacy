@@ -81,98 +81,104 @@ class SaleCreate extends Component
     }
 
     public function createSale()
-    {
-        $cart = Cart::getCart();
+{
+    $cart = Cart::getCart();
 
-        if (count($cart) == 0) {
-            $this->dispatch('msg', 'No hay productos', "danger");
-            return;
-        }
+    if (count($cart) == 0) {
+        $this->dispatch('msg', 'No hay productos', "danger");
+        return;
+    }
 
-        if ($this->pago < $this->getTotalConDescuento()) {
-            $this->pago = $this->getTotalConDescuento();
-            $this->devuelve = 0;
-        }
+    if ($this->pago < $this->getTotalConDescuento()) {
+        $this->pago = $this->getTotalConDescuento();
+        $this->devuelve = 0;
+    }
 
-        DB::transaction(function () {
-            // 1. Crear la venta y guardarla para obtener el ID
-            $sale = new Sale();
-            $sale->total         = $this->getTotalConDescuento();
-            $sale->pago          = $this->pago;
-            $sale->user_id       = userID();
-            $sale->client_id     = $this->client;
-            $sale->fecha         = date('Y-m-d');
-            $sale->fechaing      = $this->fechaing;
-            $sale->delivery_id   = $this->delivery_id;
-            $sale->tipo          = $this->tipo;
-            $sale->departamento  = $this->departamento;
-            $sale->provincia     = $this->provincia;
-            $sale->descuento     = $this->descuento;
+    DB::transaction(function () {
+        $sale = new Sale();
+        $sale->total         = $this->getTotalConDescuento();
+        $sale->pago          = $this->pago;
+        $sale->user_id       = userID();
+        $sale->client_id     = $this->client;
+        $sale->fecha         = date('Y-m-d');
+        $sale->fechaing      = $this->fechaing;
+        $sale->delivery_id   = $this->delivery_id;
+        $sale->tipo          = $this->tipo;
+        $sale->departamento  = $this->departamento;
+        $sale->provincia     = $this->provincia;
+        $sale->descuento     = $this->descuento;
+        $sale->save();
+
+        // Subida de imágenes
+        if ($this->pedido_path) {
+            $pedidoStoredPath = $this->pedido_path->store('images', 'public');
+            $sale->pedido_path = $pedidoStoredPath;
             $sale->save();
+            Image::create([
+                'url'            => $pedidoStoredPath,
+                'imageable_id'   => $sale->id,
+                'imageable_type' => Sale::class,
+                'type'           => 'pedido'
+            ]);
+        }
 
-            // 2. Subir y asignar la ruta del pedido
-            if ($this->pedido_path) {
-                $pedidoStoredPath = $this->pedido_path->store('images', 'public');
-                $sale->pedido_path = $pedidoStoredPath;
-                $sale->save(); // Actualizamos la venta con la ruta
+        if ($this->boleta_path) {
+            $boletaStoredPath = $this->boleta_path->store('images', 'public');
+            $sale->boleta_path = $boletaStoredPath;
+            $sale->save();
+            Image::create([
+                'url'            => $boletaStoredPath,
+                'imageable_id'   => $sale->id,
+                'imageable_type' => Sale::class,
+                'type'           => 'boleta'
+            ]);
+        }
 
-                Image::create([
-                    'url'            => $pedidoStoredPath,
-                    'imageable_id'   => $sale->id,
-                    'imageable_type' => Sale::class,
-                    'type'           => 'pedido'
-                ]);
-            }
+        // Guardar los ítems de la venta
+        foreach (\Cart::session(userID())->getContent() as $product) {
+            $item = new Item();
+            $item->name       = $product->name;
+            $item->price      = $product->price;
+            $item->qty        = $product->quantity;
+            $item->image      = $product->associatedModel->imagen;
+            $item->product_id = $product->id;
+            $item->fecha      = date('Y-m-d');
+            $item->save();
 
-            // 3. Subir y asignar la ruta de la boleta
-            if ($this->boleta_path) {
-                $boletaStoredPath = $this->boleta_path->store('images', 'public');
-                $sale->boleta_path = $boletaStoredPath;
-                $sale->save();
-
-                Image::create([
-                    'url'            => $boletaStoredPath,
-                    'imageable_id'   => $sale->id,
-                    'imageable_type' => Sale::class,
-                    'type'           => 'boleta'
-                ]);
-            }
-
-            // 4. Guardar los items de la venta
-            foreach (\Cart::session(userID())->getContent() as $product) {
-                $item = new Item();
-                $item->name       = $product->name;
-                $item->price      = $product->price;
-                $item->qty        = $product->quantity;
-                $item->image      = $product->associatedModel->imagen;
-                $item->product_id = $product->id;
-                $item->fecha      = date('Y-m-d');
-                $item->save();
-
-                $sale->items()->attach($item->id, [
-                    'qty'   => $product->quantity,
-                    'fecha' => date('Y-m-d')
-                ]);
-
-                Product::find($product->id)->decrement('stock', $product->quantity);
-            }
-
-            // 5. Limpiar el carrito
-            Cart::clear();
-
-            // 6. Restablecer las propiedades relacionadas a archivos y otros valores
-            $this->reset([
-                'pago',
-                'devuelve',
-                'client',
-                'pedido_path',
-                'boleta_path'
+            $sale->items()->attach($item->id, [
+                'qty'   => $product->quantity,
+                'fecha' => date('Y-m-d')
             ]);
 
-            // 7. Mensaje de éxito
-            $this->dispatch('msg', 'Venta creada correctamente con imágenes', 'success', $sale->id);
-        });
-    }
+            Product::find($product->id)->decrement('stock', $product->quantity);
+        }
+
+        // Limpiar el carrito
+        Cart::clear();
+
+        // **Restablecer todos los valores del formulario**
+        $this->reset([
+            'pago',
+            'devuelve',
+            'client',
+            'category_id',
+            'fechaing',
+            'delivery_id',
+            'tipo',
+            'departamento',
+            'provincia',
+            'descuento',
+            'pedido_path',
+            'boleta_path',
+            'search'
+        ]);
+
+        // **Emitir evento para refrescar la vista**
+        $this->dispatch('msg', 'Venta creada correctamente con imágenes', 'success', $sale->id);
+        $this->dispatch('$refresh');
+    });
+}
+
 
     #[On('client_id')]
     public function client_id($id = 1)

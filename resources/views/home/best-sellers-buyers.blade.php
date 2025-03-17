@@ -14,7 +14,7 @@
            @foreach ($bestBuyers as $delivery) 
             <li>
               <i class="fas fa-user-tie" style="font-size: 3rem"></i>
-              <a href="{{route('deliveries.show',$delivery)}}" class="users-list-name mt-2">
+              <a class="users-list-name mt-2">
                 {{$delivery->name}}
               </a>
               <span>{{money($delivery->total)}}</span>

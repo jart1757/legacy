@@ -107,37 +107,54 @@ document.addEventListener('DOMContentLoaded', function () {
 
 <script>
     document.addEventListener('DOMContentLoaded', function () {
-        var clientsByCategory = @json($clientsByCategory);
-        
-        var categories = [...new Set(clientsByCategory.map(item => item.category_id))];
-        var labels = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'];
-    
-        var datasets = categories.map(category => {
-            var data = Array(12).fill(0);
-            clientsByCategory.filter(c => c.category_id === category).forEach(c => {
-                data[c.month - 1] = c.total;
-            });
-    
-            return {
-                label: 'Categoría ' + category,
-                fill: false,
-                borderWidth: 2,
-                lineTension: 0,
-                spanGaps: true,
-                borderColor: '#' + Math.floor(Math.random() * 16777215).toString(16),
-                pointRadius: 3,
-                pointHoverRadius: 7,
-                data: data
-            };
+    var clientsByCategory = @json($clientsByCategory);
+
+    // Mapeo de categorías con nombres reales
+    var categoryNames = {
+        1: 'Bonificado',
+        2: 'Mayorista',
+        3: 'Preferente',
+        4: 'Reconsumo'
+    };
+
+    var categories = [...new Set(clientsByCategory.map(item => item.category_id))];
+    var labels = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'];
+
+    var datasets = categories.map(category => {
+        var data = Array(12).fill(0);
+        clientsByCategory.filter(c => c.category_id === category).forEach(c => {
+            data[c.month - 1] = c.total;
         });
-    
-        var ctx = document.getElementById('clients-chart').getContext('2d');
-        new Chart(ctx, {
-            type: 'line',
-            data: { labels: labels, datasets: datasets },
-            options: { responsive: true, maintainAspectRatio: false }
-        });
+
+        return {
+            label: categoryNames[category] || `Categoría ${category}`, // Usar nombre real o dejar el número
+            backgroundColor: '#' + Math.floor(Math.random() * 16777215).toString(16),
+            borderColor: '#' + Math.floor(Math.random() * 16777215).toString(16),
+            borderWidth: 1,
+            data: data
+        };
     });
+
+    var ctx = document.getElementById('clients-chart').getContext('2d');
+    new Chart(ctx, {
+        type: 'bar', // Gráfico de barras
+        data: { labels: labels, datasets: datasets },
+        options: { 
+            responsive: true, 
+            maintainAspectRatio: false,
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    title: {
+                        display: true,
+                        text: 'Cantidad de Clientes'
+                    }
+                }
+            }
+        }
+    });
+});
+
     </script>
 
 
@@ -173,7 +190,7 @@ var salesGraphChartData = {
           borderColor: '#efefef',
           pointRadius: 3,
           pointHoverRadius: 7,
-          pointColor: '#efefef',
+          pointColor: '#efefef',    
           pointBackgroundColor: '#efefef',
           data: [
               {{ $listTotalVentasMes }}

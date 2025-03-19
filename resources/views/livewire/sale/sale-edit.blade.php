@@ -29,8 +29,7 @@
                </div>
       
                <div class="col-md-6">
-                     {{-- Card cliente --}}
-                     @livewire('sale.client')
+     
                               {{-- COLUMNA PRODUCTOS --}}
                   @include('sales.list-products')
                </div>

@@ -45,7 +45,6 @@ class SaleEdit extends Component
         $this->descuento = $this->sale->descuento ?? 0;
         $this->departamento = $this->sale->departamento ?? '';
         $this->provincia = $this->sale->provincia ?? '';
-        $this->dispatch('updateSelect2', ['client' => $this->client]);
     }
 
     public function render()
@@ -107,7 +106,8 @@ class SaleEdit extends Component
 
         $this->sale->items()->sync($itemsIds);
         $this->dispatch('msg', 'Venta editada correctamente', 'success', $this->sale->id);
-        $this->clearCart(); // Llamar a la función para vaciar el carrito
+            // Limpiar el carrito y restablecer los formularios
+        $this->clearCartAndResetForm();
     }
 
     public function getItemsToCart()
@@ -184,6 +184,31 @@ class SaleEdit extends Component
         $this->cart = []; // Actualiza la propiedad en Livewire
         $this->dispatch('$refresh'); // Refresca la vista
     }
+
+    public function clearCartAndResetForm()
+{
+    // Limpiar el carrito
+    \Cart::session(userID())->clear();
+    $this->cart = []; // Actualiza la propiedad del carrito en Livewire
+    
+    // Restablecer valores de los formularios
+    $this->search = '';
+    $this->cant = 5;
+    $this->totalRegistros = 0;
+    $this->client = null;
+    $this->fechaing = now()->format('Y-m-d');
+    $this->delivery_id = '';
+    $this->extra = 0;
+    $this->descuento = 0;
+    $this->pedido_path = null;
+    $this->boleta_path = null;
+    $this->departamento = '';
+    $this->provincia = '';
+    
+    // Refrescar la vista
+    $this->dispatch('$refresh');
+}
+
 
 
 

@@ -175,9 +175,12 @@ class Inicio extends Component
 
     public function calVentasMes()
     {
-        for ($i = 1; $i <= 12; $i++) {
-            $this->listTotalVentasMes .= Sale::whereMonth('fecha', '=', $i)->sum('total') . ',';
-        }
+
+    // Recorrer los 12 meses
+    for ($i = 1; $i <= 12; $i++) {
+        // Sumar las ventas del mes basado en 'fechaing'
+        $this->listTotalVentasMes .= Sale::whereMonth('fechaing', '=', $i)->sum('total') . ',';
+    }
     }
 
     public function boxes_reports()

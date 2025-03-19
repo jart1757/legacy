@@ -38,13 +38,14 @@ class SaleEdit extends Component
 
     public function mount()
     {
-        $this->client = $this->sale->client ?? null;
+        $this->client = $this->sale->client_id ?? null;
         $this->fechaing = $this->sale->fechaing ?? now()->format('Y-m-d');
         $this->delivery_id = $this->sale->delivery_id ?? '';
         $this->extra = $this->sale->extra ?? 0;
         $this->descuento = $this->sale->descuento ?? 0;
         $this->departamento = $this->sale->departamento ?? '';
         $this->provincia = $this->sale->provincia ?? '';
+        $this->dispatch('updateSelect2', ['client' => $this->client]);
     }
 
     public function render()
@@ -65,7 +66,7 @@ class SaleEdit extends Component
 
     public function editSale()
     {
-        $this->sale->total = Cart::getTotal();
+        $this->sale->total = $this->getTotalConDescuento(); 
         $this->sale->pago = $this->sale->total;
         $this->sale->fechaing = $this->fechaing;
         $this->sale->delivery_id = $this->delivery_id;
@@ -106,6 +107,7 @@ class SaleEdit extends Component
 
         $this->sale->items()->sync($itemsIds);
         $this->dispatch('msg', 'Venta editada correctamente', 'success', $this->sale->id);
+        $this->clearCart(); // Llamar a la función para vaciar el carrito
     }
 
     public function getItemsToCart()
@@ -160,6 +162,30 @@ class SaleEdit extends Component
             ->orderBy('id', 'desc')
             ->paginate($this->cant);
     }
+    #[On('clientSelected')]
+    public function updateClient($data)
+    {
+        $this->client = $data['id'];
+    }
+    #[Computed]
+    public function getTotalConDescuento()
+    {
+        return Cart::getTotal() - $this->descuento;
+    }
+
+    public function updatedDescuento()
+    {
+        $this->dispatch('$refresh');
+    }
+
+    public function clearCart()
+    {
+        \Cart::session(userID())->clear(); // Limpia todos los productos del carrito
+        $this->cart = []; // Actualiza la propiedad en Livewire
+        $this->dispatch('$refresh'); // Refresca la vista
+    }
+
+
 
     //editar clientes con su cantidad
     public function getMaxProductsByCategory()

@@ -45,35 +45,24 @@
       @include('clients.form')
     {{-- End Modal --}}
 
-
-<script>
-  document.addEventListener('DOMContentLoaded', function() {
-    $("#select2").select2({
-      theme:"bootstrap4"
-    }); 
-
-    $("#select2").on('change', function(){
-      Livewire.dispatch('client_id',{id: $(this).val()})
-    })
-  });
-  </script>
-<script>
-  document.addEventListener('DOMContentLoaded', function() {
-    $('#select2').select2({
-      theme: "bootstrap4"
-    });
-
-    $('#select2').on('change', function () {
-      let clientId = $(this).val();
-      Livewire.dispatch('client_id', { id: clientId });
-    });
-
-    Livewire.hook('message.processed', (message, component) => {
-      $('#select2').val(@this.client).trigger('change');
-    });
-  });
-</script>
-
+    <script>
+      document.addEventListener('DOMContentLoaded', function () {
+          $('#select2').select2({
+              theme: "bootstrap4",
+              placeholder: "Buscar cliente...",
+              allowClear: true
+          });
+      
+          $('#select2').on('change', function () {
+              Livewire.dispatch('client_id', { id: $(this).val() });
+          });
+      
+          Livewire.hook('message.processed', () => {
+              $('#select2').select2();
+          });
+      });
+      </script>
+      
 
   
 

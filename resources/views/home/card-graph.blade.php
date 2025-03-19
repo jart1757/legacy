@@ -25,8 +25,7 @@
               </h3>
           </div>
           <div class="card-body">
-              <canvas class="chart" id="bar-chart" style="min-height: 300px; height: 300px; max-width: 100%;">
-              </canvas>
+            <canvas class="chart" id="bar-chart" style="height: 100px; width: 100% !important;"></canvas>
           </div>
       </div>
   </div>

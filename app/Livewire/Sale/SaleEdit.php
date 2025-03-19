@@ -6,59 +6,87 @@ use App\Models\Cart;
 use App\Models\Item;
 use App\Models\Sale;
 use App\Models\Product;
+use App\Models\Delivery;
 use Livewire\Component;
 use Livewire\Attributes\On;
 use Livewire\WithPagination;
 use Livewire\Attributes\Title;
 use Livewire\Attributes\Computed;
+use Livewire\WithFileUploads;
 
 #[Title('Ventas')]
 class SaleEdit extends Component
 {
-    use WithPagination;
+    use WithPagination, WithFileUploads;
 
-    //Propiedades clase
-    public $search='';
-    public $cant=5;
-    public $totalRegistros=0;
-
+    // Propiedades de la clase
+    public $search = '';
+    public $cant = 5;
+    public $totalRegistros = 0;
     public Sale $sale;
-
     public $cart;
-
     public $loadCart = false;
     public $client;
+    public $fechaing;
+    public $delivery_id;
+    public $extra;
+    public $descuento;
+    public $pedido_path;
+    public $boleta_path;
+    public $departamento;
+    public $provincia;
 
-    
+    public function mount()
+    {
+        $this->client = $this->sale->client ?? null;
+        $this->fechaing = $this->sale->fechaing ?? now()->format('Y-m-d');
+        $this->delivery_id = $this->sale->delivery_id ?? '';
+        $this->extra = $this->sale->extra ?? 0;
+        $this->descuento = $this->sale->descuento ?? 0;
+        $this->departamento = $this->sale->departamento ?? '';
+        $this->provincia = $this->sale->provincia ?? '';
+    }
+
     public function render()
     {
-        if(!$this->loadCart){
+        if (!$this->loadCart) {
             $this->getItemsToCart();
-        }else{
+        } else {
             $this->cart = Cart::getCart();
         }
-        
 
-        return view('livewire.sale.sale-edit',[
-            
+        return view('livewire.sale.sale-edit', [
             'totalArticulos' => Cart::totalArticulos(),
             'total' => Cart::getTotal(),
             'products' => $this->products,
+            'deliveries' => Delivery::all()
         ]);
     }
 
-    public function editSale(){
-        // dump('Editar');
-
+    public function editSale()
+    {
         $this->sale->total = Cart::getTotal();
         $this->sale->pago = $this->sale->total;
+        $this->sale->fechaing = $this->fechaing;
+        $this->sale->delivery_id = $this->delivery_id;
+        $this->sale->extra = $this->extra;
+        $this->sale->descuento = $this->descuento;
+        $this->sale->departamento = $this->departamento;
+        $this->sale->provincia = $this->provincia;
+
+        if ($this->pedido_path) {
+            $this->sale->pedido_path = $this->pedido_path->store('pedidos');
+        }
+
+        if ($this->boleta_path) {
+            $this->sale->boleta_path = $this->boleta_path->store('boletas');
+        }
 
         $this->sale->update();
 
         $itemsIds = [];
-
         foreach ($this->sale->items as $item) {
-            Product::find($item->product_id)->increment('stock',$item->qty);
+            Product::find($item->product_id)->increment('stock', $item->qty);
             $item->delete();
         }
 
@@ -72,31 +100,21 @@ class SaleEdit extends Component
             $item->fecha = date('Y-m-d');
             $item->save();
 
-            Product::find($item->product_id)->decrement('stock',$item->qty);
-
-
-            $itemsIds +=[$item->id=>["qty"=>$product->quantity,"fecha"=>date('Y-m-d')]];
+            Product::find($item->product_id)->decrement('stock', $item->qty);
+            $itemsIds[$item->id] = ['qty' => $product->quantity, 'fecha' => date('Y-m-d')];
         }
 
         $this->sale->items()->sync($itemsIds);
-        $this->dispatch('msg','Venta editada correctamente','success',$this->sale->id);
-
-
-
+        $this->dispatch('msg', 'Venta editada correctamente', 'success', $this->sale->id);
     }
 
     public function getItemsToCart()
     {
-       foreach ($this->sale->items as $item) {
-
+        foreach ($this->sale->items as $item) {
             $product = Product::find($item->product_id);
-
             $existingItem = \Cart::session(userID())->get($item->product_id);
 
-            if($existingItem){
-                $this->cart = Cart::getCart();
-                return;
-            }else{
+            if (!$existingItem) {
                 \Cart::session(userID())->add([
                     'id' => $item->product_id,
                     'name' => $item->name,
@@ -104,51 +122,43 @@ class SaleEdit extends Component
                     'quantity' => $item->qty,
                     'attributes' => [],
                     'associatedModel' => $product,
-
                 ]);
-
             }
-
-       }
-       $this->loadCart = true;
-       $this->cart = Cart::getCart();
+        }
+        $this->loadCart = true;
+        $this->cart = Cart::getCart();
     }
 
-    public function mount()
-    {
-        $this->client = $this->sale->client_id ?? null;
-    }
-    
-    // Agregar producto al carrito
     #[On('add-product')]
-    public function addProduct(Product $product){
+    public function addProduct(Product $product)
+    {
         Cart::add($product);
     }
 
-    // Decrementar cantidad
-    public function decrement($id){
+    public function decrement($id)
+    {
         Cart::decrement($id);
         $this->dispatch("incrementStock.{$id}");
     }
 
-    // Incrementar cantidad
-    public function increment($id){
+    public function increment($id)
+    {
         Cart::increment($id);
         $this->dispatch("decrementStock.{$id}");
     }
 
-    // Eliminar item del carrito
-    public function removeItem($id,$qty){
+    public function removeItem($id, $qty)
+    {
         Cart::removeItem($id);
-        $this->dispatch("devolverStock.{$id}",$qty);
+        $this->dispatch("devolverStock.{$id}", $qty);
     }
 
-    // Propiedad para obtener listado productos
     #[Computed()]
-    public function products(){
-        return Product::where('name','like','%'.$this->search.'%')
-        ->orderBy('id','desc')
-        ->paginate($this->cant);
+    public function products()
+    {
+        return Product::where('name', 'like', '%' . $this->search . '%')
+            ->orderBy('id', 'desc')
+            ->paginate($this->cant);
     }
 
     //editar clientes con su cantidad
@@ -168,7 +178,5 @@ class SaleEdit extends Component
             default => 0,
         };
     }
-    
-    
 
 }

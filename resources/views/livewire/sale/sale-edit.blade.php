@@ -17,16 +17,23 @@
       {{-- CONTENT --}}
        <div class="row">
          {{-- COLUMNA DETALLES VENTA --}}
-         <div class="col-md-6">
-            {{-- Card details --}}
-            @include('sales.card-details')
-
-         </div>
-         {{-- COLUMNA PRODUCTOS --}}
-         <div class="col-md-6">
-            @include('sales.list-products')
-         </div>
-
+               {{-- COLUMNA DETALLES VENTA --}}
+               <div class="col-md-6">
+                  {{-- Card details --}}
+                  @include('sales.card-details')
+                  {{-- Card pago --}}
+                  @include('sales.card-pago')
+               
+         
+         
+               </div>
+      
+               <div class="col-md-6">
+                     {{-- Card cliente --}}
+                     @livewire('sale.client')
+                              {{-- COLUMNA PRODUCTOS --}}
+                  @include('sales.list-products')
+               </div>
 
        </div>
 

@@ -6,6 +6,7 @@ use Livewire\Component;
 use Livewire\Attributes\On;
 use App\Models\Client as Cliente;
 use App\Models\Category;
+use Illuminate\Http\Request;
 
 class Client extends Component
 {
@@ -25,37 +26,49 @@ class Client extends Component
     public $categories = [];
     public $selectedClientId = null;
     public $categoryName;
+    public $search = ''; // Para la búsqueda en tiempo real
+
 
     
 
 
     public function render()
     {
-        $this->categories = Category::all(); 
-        return view('livewire.sale.client', [
-            "clients" => Cliente::latest()->take(50)->get(), // Solo los últimos 50 clientes
-            "categories" => Category::all()
-        ]);
+        $clients = Cliente::where('name', 'like', "%{$this->search}%")
+        ->orWhere('identificacion', 'like', "%{$this->search}%")
+        ->orderBy('name')
+        ->limit(500)
+        ->get();
+
+        return view('livewire.sale.client', compact('clients'));
     }
 
     public function categories(){
         return Category::all();
     }
-
     #[On('client_id')]
-    public function client_id($id=1){
+    public function client_id($id)
+    {
         $this->client = $id;
-        $this->selectedClientId = $id;
-        $this->nameClient($id);
-    
-        // Obtener la categoría del cliente seleccionado
         $findClient = Cliente::find($id);
+        $this->nameClient = $findClient->name;
         $this->categoryName = $findClient->category->name ?? 'Sin categoría';
-        
-        // Enviar el category_id a otros componentes para filtrar productos
+
         $this->dispatch('updateCategory', ['category_id' => $findClient->category_id ?? null]);
     }
     
+    public function search(Request $request)
+{
+    $search = $request->search;
+
+    $clients = Client::where('name', 'like', "%{$search}%")
+        ->orWhere('identificacion', 'like', "%{$search}%")
+        ->orderBy('name')
+        ->limit(10)
+        ->get();
+
+    return response()->json($clients);
+}
     
     public function mount($client = null)
 {

@@ -318,13 +318,17 @@ class SaleCreate extends Component
     {
         $client = \App\Models\Client::find($this->client);
 
-        return match ($client->category_id) {
-            1 => 5,  // Bonificado
-            2 => 20, // Mayorista
-            3 => 1,  // Preferente
-            4 => 5,  // Reconsumo (5 cajas)
-            default => 0,
-        };
+    if (!$client) {
+        return 0; // Si no hay cliente, retorna un valor por defecto
+    }
+
+    return match ($client->category_id) {
+        1 => 5,  // Bonificado
+        2 => 20, // Mayorista
+        3 => 1,  // Preferente
+        4 => 5,  // Reconsumo (5 cajas)
+        default => 0,
+    };
     }
     
     #[Computed]

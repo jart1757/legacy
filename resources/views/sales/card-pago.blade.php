@@ -8,7 +8,7 @@
     <div class="card-body">
         <div class="row">
             <div class="col-6">
-                <label for="fechaing">Fecha de Entrega:</label>
+                <label for="fechaing">Fecha de Pago:</label>
                 <div class="input-group">
                     <input type="date" wire:model="fechaing" class="form-control" id="fechaing">
                 </div>
@@ -27,15 +27,16 @@
         </div>
 
         <div class="row">
-            <div class="col-6">
-                <label for="extra">Extra:</label>
-                <div class="input-group">
-                    <input type="number" wire:model="extra" class="form-control" id="extra" placeholder="Ingrese monto por caja extra">
-                </div>
-            </div>
-            <div class="col-6">
+  
+            <div class="col-12">
                 <label for="descuento">Descuento:</label>
                 <div class="input-group">
+                    <select class="form-control" id="descuento_select" onchange="setDescuento()">
+                        <option value="">Seleccionar descuento</option>
+                        <option value="0.03">Bonificado (0.03)</option>
+                        <option value="0.10">Mayorista (0.10)</option>
+                        <option value="280.04">Bonificado Alc (280.04)</option>
+                    </select>
                     <input type="number" wire:model="descuento" class="form-control" id="descuento" placeholder="Ingrese descuento">
                 </div>
             </div>
@@ -161,4 +162,17 @@
             $('#provincia').trigger('change');
         });
     });
+</script>
+
+<script>
+    function setDescuento() {
+        let descuentoSelect = document.getElementById("descuento_select");
+        let descuentoInput = document.getElementById("descuento");
+
+        // Asignar el valor seleccionado al campo de descuento
+        descuentoInput.value = descuentoSelect.value;
+
+        // Notificar a Livewire del cambio
+        @this.set('descuento', descuentoSelect.value);
+    }
 </script>

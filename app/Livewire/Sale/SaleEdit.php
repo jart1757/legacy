@@ -65,7 +65,8 @@ class SaleEdit extends Component
 
     public function editSale()
     {
-        $this->sale->total = $this->getTotalConDescuento(); 
+        // Actualizar datos de la venta
+        $this->sale->total = $this->getTotalConDescuento();
         $this->sale->pago = $this->sale->total;
         $this->sale->fechaing = $this->fechaing;
         $this->sale->delivery_id = $this->delivery_id;
@@ -73,42 +74,73 @@ class SaleEdit extends Component
         $this->sale->descuento = $this->descuento;
         $this->sale->departamento = $this->departamento;
         $this->sale->provincia = $this->provincia;
-
+    
         if ($this->pedido_path) {
             $this->sale->pedido_path = $this->pedido_path->store('pedidos');
         }
-
+    
         if ($this->boleta_path) {
             $this->sale->boleta_path = $this->boleta_path->store('boletas');
         }
-
+    
         $this->sale->update();
-
-        $itemsIds = [];
+    
+        // === Revertir el stock de la venta anterior de forma agrupada ===
+        $revertGroups = [];
         foreach ($this->sale->items as $item) {
-            Product::find($item->product_id)->increment('stock', $item->qty);
+            // Agrupar cantidades por nombre del producto
+            if (isset($revertGroups[$item->name])) {
+                $revertGroups[$item->name] += $item->qty;
+            } else {
+                $revertGroups[$item->name] = $item->qty;
+            }
+            // Eliminar el ítem (para luego re-asociarlo con los nuevos)
             $item->delete();
         }
-
+        // Revertir stock de todos los productos agrupados por nombre
+        foreach ($revertGroups as $name => $totalQty) {
+            Product::where('name', $name)->increment('stock', $totalQty);
+        }
+    
+        // === Agregar los nuevos ítems de la venta y descontar stock de forma agrupada ===
+        $itemsIds = [];
+        $deductions = [];
         foreach (Cart::getCart() as $product) {
             $item = new Item();
-            $item->name = $product->name;
-            $item->price = $product->price;
-            $item->qty = $product->quantity;
-            $item->image = $product->associatedModel->imagen;
+            $item->name       = $product->name;
+            $item->price      = $product->price;
+            $item->qty        = $product->quantity;
+            $item->image      = $product->associatedModel->imagen;
             $item->product_id = $product->id;
-            $item->fecha = date('Y-m-d');
+            $item->fecha      = date('Y-m-d');
             $item->save();
-
-            Product::find($item->product_id)->decrement('stock', $item->qty);
+    
+            $this->sale->items()->attach($item->id, [
+                'qty'   => $product->quantity,
+                'fecha' => date('Y-m-d')
+            ]);
+    
+            // Agrupar la cantidad a descontar por nombre
+            if (isset($deductions[$product->name])) {
+                $deductions[$product->name] += $product->quantity;
+            } else {
+                $deductions[$product->name] = $product->quantity;
+            }
             $itemsIds[$item->id] = ['qty' => $product->quantity, 'fecha' => date('Y-m-d')];
         }
-
+        // Descontar stock de los nuevos ítems de forma agrupada
+        foreach ($deductions as $name => $totalQty) {
+            Product::where('name', $name)->decrement('stock', $totalQty);
+        }
+    
         $this->sale->items()->sync($itemsIds);
         $this->dispatch('msg', 'Venta editada correctamente', 'success', $this->sale->id);
-            // Limpiar el carrito y restablecer los formularios
+        
+        // Limpiar el carrito y restablecer los formularios
         $this->clearCartAndResetForm();
     }
+    
+
 
     public function getItemsToCart()
     {

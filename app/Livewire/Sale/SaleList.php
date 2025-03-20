@@ -50,22 +50,32 @@ class SaleList extends Component
     }
 
     #[On('destroySale')]
-    public function destroy($id)
-    {
-        $sale = Sale::findOrFail($id);
+public function destroy($id)
+{
+    $sale = Sale::findOrFail($id);
 
-        foreach ($sale->items as $item) {
-            $product = Product::find($item->product_id);
-            if ($product) {
-                $product->increment('stock', $item->qty);
-            }
-            $item->delete();
+    // Agrupar cantidades a revertir por nombre de producto
+    $revertGroups = [];
+    foreach ($sale->items as $item) {
+        if (isset($revertGroups[$item->name])) {
+            $revertGroups[$item->name] += $item->qty;
+        } else {
+            $revertGroups[$item->name] = $item->qty;
         }
-
-        $sale->delete();
-
-        $this->dispatch('msg', 'Venta eliminada con éxito.');
+        $item->delete();
     }
+
+    // Revertir (sumar) el stock de todos los productos agrupados por nombre
+    foreach ($revertGroups as $name => $totalQty) {
+        Product::where('name', $name)->increment('stock', $totalQty);
+    }
+
+    $sale->delete();
+
+    $this->dispatch('msg', 'Venta eliminada con éxito.');
+}
+
+    
 
     #[On('setDates')]
     public function setDates($fechaInicio, $fechaFinal)

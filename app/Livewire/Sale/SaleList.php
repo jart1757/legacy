@@ -38,7 +38,7 @@ class SaleList extends Component
 
         // Aplicar filtro por fechas si están definidas
         if ($this->dateInicio && $this->dateFin) {
-            $salesQuery->whereBetween('fecha', [$this->dateInicio, $this->dateFin]);
+            $salesQuery->whereBetween('fechaing', [$this->dateInicio, $this->dateFin]);
             $this->totalVentas = $salesQuery->sum('total');
         } else {
             $this->totalVentas = Sale::sum('total');

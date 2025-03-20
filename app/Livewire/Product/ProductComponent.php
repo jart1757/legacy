@@ -106,6 +106,9 @@ class ProductComponent extends Component
             $product->image()->create(['url'=>$customName]);
         }
 
+            // Sincronizar stock con todos los productos con el mismo name
+         $this->syncStock($this->name, $this->stock);
+
         $this->dispatch('close-modal','modalProduct');
         $this->dispatch('msg','Producto creado correctamente.');
         $this->clean();
@@ -176,6 +179,9 @@ class ProductComponent extends Component
             $this->image->storeAs('public',$customName);
             $product->image()->create(['url'=>$customName]);
         }
+        
+    // Sincronizar stock con todos los productos con el mismo name
+    $this->syncStock($this->name, $this->stock);
 
         $this->dispatch('close-modal','modalProduct');
         $this->dispatch('msg','Producto editado correctamente.');
@@ -197,6 +203,11 @@ class ProductComponent extends Component
         $product->delete();
 
         $this->dispatch('msg','Producto eliminado correctamente.');
+    }
+
+    private function syncStock($name, $stock)
+    {
+        Product::where('name', $name)->update(['stock' => $stock]);
     }
 
 

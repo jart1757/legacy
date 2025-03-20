@@ -54,16 +54,29 @@ class ProductRow extends Component
     }
 
     public function addProduct(Product $product)
-{
-    if ($product->stock == 0) {
-        return;
-    }
-
-    $product->decrement('stock'); // Disminuye directamente en la base de datos
-    $this->stock = $product->fresh()->stock; // Refresca el valor después de la actualización
+    {
+        if ($product->stock == 0) {
+            return;
+        }
     
-    $this->dispatch('add-product', $product);
-}
+        // Calcular nuevo stock
+        $newStock = $product->stock - 1;
+    
+        // Verificar si hay stock suficiente
+        if ($newStock < 0) {
+            return;
+        }
+    
+        // Actualizar stock de todos los productos con el mismo nombre
+        Product::where('name', $product->name)->update(['stock' => $newStock]);
+    
+        // Refrescar el stock en la interfaz
+        $this->stock = Product::find($product->id)->stock;
+    
+        // Emitir evento para actualizar la vista
+        $this->dispatch('add-product', $product);
+    }
+    
 
     public function decrementStock(){
         $this->stock--;

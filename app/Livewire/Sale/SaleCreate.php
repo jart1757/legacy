@@ -205,34 +205,89 @@ class SaleCreate extends Component
     }
 
     public function decrement($id)
-    {
-        $this->updating = 0;
-        Cart::decrement($id);
-        $this->dispatch("incrementStock.{$id}");
+{
+    // Obtener el producto específico
+    $product = Product::find($id);
+
+    if (!$product) {
+        return;
     }
+
+    // Obtener todos los productos con el mismo nombre
+    $productos = Product::where('name', $product->name)->get();
+
+    // Aumentar stock en todos los productos con el mismo nombre
+    foreach ($productos as $prod) {
+        $prod->increment('stock');
+    }
+
+    // Disminuir cantidad en el carrito
+    Cart::decrement($id);
+
+    // Emitir evento para actualizar la vista
+    $this->dispatch('refreshProducts');
+}
+
 
     public function increment($id)
     {
-        $cart   = Cart::getCart();
+        $cart = Cart::getCart();
         $totalQty = $cart->sum('quantity');
         $maxQty = $this->getMaxProductsByCategory();
-
+    
         if ($totalQty >= $maxQty) {
             $this->dispatch('msg', "No puedes agregar más productos. Límite máximo: $maxQty", "warning");
             return;
         }
-
-        $this->updating = 0;
+    
+        // Obtener el producto específico
+        $product = Product::find($id);
+    
+        if (!$product || $product->stock <= 0) {
+            $this->dispatch('msg', "Stock insuficiente para {$product->name}", "danger");
+            return;
+        }
+    
+        // Obtener todos los productos con el mismo nombre
+        $productos = Product::where('name', $product->name)->get();
+    
+        // Restar stock a todos los productos con el mismo nombre
+        foreach ($productos as $prod) {
+            $prod->decrement('stock');
+        }
+    
+        // Agregar al carrito
         Cart::increment($id);
-        $this->dispatch("decrementStock.{$id}");
+    
+        // Emitir evento para actualizar la vista
+        $this->dispatch('refreshProducts');
     }
+    
 
     public function removeItem($id, $qty)
     {
-        $this->updating = 0;
+        // Obtener el producto específico
+        $product = Product::find($id);
+    
+        if (!$product) {
+            return;
+        }
+    
+        // Obtener todos los productos con el mismo nombre
+        $productos = Product::where('name', $product->name)->get();
+    
+        // Devolver stock a todos los productos con el mismo nombre
+        foreach ($productos as $prod) {
+            $prod->increment('stock', $qty);
+        }
+    
+        // Remover del carrito
         Cart::removeItem($id);
-        $this->dispatch("devolverStock.{$id}", $qty);
+    
+        // Emitir evento para actualizar la vista
+        $this->dispatch('refreshProducts');
     }
+    
 
     public function clear()
     {

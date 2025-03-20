@@ -57,7 +57,7 @@ class DeliveryComponent extends Component
     public function store(){
         // dump('Crear delivery');
         $rules = [
-            'name' => 'required|min:2|max:255|unique:categories'
+            'name' => 'required|min:2|max:255|unique:deliveries'
         ];
 
         $messages = [

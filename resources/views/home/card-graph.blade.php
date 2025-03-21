@@ -5,7 +5,7 @@
             <div class="card-header border-0">
                 <h3 class="card-title">
                     <i class="fas fa-chart-bar mr-1"></i>
-                    Gráfica Salidas por Mes (Estilo 3D)
+                    GRÁFICA DE CONTROL EN BOLIVIANOS POR MES
                 </h3>
             </div>
             <div class="card-body">
@@ -20,7 +20,7 @@
           <div class="card-header border-1">
               <h3 class="card-title">
                   <i class="fas fa-chart-bar mr-1"></i>
-                  Ventas por Departamento y Provincia
+                  SALIDAS POR STOCKS POR DEPARTAMENTO
               </h3>
           </div>
           <div class="card-body">
@@ -51,7 +51,7 @@
 
 <div class="card">
     <div class="card-header">
-        <h3 class="card-title">Clientes por Categoría y Mes</h3>
+        <h3 class="card-title">CLIENTES REGISTRADOS POR MES </h3>
     </div>
     <div class="card-body">
         <canvas id="clients-chart" width="400" height="200"></canvas>

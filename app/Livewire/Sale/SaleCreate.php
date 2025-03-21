@@ -185,6 +185,7 @@ class SaleCreate extends Component
                 'boleta_path',
                 'search'
             ]);
+            $this->dispatch('resetDescuentoSelect'); // Restablecer selección de descuento
     
             // Emitir evento para refrescar la vista
             $this->dispatch('msg', 'Venta creada correctamente con imágenes', 'success', $sale->id);
@@ -306,6 +307,7 @@ class SaleCreate extends Component
         $this->devuelve = 0;
         $this->dispatch('msg', 'Venta cancelada');
         $this->dispatch('refreshProducts');
+        $this->dispatch('resetDescuentoSelect'); // Restablecer selección de descuento
     }
 
     #[On('setPago')]

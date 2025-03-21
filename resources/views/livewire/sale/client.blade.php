@@ -4,6 +4,7 @@
           <h3 class="card-title">
             <i class="fas fa-user"></i>
              Cliente: <span class="badge badge-secondary">{{$nameClient}}</span> 
+             <span class="badge badge-danger">{{$identificacion}}</span> 
              <span class="badge badge-primary">{{ $categoryName }}</span>
           </h3>
           <div class="card-tools">

@@ -52,6 +52,7 @@ class Client extends Component
         $this->client = $id;
         $findClient = Cliente::find($id);
         $this->nameClient = $findClient->name;
+        $this->identificacion = $findClient->identificacion; // Aquí asignamos la identificación
         $this->categoryName = $findClient->category->name ?? 'Sin categoría';
 
         $this->dispatch('updateCategory', ['category_id' => $findClient->category_id ?? null]);
@@ -76,6 +77,7 @@ class Client extends Component
         $this->isEditing = true;
         $this->client = $client;
         $this->name = $client->name;
+       
     }
 }
 

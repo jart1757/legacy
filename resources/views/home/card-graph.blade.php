@@ -1,20 +1,19 @@
 <div class="row">
-  <div wire:ignore class="col-md-12">
-      <!-- Gráfica de línea (Ventas por mes) -->
-      <div class="card bg-gradient-info">
-          <div class="card-header border-0">
-              <h3 class="card-title">
-                  <i class="fas fa-chart-bar mr-1"></i>
-                  Gráfica Salidas por mes
-              </h3>
-          </div>
-          <div class="card-body">
-              <canvas class="chart" id="line-chart" style="min-height: 250px; height: 250px; max-height: 250px; max-width: 100%;">
-              </canvas>
-          </div>
-      </div>
+    <div wire:ignore class="col-md-12">
+        <!-- Gráfica de barras 3D (Salidas por mes) -->
+        <div class="card bg-gradient-info">
+            <div class="card-header border-0">
+                <h3 class="card-title">
+                    <i class="fas fa-chart-bar mr-1"></i>
+                    Gráfica Salidas por Mes (Estilo 3D)
+                </h3>
+            </div>
+            <div class="card-body">
+                <canvas class="chart" id="bar-3d-chart" style="min-height: 250px; height: 250px; max-height: 250px; max-width: 100%;"></canvas>
+            </div>
+        </div>
+    </div>
   </div>
-
   <div wire:ignore class="col-md-12">
       <!-- Gráfica de barras (Departamentos) -->
       <div class="card bg-gradient-info">
@@ -168,78 +167,65 @@ document.addEventListener('DOMContentLoaded', function () {
 <!-- <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> -->
 <!-- <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script> -->
 
+
 <script>
-/* -----------------------------------------------------
- GRÁFICA DE LÍNEAS (VENTAS POR MES)
------------------------------------------------------ */
-var salesGraphChartCanvas = document.getElementById('line-chart').getContext('2d');
-var salesGraphChartData = {
-  labels: [
-      'Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 
-      'Junio', 'Julio', 'Agosto', 'Septiembre', 
-      'Octubre', 'Noviembre', 'Diciembre'
-  ],
-  datasets: [
-      {
-          label: '',
-          fill: false,
-          borderWidth: 2,
-          lineTension: 0,
-          spanGaps: true,
-          borderColor: '#efefef',
-          pointRadius: 3,
-          pointHoverRadius: 7,
-          pointColor: '#efefef',    
-          pointBackgroundColor: '#efefef',
-          data: [
-              {{ $listTotalVentasMes }}
-          ]
-      }
-  ]
-};
-
-var salesGraphChartOptions = {
-  maintainAspectRatio: false,
-  responsive: true,
-  tooltips: {
-      callbacks: {
-          label: (item) => `Ventas $${item.yLabel}`,
-      },
-  },
-  legend: {
-      display: false
-  },
-  scales: {
-      xAxes: [{
-          ticks: {
-              fontColor: '#efefef'
-          },
-          gridLines: {
-              display: false,
-              color: '#efefef',
-              drawBorder: false
-          }
-      }],
-      yAxes: [{
-          ticks: {
-              stepSize: 5000,
-              fontColor: '#efefef'
-          },
-          gridLines: {
-              display: true,
-              color: '#efefef',
-              drawBorder: false
-          }
-      }]
-  }
-};
-
-var salesGraphChart = new Chart(salesGraphChartCanvas, {
-  type: 'line',
-  data: salesGraphChartData,
-  options: salesGraphChartOptions
-});
-</script>
+    document.addEventListener('DOMContentLoaded', function () {
+        var ctx = document.getElementById('bar-3d-chart').getContext('2d');
+    
+        // Datos de ventas
+        var labels = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'];
+        var data = [{{ $listTotalVentasMes }}];
+    
+        // Generar colores degradados para un efecto 3D
+        var gradientColors = labels.map((_, i) => {
+            var gradient = ctx.createLinearGradient(0, 0, 0, 250);
+            gradient.addColorStop(0, `hsl(${i * 30}, 80%, 60%)`);
+            gradient.addColorStop(1, `hsl(${i * 30}, 80%, 40%)`);
+            return gradient;
+        });
+    
+        // Crear el gráfico de barras con efecto 3D
+        new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: labels,
+                datasets: [{
+                    label: 'Total Salidas',
+                    data: data,
+                    backgroundColor: gradientColors,
+                    borderColor: 'rgba(0,0,0,0.2)',
+                    borderWidth: 2,
+                    borderRadius: 8, // Bordes redondeados
+                    barPercentage: 0.7,
+                    categoryPercentage: 0.8
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        display: false
+                    },
+                    tooltip: {
+                        callbacks: {
+                            label: (item) => `Salidas: ${item.raw}`
+                        }
+                    }
+                },
+                scales: {
+                    x: {
+                        grid: { display: false }
+                    },
+                    y: {
+                        beginAtZero: true,
+                        ticks: { stepSize: 5000 }
+                    }
+                }
+            }
+        });
+    });
+    </script>
 
 <script>
 /* -----------------------------------------------------

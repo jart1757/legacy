@@ -2,9 +2,14 @@
     <x-card cardTitle="Listado ventas ({{$this->totalRegistros}})">
        <x-slot:cardTools>
             <div class="d-flex align-items-center">
+                <button wire:click="exportPDF" class="btn btn-danger">
+                    <i class="far fa-file-pdf"></i> Exportar PDF
+                </button>
+
                 <span class="badge badge-info" style="font-size: 1.4rem">
                     Total: {{money($this->totalVentas)}}
                 </span>
+
                 <div class="mx-3">
                     <button class="btn btn-default" id="daterange-btn" wire:ignore>
                         <i class="far fa-calendar-alt"></i> 
@@ -12,6 +17,7 @@
                         <i class="fas fa-caret-down"></i>
                     </button>
                 </div>
+
                 <a href="{{route('sales.create')}}" class="btn btn-primary">
                     <i class="fas fa-cart-plus"></i> Crear Salida
                 </a>
@@ -25,8 +31,9 @@
              <th>Total</th>
              <th>Descuento</th>
              <th>Cantidad de Productos</th>
+             <th>Detalle de Productos</th>
              <th>Fecha de Salida</th>
-             <th>Fecha de Ingreso</th>
+             <th>Fecha de Pago</th>
              <th>Usuario</th>
              <th>Tipo</th>
              <th>Departamento de Destino</th>
@@ -38,13 +45,42 @@
              <th>Eliminar</th>
           </x-slot>
 
+          @php
+              $totalCantidadProductos = 0;
+              $productosPorVenta = [];
+          @endphp
+
           @forelse ($sales as $sale)
              <tr>
                 <td><span class="badge badge-primary">FV-{{$sale->id}}</span></td>
                 <td>{{$sale->client->name}}</td>
                 <td><span class="badge badge-secondary">{{money($sale->total)}}</span></td>
                 <td><span class="badge badge-secondary">{{money($sale->descuento)}}</span></td>
-                <td><span class="badge badge-pill bg-purple">{{$sale->items->sum('qty')}}</span></td>
+                
+                <td><span class="badge badge-pill bg-purple">
+                    @foreach ($sale->items as $item)
+                        @php
+                            $totalCantidadProductos += $item->qty;
+                            if (!isset($productosPorVenta[$item->name])) {
+                                $productosPorVenta[$item->name] = 0;
+                            }
+                            $productosPorVenta[$item->name] += $item->qty;
+                        @endphp
+                    @endforeach
+                    {{$sale->items->sum('qty')}}
+                </span></td>
+
+                <td>
+                    <ul class="list-unstyled text-left">
+                        @foreach ($sale->items as $item)
+                            <li>
+                                <span class="badge badge-info">{{$item->name}}</span> 
+                                <span class="badge badge-primary">{{$item->qty}}</span>
+                            </li>
+                        @endforeach
+                    </ul>
+                </td>
+
                 <td>{{$sale->fecha}}</td>
                 <td>{{$sale->fechaing}}</td>
                 <td>{{$sale->delivery->name ?? 'Sin delivery'}}</td>
@@ -76,16 +112,19 @@
                         <i class="far fa-file-pdf"></i>
                     </a>
                 </td>
+
                 <td>
                     <a href="{{route('sales.show',$sale)}}" class="btn btn-success btn-sm">
                         <i class="far fa-eye"></i>
                     </a>
                 </td>
+
                 <td>
                     <a href="{{route('sales.edit',$sale)}}" class="btn btn-primary btn-sm">
                         <i class="far fa-edit"></i>
                     </a>
                 </td>
+
                 <td>
                     <button wire:click.prevent="$dispatch('delete', {id: {{$sale->id}}, eventName:'destroySale'})" class="btn btn-danger btn-sm">
                         <i class="far fa-trash-alt"></i>
@@ -98,6 +137,16 @@
              </tr>
           @endforelse
        </x-table>
+
+       <div class="productos-individuales">
+           <h5>Cantidad total por producto:</h5>
+           <ul>
+               @foreach ($productosPorVenta as $producto => $cantidad)
+                   <li><strong>{{$producto}}:</strong> {{$cantidad}}</li>
+               @endforeach
+           </ul>
+           <h5>Total de productos vendidos: {{$totalCantidadProductos}}</h5>
+       </div>
 
        <x-slot:cardFooter>
             {{$sales->links()}}
@@ -139,8 +188,6 @@
                 $('#daterange-btn span').html(start.format('DD-MM-YYYY') + ' - ' + end.format('DD-MM-YYYY'));
 
                 Livewire.dispatch('setDates',{fechaInicio: dateStart, fechaFinal: dateEnd});
-
-
         }
 
     );            

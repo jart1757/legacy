@@ -31,7 +31,7 @@
             <div class="col-12">
                 <label for="descuento">Descuento:</label>
                 <div class="input-group">
-                    <select class="form-control" id="descuento" onchange="setDescuento()">
+                    <select class="form-control" id="descuento_select" onchange="setDescuento()">
                         <option value="0">Seleccionar descuento</option>
                         <option value="0.03">Bonificado (0.03)</option>
                         <option value="0.10">Mayorista (0.10)</option>

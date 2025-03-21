@@ -9,6 +9,7 @@ use Livewire\Component;
 use Livewire\Attributes\On;
 use Livewire\WithPagination;
 use Livewire\Attributes\Title;
+use Barryvdh\DomPDF\Facade\Pdf;
 
 #[Title('Ventas')]
 class SaleList extends Component
@@ -19,13 +20,15 @@ class SaleList extends Component
     public $dateInicio, $dateFin;
     public $totalRegistros, $totalVentas;
     public $cant = 10; // Número de registros por página
+    public $fechaInicio;
+    public $fechaFinal;
 
     public function render()
     {
         $this->totalRegistros = Sale::count();
-
+    
         $salesQuery = Sale::query();
-
+    
         // Aplicar búsqueda por ID o por nombre de delivery
         if ($this->search) {
             $salesQuery->where(function ($query) {
@@ -35,20 +38,18 @@ class SaleList extends Component
                     });
             });
         }
-
-        // Aplicar filtro por fechas si están definidas
-        if ($this->dateInicio && $this->dateFin) {
-            $salesQuery->whereBetween('fechaing', [$this->dateInicio, $this->dateFin]);
+    
+        if (!empty($this->fechaInicio) && !empty($this->fechaFinal)) {
+            $salesQuery->whereBetween('fechaing', [$this->fechaInicio, $this->fechaFinal]);
             $this->totalVentas = $salesQuery->sum('total');
-        } else {
-            $this->totalVentas = Sale::sum('total');
         }
-
+        
+    
         $sales = $salesQuery->orderBy('id', 'desc')->paginate($this->cant);
-
+    
         return view('livewire.sale.sale-list', compact('sales'));
     }
-
+    
     #[On('destroySale')]
 public function destroy($id)
 {
@@ -77,10 +78,53 @@ public function destroy($id)
 
     
 
-    #[On('setDates')]
-    public function setDates($fechaInicio, $fechaFinal)
+#[On('setDates')]
+public function setDates($fechaInicio, $fechaFinal)
+{
+    $this->fechaInicio = $fechaInicio;
+    $this->fechaFinal = $fechaFinal;
+}
+
+
+    public function mount()
     {
-        $this->dateInicio = $fechaInicio;
-        $this->dateFin = $fechaFinal;
+        $this->fechaInicio = now()->startOfYear()->format('Y-m-d');
+        $this->fechaFinal = now()->format('Y-m-d');
     }
+
+    public function exportPDF()
+{
+    $salesQuery = Sale::query();
+
+    // Aplicar filtro por ID o por nombre de delivery
+    if ($this->search) {
+        $salesQuery->where(function ($query) {
+            $query->where('id', 'like', '%' . $this->search . '%')
+                ->orWhereHas('delivery', function ($q) {
+                    $q->where('name', 'like', '%' . $this->search . '%');
+                });
+        });
+    }
+
+    // Aplicar filtro por fechas
+    if (!empty($this->fechaInicio) && !empty($this->fechaFinal)) {
+        $salesQuery->whereBetween('fechaing', [$this->fechaInicio, $this->fechaFinal]);
+    }
+
+    $sales = $salesQuery->get();
+
+    $pdf = Pdf::loadView('sales.report', [
+        'sales' => $sales,
+        'fechaInicio' => $this->fechaInicio,
+        'fechaFinal' => $this->fechaFinal
+    ]);
+
+    return response()->streamDownload(
+        fn () => print($pdf->output()), 
+        "Reporte_Ventas_{$this->fechaInicio}_{$this->fechaFinal}.pdf"
+    );
+}
+
+
+
 }

@@ -155,7 +155,15 @@
                     <b>Usuario: </b>{{$sale->delivery->name}}
                 </span>
                 @endif 
+                @if($sale->tipo)
+                <span class="shop-info">
+                    <b>Pago con bonificación: </b>{{$sale->tipo}}
+                </span>
+                @endif 
+        
+            
             </td>
+      
             <td width="33%">
                 <h2 style="text-align: center">
                    Comprobante: <span class="factura-id">FV-{{$sale->id}}</span>
@@ -166,6 +174,7 @@
                     Fecha Salida: <span class="factura-fecha">{{$sale->created_at}}</span>
                 </h3>
             </td>
+     
         </tr>
     </table>
 

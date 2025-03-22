@@ -99,15 +99,7 @@
         </tbody>
     </table>
 
-    <table width="100%" style="text-align: center; margin-top:5rem; border: 1px solid white;">
-        <tr>
-            <td>
-                ___________________________ <br> 
-                <b>{{$sale->delivery->name}}</b> <br>
-                Recogio los productos
-            </td>
-        </tr>
-    </table>
+
     
 
 </body>

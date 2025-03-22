@@ -40,7 +40,10 @@ class SaleList extends Component
         }
     
         if (!empty($this->fechaInicio) && !empty($this->fechaFinal)) {
-            $salesQuery->whereBetween('fechaing', [$this->fechaInicio, $this->fechaFinal]);
+            $salesQuery->whereBetween('created_at', [
+                \Carbon\Carbon::parse($this->fechaInicio)->startOfDay(),
+                \Carbon\Carbon::parse($this->fechaFinal)->endOfDay()
+            ]);
             $this->totalVentas = $salesQuery->sum('total');
         }
         

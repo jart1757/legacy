@@ -48,6 +48,7 @@ class SaleCreate extends Component
     public $descuento = 0; // Valor inicial del descuento
     public $searchIdentification = ''; // Nueva propiedad para buscar por identificación
 
+    
     public function render()
     {
 

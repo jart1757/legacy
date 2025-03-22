@@ -86,6 +86,15 @@
                 </div>
             </div>
         </div>
+        <div class="row mt-3">
+            <div class="col-12">
+                <label for="pago_bonificacion">PAGO CON BONIFICACIÓN:</label>
+                <div class="input-group">
+                    <input type="text" wire:model="tipo" class="form-control" id="pago_bonificacion" placeholder="Ingrese el codigo">
+                </div>
+            </div>
+        </div>
+        
     </div>
 </div>
 

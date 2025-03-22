@@ -34,12 +34,14 @@ class Client extends Component
 
     public function render()
     {
-        $clients = Cliente::where('name', 'like', "%{$this->search}%")
-        ->orWhere('identificacion', 'like', "%{$this->search}%")
+        $clients = Cliente::where(function ($query) {
+            $query->where('name', 'like', "%{$this->search}%")
+                  ->orWhere('identificacion', 'like', "%{$this->search}%");
+        })
         ->orderBy('name')
         ->limit(500)
         ->get();
-
+    
         return view('livewire.sale.client', compact('clients'));
     }
 
@@ -62,11 +64,13 @@ class Client extends Component
 {
     $search = $request->search;
 
-    $clients = Client::where('name', 'like', "%{$search}%")
-        ->orWhere('identificacion', 'like', "%{$search}%")
-        ->orderBy('name')
-        ->limit(10)
-        ->get();
+    $clients = Cliente::where(function ($query) use ($search) {
+        $query->where('name', 'like', "%{$search}%")
+              ->orWhere('identificacion', 'like', "%{$search}%");
+    })
+    ->orderBy('name')
+    ->limit(10)
+    ->get();
 
     return response()->json($clients);
 }

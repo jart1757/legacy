@@ -46,9 +46,14 @@ class SaleCreate extends Component
     
     // Agregar propiedad descuento
     public $descuento = 0; // Valor inicial del descuento
+    public $searchIdentification = ''; // Nueva propiedad para buscar por identificación
 
     public function render()
     {
+
+
+
+        
         if ($this->search != '') {
             $this->resetPage();
         }

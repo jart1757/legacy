@@ -108,7 +108,7 @@ public function setDates($fechaInicio, $fechaFinal)
 
     // Aplicar filtro por fechas
     if (!empty($this->fechaInicio) && !empty($this->fechaFinal)) {
-        $salesQuery->whereBetween('fechaing', [$this->fechaInicio, $this->fechaFinal]);
+        $salesQuery->whereBetween('created_at', [$this->fechaInicio, $this->fechaFinal]);
     }
 
     $sales = $salesQuery->get();

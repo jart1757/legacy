@@ -18,6 +18,7 @@ use App\Livewire\Category\CategoryComponent;
 use App\Livewire\Sale\SaleEdit;
 use App\Livewire\Delivery\DeliveryComponent;
 use App\Livewire\Delivery\DeliveryShow;
+use App\Http\Controllers\ClientController;
 
 /*
 |--------------------------------------------------------------------------
@@ -67,3 +68,4 @@ Route::get('/tienda',ShopComponent::class)->name('tienda')->middleware(['auth','
 Route::get('/sales/invoice/{sale}',[PdfController::class,'invoice'])->name('sales.invoice')->middleware(['auth']);
 
 Route::get('/sales/{sale}/edit',SaleEdit::class)->name('sales.edit')->middleware(['auth','admin']);
+Route::get('/search/clients', [ClientController::class, 'search'])->name('search.clients');

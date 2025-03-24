@@ -26,13 +26,11 @@
 
        <x-table>
           <x-slot:thead>
-             <th>ID</th>
+             <th>Codigo</th>
              <th>Cliente</th>
-             <th>Total</th>
-             <th>Descuento</th>
              <th>Cantidad de Productos</th>
              <th>Detalle de Productos</th>
-             <th>Fecha de Salida</th>
+             <th>Total</th>
              <th>Fecha de Pago</th>
              <th>Usuario</th>
              <th>Tipo</th>
@@ -52,11 +50,8 @@
 
           @forelse ($sales as $sale)
              <tr>
-                <td><span class="badge badge-primary">FV-{{$sale->id}}</span></td>
+                <td><span class="badge badge-primary">{{$sale->client->identificacion}}</span></td>
                 <td>{{$sale->client->name}}</td>
-                <td><span class="badge badge-secondary">{{money($sale->total)}}</span></td>
-                <td><span class="badge badge-secondary">{{money($sale->descuento)}}</span></td>
-                
                 <td><span class="badge badge-pill bg-purple">
                     @foreach ($sale->items as $item)
                         @php
@@ -80,8 +75,7 @@
                         @endforeach
                     </ul>
                 </td>
-
-                <td>{{$sale->fecha}}</td>
+                <td><span class="badge badge-secondary">{{money($sale->total)}}</span></td>
                 <td>{{$sale->fechaing}}</td>
                 <td>{{$sale->delivery->name ?? 'Sin delivery'}}</td>
                 <td>{{$sale->client->category->name ?? 'Sin categoría'}}</td>

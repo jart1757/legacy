@@ -17,7 +17,7 @@ class ProductRow extends Component
     public $stockLabel;
     public $category_id = null;
     public $search = ''; // Nueva variable para la búsqueda
-    public $cant = 5; // Cantidad de registros a mostrar
+    public $cant = 10; // Cantidad de registros a mostrar
 
     protected function getListeners(){
 
@@ -33,6 +33,7 @@ class ProductRow extends Component
     
     public function render()
     {
+        
         $productos = Product::when($this->search, function ($query) {
             $query->where('category_id', $this->search); // Filtra por category_id
         })

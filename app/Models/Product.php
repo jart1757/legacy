@@ -12,6 +12,9 @@ class Product extends Model
 {
     use HasFactory;
 
+    protected $fillable = ['name', 'category_id', 'stock', 'descripcion', 'precio_compra', 'precio_venta'];
+
+
     // Relacion poliformica image
     public function image(){
         return $this->morphOne('App\Models\Image','imageable');

@@ -47,7 +47,7 @@
                             <li class="list-group-item">
                                 <b>Tipo</b> 
                                 <a class="float-right">
-                                    {{$sale->client->empresa}}
+                                    {{$sale->client->category->name ?? 'Sin categoría'}}
                                 </a>
                             </li>
                             <li class="list-group-item">
@@ -136,7 +136,7 @@
                     </tr>
                     @endforelse
                     <tr>
-                        <td colspan="4"></td>
+                        <td colspan="3"></td>
                         <td><h5>Total:</h5></td>
                         <td>
                             <h5>

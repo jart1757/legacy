@@ -95,11 +95,10 @@ public function setDates($fechaInicio, $fechaFinal)
         $this->fechaFinal = now()->format('Y-m-d');
     }
 
-    public function exportPDF()
+public function exportPDF()
 {
     $salesQuery = Sale::query();
 
-    // Aplicar filtro por ID o por nombre de delivery
     if ($this->search) {
         $salesQuery->where(function ($query) {
             $query->where('id', 'like', '%' . $this->search . '%')
@@ -109,12 +108,19 @@ public function setDates($fechaInicio, $fechaFinal)
         });
     }
 
-    // Aplicar filtro por fechas
     if (!empty($this->fechaInicio) && !empty($this->fechaFinal)) {
-        $salesQuery->whereBetween('created_at', [$this->fechaInicio, $this->fechaFinal]);
+        $salesQuery->whereBetween('created_at', [
+            \Carbon\Carbon::parse($this->fechaInicio)->startOfDay(),
+            \Carbon\Carbon::parse($this->fechaFinal)->endOfDay()
+        ]);
     }
 
     $sales = $salesQuery->get();
+
+    if ($sales->isEmpty()) {
+        session()->flash('msg', 'No hay ventas en el rango de fechas seleccionado.');
+        return;
+    }
 
     $pdf = Pdf::loadView('sales.report', [
         'sales' => $sales,
@@ -127,7 +133,6 @@ public function setDates($fechaInicio, $fechaFinal)
         "Reporte_Ventas_{$this->fechaInicio}_{$this->fechaFinal}.pdf"
     );
 }
-
 
 
 }

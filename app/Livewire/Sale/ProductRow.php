@@ -109,5 +109,23 @@ class ProductRow extends Component
         $this->category_id = $data['category_id'];
         $this->dispatch('refreshProducts'); // Refrescar productos
     }
+
+    public function getProducts()
+    {
+        $query = Product::query();
+
+       // Filtrar por nombre si se ha ingresado una búsqueda
+        if ($this->search != '') {
+           $query->where('name', 'like', '%' . $this->search . '%');
+      }
+
+      // Filtrar por la categoría del cliente seleccionado
+     if ($this->category_id) {
+          $query->where('category_id', $this->category_id);
+       }
+
+      return $query->paginate($this->cant);
+    }
+
     
 }

@@ -32,7 +32,7 @@ class ProductComponent extends Component
     public $precio_venta;
     public $codigo_barras;
     public $stock=0;
-    public $stock_minimo=10;
+    public $stock_minimo=100;
     public $fecha_vencimiento;
     public $active=1;
     public $image;

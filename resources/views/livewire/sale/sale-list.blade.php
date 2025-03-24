@@ -89,23 +89,52 @@
 
                 <td>
                     @if($sale->pedido_path)
-                        <a href="{{ asset('storage/' . $sale->pedido_path) }}" target="_blank">
-                            <i class="fas fa-image"></i>
-                        </a>
+                        @php
+                            $extension = pathinfo($sale->pedido_path, PATHINFO_EXTENSION);
+                        @endphp
+                
+                        @if(in_array($extension, ['jpg', 'jpeg', 'png', 'gif', 'bmp', 'webp']))
+                            <!-- Si es una imagen -->
+                            <a href="{{ asset('storage/' . $sale->pedido_path) }}" target="_blank">
+                                <i class="fas fa-image"></i>
+                            </a>
+                        @elseif($extension == 'pdf')
+                            <!-- Si es un PDF -->
+                            <a href="{{ asset('storage/' . $sale->pedido_path) }}" target="_blank">
+                                Ver PDF del pedido
+                            </a>
+                        @else
+                            <span class="text-muted">-</span>
+                        @endif
                     @else
                         <span class="text-muted">-</span>
                     @endif
                 </td>
-
+                
                 <td>
                     @if($sale->boleta_path)
-                        <a href="{{ asset('storage/' . $sale->boleta_path) }}" target="_blank">
-                            <i class="fas fa-image"></i>
-                        </a>
+                        @php
+                            $extension = pathinfo($sale->boleta_path, PATHINFO_EXTENSION);
+                        @endphp
+                
+                        @if(in_array($extension, ['jpg', 'jpeg', 'png', 'gif', 'bmp', 'webp']))
+                            <!-- Si es una imagen -->
+                            <a href="{{ asset('storage/' . $sale->boleta_path) }}" target="_blank">
+                                <i class="fas fa-image"></i>
+                            </a>
+                        @elseif($extension == 'pdf')
+                            <!-- Si es un PDF -->
+                            <a href="{{ asset('storage/' . $sale->boleta_path) }}" target="_blank">
+                                Ver PDF de la boleta
+                            </a>
+                        @else
+                            <span class="text-muted">-</span>
+                        @endif
                     @else
                         <span class="text-muted">-</span>
                     @endif
                 </td>
+                
 
                 <td>
                     <a href="{{route('sales.invoice',$sale)}}" class="btn bg-navy btn-sm" target="_blank">

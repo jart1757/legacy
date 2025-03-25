@@ -33,6 +33,7 @@
     <table>
         <thead>
             <tr>
+                <th>#</th> <!-- Columna para la numeración -->
                 <th>Codigo</th>
                 <th>Cliente</th>
                 <th>Total</th>
@@ -44,6 +45,7 @@
             @php
                 $totalVentas = 0;
                 $productosTotales = [];
+                $i=1;
             @endphp
 
             @foreach ($sales as $sale)
@@ -51,6 +53,7 @@
                     $totalVentas += $sale->total;
                 @endphp
                 <tr>
+                    <td>{{ $i++ }}</td> <!-- Imprime el número de la fila -->
                     <td>{{ $sale->client->identificacion }}</td>
                     <td>{{ $sale->client->name }}</td>
                     <td>{{ number_format($sale->total, 2) }}</td>

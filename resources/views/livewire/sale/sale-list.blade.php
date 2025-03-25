@@ -161,19 +161,43 @@
           @endforelse
        </x-table>
 
-       <div class="productos-individuales">
-           <h5>Cantidad total por producto:</h5>
-           <ul>
-               @foreach ($productosPorVenta as $producto => $cantidad)
-                   <li><strong>{{$producto}}:</strong> {{$cantidad}}</li>
-               @endforeach
-           </ul>
-           <h5>Total de productos vendidos: {{$totalCantidadProductos}}</h5>
-       </div>
-
-       <x-slot:cardFooter>
-            {{$sales->links()}}
-       </x-slot>
+       <div class="container-fluid">
+        <div class="row justify-content-center">
+            <div class="col-12">
+                <div class="table-responsive">
+                    <table class="table table-bordered text-center">
+                        <thead class="table-dark">
+                            <tr>
+                                <th>Producto</th>
+                                @foreach ($productosPorVenta as $producto => $cantidad)
+                                    <th>{{ $producto }}</th>
+                                @endforeach
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong>Cantidad</strong></td>
+                                @foreach ($productosPorVenta as $cantidad)
+                                    <td>{{ $cantidad }}</td>
+                                @endforeach
+                            </tr>
+                            <tr class="table-primary">
+                                <td><strong>Total</strong></td>
+                                <td colspan="{{ count($productosPorVenta) }}" class="fw-bold">{{ $totalCantidadProductos }}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <x-slot:cardFooter>
+        <div class="d-flex justify-content-center">
+            {{ $sales->links() }}
+        </div>
+    </x-slot>
+    
     </x-card>
     @section('styles')
     <!-- daterange picker -->

@@ -48,7 +48,6 @@ class SaleCreate extends Component
     public $descuento = 0; // Valor inicial del descuento
     public $searchIdentification = ''; // Nueva propiedad para buscar por identificación
 
-    
     public function render()
     {
 
@@ -115,67 +114,31 @@ class SaleCreate extends Component
             $sale->descuento     = $this->descuento;
             $sale->save();
     
-     // Subida de imágenes o PDF
-        if ($this->pedido_path) {
-          // Obtener la extensión del archivo
-          $extension = $this->pedido_path->getClientOriginalExtension();
-        
-          // Determinar si el archivo es una imagen o un PDF
-           if (in_array($extension, ['jpg', 'jpeg', 'png', 'gif', 'bmp', 'webp'])) {
-               // Si es imagen, guardarlo en 'images'
-               $pedidoStoredPath = $this->pedido_path->store('images', 'public');
-          } elseif ($extension == 'pdf') {
-              // Si es PDF, guardarlo en 'pdfs'
-               $pedidoStoredPath = $this->pedido_path->store('pdfs', 'public');
-         } else {
-              // Si el tipo de archivo no es ni imagen ni PDF, puedes lanzar un error o manejarlo según lo necesites
-             $this->dispatch('msg', 'El tipo de archivo no es compatible.', 'danger');
-             return;
-          }
-      
-          // Guardar la ruta del archivo en la base de datos
-          $sale->pedido_path = $pedidoStoredPath;
-          $sale->save();
-      
-         // Registrar la imagen o el archivo en la tabla de imágenes
-          Image::create([
-               'url'            => $pedidoStoredPath,
-              'imageable_id'   => $sale->id,
-               'imageable_type' => Sale::class,
-              'type'           => 'pedido'
-           ]);
-        }
-
-        if ($this->boleta_path) {
-          // Obtener la extensión del archivo
-         $extension = $this->boleta_path->getClientOriginalExtension();
-
-            // Determinar si el archivo es una imagen o un PDF
-         if (in_array($extension, ['jpg', 'jpeg', 'png', 'gif', 'bmp', 'webp'])) {
-             // Si es imagen, guardarlo en 'images'
-              $boletaStoredPath = $this->boleta_path->store('images', 'public');
-         } elseif ($extension == 'pdf') {
-             // Si es PDF, guardarlo en 'pdfs'
-             $boletaStoredPath = $this->boleta_path->store('pdfs', 'public');
-             } else {
-              // Si el tipo de archivo no es ni imagen ni PDF, puedes lanzar un error o manejarlo según lo necesites
-              $this->dispatch('msg', 'El tipo de archivo no es compatible.', 'danger');
-              return;
-         }
-     
-         // Guardar la ruta del archivo en la base de datos
-         $sale->boleta_path = $boletaStoredPath;
-         $sale->save();
-     
-         // Registrar la imagen o el archivo en la tabla de imágenes
-          Image::create([
-              'url'            => $boletaStoredPath,
-              'imageable_id'   => $sale->id,
-               'imageable_type' => Sale::class,
-              'type'           => 'boleta'
-          ]);
-        }
-
+            // Subida de imágenes
+            if ($this->pedido_path) {
+                $pedidoStoredPath = $this->pedido_path->store('images', 'public');
+                $sale->pedido_path = $pedidoStoredPath;
+                $sale->save();
+                Image::create([
+                    'url'            => $pedidoStoredPath,
+                    'imageable_id'   => $sale->id,
+                    'imageable_type' => Sale::class,
+                    'type'           => 'pedido'
+                ]);
+            }
+    
+            if ($this->boleta_path) {
+                $boletaStoredPath = $this->boleta_path->store('images', 'public');
+                $sale->boleta_path = $boletaStoredPath;
+                $sale->save();
+                Image::create([
+                    'url'            => $boletaStoredPath,
+                    'imageable_id'   => $sale->id,
+                    'imageable_type' => Sale::class,
+                    'type'           => 'boleta'
+                ]);
+            }
+    
             // (Opcional) Si quieres agrupar para otros fines, puedes dejar esta parte...
             $deductions = [];
     

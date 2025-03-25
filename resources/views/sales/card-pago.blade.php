@@ -1,3 +1,4 @@
+
 <div class="card card-info">
     <div class="card-header">
         <h3 class="card-title"><i class="fas fa-wallet"></i> Detalles </h3>
@@ -46,19 +47,17 @@
             <div class="col-6">
                 <label for="pedido_path">Subir Pedido:</label>
                 <div class="input-group">
-                    <input type="file" wire:model="pedido_path" class="form-control d-none" id="pedido">
-                    <button class="btn btn-primary" type="button" onclick="document.getElementById('pedido').click();">Seleccionar Archivo</button>
+                    <input type="file" wire:model="pedido_path" class="form-control" id="pedido_path">
                 </div>
             </div>
             <div class="col-6">
                 <label for="boleta_path">Subir Boleta:</label>
                 <div class="input-group">
-                    <input type="file" wire:model="boleta_path" class="form-control d-none" id="boleta">
-                    <button class="btn btn-primary" type="button" onclick="document.getElementById('boleta').click();">Seleccionar Archivo</button>
+                    <input type="file" wire:model="boleta_path" class="form-control" id="boleta_path">
                 </div>
             </div>
         </div>
-
+        
         <div class="row mt-3">
             <div class="col-6">
                 <label for="departamento">Departamento:</label>

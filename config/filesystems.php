@@ -73,4 +73,17 @@ return [
         public_path('storage') => storage_path('app/public'),
     ],
 
+    'disks' => [
+
+    'google' => [
+        'driver' => 'google',
+        'client_id' => env('726336061268-5q6ibv6f3knt9bg1ipv6esta3q8s5uef.apps.googleusercontent.com'),
+        'client_secret' => env('TU_CLIENT_SECRETGOCSPX-gW_b1ZLbtO5yn15g1ZISuS7BP0Lf'),
+        'refresh_token' => env('GOOGLE_DRIVE_REFRESH_TOKEN1//04qA6DGbYhBH3CgYIARAAGAQSNwF-L9Irs5P1n--KPu1ZI5iWyxrRD0YuqF12c02kc5WqisSPysatMsp4dAshbB94YjmOZcwH5Ak'),
+        'folder_id' => env('19hZUoVfeoxhP4WVGEbx0mcUevkefFDtK'),
+        ],
+
+    ],
+
+
 ];

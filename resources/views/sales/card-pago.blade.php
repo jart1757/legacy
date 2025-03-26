@@ -15,10 +15,10 @@
                 </div>
             </div>
             <div class="col-6">
-                <label for="delivery_id">Repartidor:</label>
+                <label for="delivery_id">Usuario:</label>
                 <div class="input-group">
                     <select wire:model="delivery_id" class="form-control" id="delivery_id">
-                        <option value="">Sin repartidor</option>
+                        <option value="">Seleccionar Usuario</option>
                         @foreach (\App\Models\Delivery::all() as $delivery)
                             <option value="{{ $delivery->id }}">{{ $delivery->name }}</option>
                         @endforeach

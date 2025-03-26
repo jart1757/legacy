@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!DOCTYPE html> 
 <html lang="es">
 <head>
     <meta charset="UTF-8">
@@ -12,8 +12,9 @@
         .producto { background: #ffcccb; color: #b30000; } /* Rojo suave */
         .cantidad { background: #cce5ff; color: #004085; } /* Azul suave */
         .header { text-align: center; margin-bottom: 10px; }
-        /* Flex para alinear el usuario y la fecha en una misma fila */
         .sub-header { display: flex; justify-content: space-between; font-size: 13px; margin-bottom: 10px; }
+        .observaciones { margin-top: 20px; font-size: 14px; }
+        .observaciones textarea { width: 100%; height: 80px; border: 1px solid #000; padding: 5px; font-size: 12px; }
     </style>
 </head>
 <body>
@@ -22,20 +23,21 @@
         <h2>LEGACY</h2>
     </div>
 
-    <!-- Tabla con Usuario y Fecha en la misma fila -->
-    <table style="width: 100%; margin-bottom: 20px; border:none">
+    <table style="width: 100%; margin-bottom: 20px; border-collapse: collapse; border: none;">
         <tr>
-            <td style="text-align: left; width: 50%"><h4>Usuario: {{ $sales->first()->delivery->name ?? 'N/A' }}</h4></td>
-            <td style="text-align: left; width: 50%"><h4>Fecha: {{ \Carbon\Carbon::parse($fechaFinal)->format('d-m-Y') }}</h4></td>
+            <td style="text-align: left; width: 50%; border: none;"><h4>Usuario: {{ $sales->first()->delivery->name ?? 'N/A' }}</h4></td>
+            <td style="text-align: left; width: 50%; border: none;"><h4>Departamento: {{ $sales->first()->departamento ?? 'N/A' }}</h4></td>
+            <td style="text-align: right; width: 50%; border: none;"><h4>Fecha: {{ \Carbon\Carbon::parse($fechaFinal)->format('d-m-Y') }}</h4></td>
         </tr>
     </table>
 
     <table>
         <thead>
             <tr>
-                <th>#</th> <!-- Columna para la numeración -->
+                <th>#</th>
                 <th>Codigo</th>
                 <th>Cliente</th>
+                <th>Carnet</th>
                 <th>Total</th>
                 <th>Detalle de Productos</th>
                 <th>Fecha de Pago</th>
@@ -53,9 +55,10 @@
                     $totalVentas += $sale->total;
                 @endphp
                 <tr>
-                    <td>{{ $i++ }}</td> <!-- Imprime el número de la fila -->
+                    <td>{{ $i++ }}</td>
                     <td>{{ $sale->client->identificacion }}</td>
                     <td>{{ $sale->client->name }}</td>
+                    <td>{{ $sale->client->telefono }}</td>
                     <td>{{ number_format($sale->total, 2) }}</td>
                     <td>
                         <div class="detalle-productos">
@@ -102,8 +105,25 @@
         </tbody>
     </table>
 
-
+    @if (trim(strtoupper($sales->first()->departamento ?? '')) === 'LA PAZ')
+    <div style="text-align: center; margin-top: 70px;">
     
+        <p>___________________________</p>
+        <h3>RECIBÍ CONFORME</h3>
+        <p><strong>Nombre:</strong> ___________________________________________</p>
+        <p><strong>Fecha:</strong> ___________________________________________</p>
+    </div>
+@else
+    <h3>ENVIADO A:</h3>
+    <p>_____________________________________________________________________</p>
+
+    <div class="observaciones">
+        <h3>OBSERVACIONES:</h3>
+        <textarea></textarea>
+    </div>
+@endif
+
+
 
 </body>
 </html>

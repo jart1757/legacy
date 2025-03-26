@@ -44,9 +44,12 @@ class ClientComponent extends Component
         $this->categories = Category::all();
 
         $clientes = Client::with('category')
-            ->where('name', 'like', '%' . $this->search . '%')
-            ->orderBy('id', 'desc')
-            ->paginate($this->cant);
+    ->where(function ($query) {
+        $query->where('name', 'like', '%' . $this->search . '%')
+              ->orWhere('identificacion', 'like', '%' . $this->search . '%');
+    })
+    ->orderBy('id', 'desc')
+    ->paginate($this->cant);
 
         return view('livewire.client.client-component', [
             'clientes' => $clientes,

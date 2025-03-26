@@ -344,6 +344,7 @@ class SaleCreate extends Component
             2 => 20, // Mayorista
             3 => 1,  // Preferente
             4 => 5,  // Reconsumo (5 cajas)
+            5=> 5,
             default => 0,
         };
     }

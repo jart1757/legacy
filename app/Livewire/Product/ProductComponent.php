@@ -21,7 +21,7 @@ class ProductComponent extends Component
     //Propiedades clase
     public $search='';
     public $totalRegistros=0;
-    public $cant=5;
+    public $cant=10;
 
     //Propiedades modelo
     public $Id=0;

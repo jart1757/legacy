@@ -33,11 +33,9 @@ class ProductRow extends Component
     
     public function render()
     {
-        
-        $productos = Product::when($this->search, function ($query) {
-            $query->where('category_id', $this->search); // Filtra por category_id
-        })
-        ->paginate($this->cant);
+       
+        $productos = $this->getProducts(); // Usar la consulta con los filtros correctos
+
     
         $this->stockLabel = $this->stockLabel();
     
@@ -47,11 +45,10 @@ class ProductRow extends Component
         ]);
     }
     
-    
-    
 
     public function mount(){
         $this->stock = $this->product->stock;
+        $this->cant = 10; // Forzar que sean 10 registros por página
     }
 
     public function addProduct(Product $product)
@@ -114,19 +111,20 @@ class ProductRow extends Component
     public function getProducts()
     {
         $query = Product::query();
-
-       // Filtrar por nombre si se ha ingresado una búsqueda
+    
+        // Filtrar por nombre si se ha ingresado una búsqueda
         if ($this->search != '') {
            $query->where('name', 'like', '%' . $this->search . '%');
-      }
-
-      // Filtrar por la categoría del cliente seleccionado
-     if ($this->category_id) {
-          $query->where('category_id', $this->category_id);
-       }
-
-      return $query->paginate($this->cant);
+        }
+    
+        // Filtrar por la categoría del cliente seleccionado
+        if ($this->category_id) {
+              $query->where('category_id', $this->category_id);
+        }
+    
+        return $query->paginate($this->cant);
     }
+    
 
     
 }

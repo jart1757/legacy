@@ -114,31 +114,34 @@ class SaleCreate extends Component
             $sale->descuento     = $this->descuento;
             $sale->save();
     
-            // Subida de imágenes
-            if ($this->pedido_path) {
-                $pedidoStoredPath = $this->pedido_path->store('images', 'public');
-                $sale->pedido_path = $pedidoStoredPath;
-                $sale->save();
-                Image::create([
-                    'url'            => $pedidoStoredPath,
-                    'imageable_id'   => $sale->id,
-                    'imageable_type' => Sale::class,
-                    'type'           => 'pedido'
-                ]);
-            }
-    
-            if ($this->boleta_path) {
-                $boletaStoredPath = $this->boleta_path->store('images', 'public');
-                $sale->boleta_path = $boletaStoredPath;
-                $sale->save();
-                Image::create([
-                    'url'            => $boletaStoredPath,
-                    'imageable_id'   => $sale->id,
-                    'imageable_type' => Sale::class,
-                    'type'           => 'boleta'
-                ]);
-            }
-    
+      // Subida de imágenes
+      if ($this->pedido_path) {
+        $pedidoStoredPath = $this->pedido_path->store('pedidos');
+
+
+        $sale->pedido_path = $pedidoStoredPath;
+        $sale->save();
+        Image::create([
+            'url'            => $pedidoStoredPath,
+            'imageable_id'   => $sale->id,
+            'imageable_type' => Sale::class,
+            'type'           => 'pedido'
+        ]);
+    }
+
+    if ($this->boleta_path) {
+        $boletaStoredPath = $this->boleta_path->store('boletas');
+        $sale->boleta_path = $boletaStoredPath;
+        $sale->save();
+        Image::create([
+            'url'            => $boletaStoredPath,
+            'imageable_id'   => $sale->id,
+            'imageable_type' => Sale::class,
+            'type'           => 'boleta'
+        ]);
+    }
+
+
             // (Opcional) Si quieres agrupar para otros fines, puedes dejar esta parte...
             $deductions = [];
     

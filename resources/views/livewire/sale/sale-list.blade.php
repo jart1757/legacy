@@ -106,9 +106,9 @@
                 </td>
                 
                 <td>
-                    @if($sale->boleta_path)
+                    @if($sale->pedido_path)
                         @php
-                            $extension = pathinfo($sale->boleta_path, PATHINFO_EXTENSION);
+                            $extension = pathinfo($sale->pedido_path, PATHINFO_EXTENSION);
                         @endphp
                 
                         @if(in_array($extension, ['jpg', 'jpeg', 'png', 'gif', 'bmp', 'webp']))
@@ -119,7 +119,7 @@
                         @elseif($extension == 'pdf')
                             <!-- Si es un PDF -->
                             <a href="{{ asset('storage/' . $sale->boleta_path) }}" target="_blank">
-                                Ver PDF de la boleta
+                                Ver PDF del pedido
                             </a>
                         @else
                             <span class="text-muted">-</span>

@@ -66,6 +66,7 @@ Route::get('/sales/{sale}',SaleShow::class)->name('sales.show')->middleware(['au
 Route::get('/tienda',ShopComponent::class)->name('tienda')->middleware(['auth','admin']);
 
 Route::get('/sales/invoice/{sale}',[PdfController::class,'invoice'])->name('sales.invoice')->middleware(['auth']);
+Route::get('/sales/report/{sale}',[PdfController::class,'report'])->name('sales.report')->middleware(['auth']);
 
 Route::get('/sales/{sale}/edit',SaleEdit::class)->name('sales.edit')->middleware(['auth','admin']);
 Route::get('/search/clients', [ClientController::class, 'search'])->name('search.clients');

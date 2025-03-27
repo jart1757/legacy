@@ -111,7 +111,7 @@
         <p>___________________________</p>
         <h3>RECIBÍ CONFORME</h3>
         <p><strong>Nombre:</strong> ___________________________________________</p>
-        <p><strong>Fecha:</strong> ___________________________________________</p>
+        <p><strong>Fecha:</strong> {{ \Carbon\Carbon::parse($fechaFinal)->format('d-m-Y') }}</p>
     </div>
 @else
     <h3>ENVIADO A:</h3>

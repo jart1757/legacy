@@ -18,4 +18,20 @@ class PdfController extends Controller
         return $pdf->stream('invoice.pdf');
         
     }
+    public function report(Sale $sale)
+    {
+        // Convertir la venta en una colección
+        $sales = collect([$sale]);
+        
+        // Definir la fecha final (por ejemplo, la fecha actual)
+        $fechaFinal = now();
+        
+        $pdf = Pdf::loadView('sales.report', compact('sales', 'fechaFinal'));
+        
+        return response($pdf->output(), 200)
+            ->header('Content-Type', 'application/pdf')
+            ->header('Content-Disposition', 'inline; filename="report.pdf"');
+    }
+    
+
 }

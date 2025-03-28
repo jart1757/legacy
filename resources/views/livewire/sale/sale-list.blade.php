@@ -3,7 +3,7 @@
        <x-slot:cardTools>
             <div class="d-flex align-items-center">
                 <button wire:click="exportPDF" class="btn btn-danger">
-                    <i class="far fa-file-pdf"></i> Exportar PDF
+                    <i class="far fa-file-pdf"></i> GENERAR REPORTE
                 </button>
 
                 <span class="badge badge-info" style="font-size: 1.4rem">

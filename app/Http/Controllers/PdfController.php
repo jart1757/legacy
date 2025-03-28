@@ -25,12 +25,11 @@ class PdfController extends Controller
         
         // Definir la fecha final (por ejemplo, la fecha actual)
         $fechaFinal = now();
+        $fechaInicio = now();
         
-        $pdf = Pdf::loadView('sales.report', compact('sales', 'fechaFinal'));
+        $pdf = Pdf::loadView('sales.report', compact('sales', 'fechaInicio','fechaFinal'));
+        return $pdf->stream('invoice.pdf');
         
-        return response($pdf->output(), 200)
-            ->header('Content-Type', 'application/pdf')
-            ->header('Content-Disposition', 'inline; filename="report.pdf"');
     }
     
 

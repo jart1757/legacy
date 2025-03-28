@@ -116,10 +116,10 @@
         <table style="width: 100%; border-collapse: collapse; border: none;">
           <tr style="border: none;">
             <td style="text-align: right; border: none;">
-              <h4>Fecha Inicio: {{ \Carbon\Carbon::parse($fechaInicio)->format('d-m-Y') }}</h4>
+              <h4>Fecha Inicio:  {{ \Carbon\Carbon::parse($fechaInicio)->format('d-m-Y') }}</h4>
             </td>
             <td style="text-align: left; border: none;">
-              <h4>Fecha Final: {{ \Carbon\Carbon::parse($fechaFinal)->format('d-m-Y') }}</h4>
+              <h4>- Fecha Final: {{ \Carbon\Carbon::parse($fechaFinal)->format('d-m-Y') }}</h4>
             </td>
           </tr>
         </table>

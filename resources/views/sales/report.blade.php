@@ -30,7 +30,7 @@
             <td style="text-align: left; width: 50%; border: none;">
                 <h4>Usuario: {{ $sales->first()->delivery->name ?? 'N/A' }}</h4>
             </td>
-            <td style="text-align: left; width: 50%; border: none;">
+            <td style="text-align: center; width: 50%; border: none;">
                 <h4>Departamento: {{ $sales->first()->departamento ?? 'N/A' }}</h4>
             </td>
             <td style="text-align: right; width: 50%; border: none;">
@@ -118,8 +118,9 @@
             <td style="text-align: right; border: none;">
               <h4>Fecha Inicio:  {{ \Carbon\Carbon::parse($fechaInicio)->format('d-m-Y') }}</h4>
             </td>
+
             <td style="text-align: left; border: none;">
-              <h4>- Fecha Final: {{ \Carbon\Carbon::parse($fechaFinal)->format('d-m-Y') }}</h4>
+              <h4>Fecha Final: {{ \Carbon\Carbon::parse($fechaFinal)->format('d-m-Y') }}</h4>
             </td>
           </tr>
         </table>

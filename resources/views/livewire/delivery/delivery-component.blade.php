@@ -2,7 +2,7 @@
     <x-card cardTitle="Listado repartidores ({{$this->totalRegistros}})">
        <x-slot:cardTools>
           <a href="#" class="btn btn-primary" wire:click='create'>
-            <i class="fas fa-plus-circle"></i> Crear Delivery
+            <i class="fas fa-plus-circle"></i> Crear Usuario
           </a>
        </x-slot>
 

@@ -19,7 +19,7 @@ class SaleList extends Component
     public $search = '';
     public $dateInicio, $dateFin;
     public $totalRegistros, $totalVentas;
-    public $cant = 10; // Número de registros por página
+    public $cant = 50; // Número de registros por página
     public $fechaInicio;
     public $fechaFinal;
 

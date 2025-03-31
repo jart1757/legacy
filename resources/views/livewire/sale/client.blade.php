@@ -8,7 +8,7 @@
              <span class="badge badge-primary">{{ $categoryName }}</span>
           </h3>
           <div class="card-tools">
-              {{--<button wire:click="openModal" class="btn bg-purple btn-sm">Crear cliente</button> --}}
+              <button wire:click="openModal" class="btn bg-purple btn-sm">Crear cliente</button>
               <button wire:click="editClient" class="btn btn-warning btn-sm" @disabled(!$client)">
                 Ver Cliente
               </button>

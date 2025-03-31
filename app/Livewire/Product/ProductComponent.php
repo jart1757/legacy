@@ -34,6 +34,7 @@ class ProductComponent extends Component
     public $active = 1;
     public $image;
     public $imageModel;
+    public $categories;
 
     public function updatingSearch()
     {
@@ -43,6 +44,7 @@ class ProductComponent extends Component
     public function render()
     {
         $this->totalRegistros = Product::count();
+        $this->categories=Category::all();
 
         $products = Product::where('name', 'like', '%' . $this->search . '%')
             ->orderBy('id', 'desc')

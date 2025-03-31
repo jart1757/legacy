@@ -20,8 +20,7 @@
             @include('sales.card-details')
             {{-- Card pago --}}
             @include('sales.card-pago')
-         
-   
+
    
          </div>
 

@@ -22,7 +22,7 @@ class SaleCreate extends Component
 
     // Propiedades de la clase
     public $search = '';
-    public $cant = 5;
+    public $cant = 10;
     public $totalRegistros = 0;
 
     // Propiedades de pago

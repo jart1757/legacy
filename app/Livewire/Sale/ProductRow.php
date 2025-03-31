@@ -34,9 +34,10 @@ class ProductRow extends Component
     public function render()
     {
        
-        $productos = $this->getProducts(); // Usar la consulta con los filtros correctos
+        $productos = Product::where('name','like','%'.$this->search.'%')
+            ->orderBy('id','desc')
+            ->paginate(10);
 
-    
         $this->stockLabel = $this->stockLabel();
     
         return view('livewire.sale.product-row', [
@@ -108,23 +109,6 @@ class ProductRow extends Component
         $this->dispatch('refreshProducts'); // Refrescar productos
     }
 
-    public function getProducts()
-    {
-        $query = Product::query();
-    
-        // Filtrar por nombre si se ha ingresado una búsqueda
-        if ($this->search != '') {
-           $query->where('name', 'like', '%' . $this->search . '%');
-        }
-    
-        // Filtrar por la categoría del cliente seleccionado
-        if ($this->category_id) {
-              $query->where('category_id', $this->category_id);
-        }
-    
-        return $query->paginate($this->cant);
-    }
-    
 
     
 }

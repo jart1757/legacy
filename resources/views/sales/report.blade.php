@@ -89,7 +89,29 @@
             @endforeach
         </tbody>
     </table>
-
+    <table class="table table-bordered text-center">
+        <thead class="table-dark">
+            <tr>
+                <th>Producto</th>
+                @foreach ($productosTotales as $producto => $cantidad)
+                    <th>{{ $producto }}</th>
+                @endforeach
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><strong>Cantidad</strong></td>
+                @foreach ($productosTotales as $cantidad)
+                    <td>{{ $cantidad }}</td>
+                @endforeach
+            </tr>
+            <tr class="table-primary">
+                <td><strong>Total</strong></td>
+                <td colspan="{{ count($productosTotales) }}" class="fw-bold">{{ array_sum($productosTotales) }}</td>
+            </tr>
+        </tbody>
+    </table>
+    
     <!-- Bloque de "Recibí conforme" o "Enviado a" (parte de la tabla completa) -->
     @if (trim(strtoupper($sales->first()->departamento ?? '')) === 'LA PAZ')
         <div style="text-align: center; margin-top: 70px;">

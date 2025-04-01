@@ -1,6 +1,9 @@
 <div>
-    <x-card cardTitle="Listado repartidores ({{$this->totalRegistros}})">
+    <x-card cardTitle="Lista de Usuarios ({{$this->totalRegistros}})">
        <x-slot:cardTools>
+        <a href="{{ route('sales.create') }}" class="btn btn-secondary">
+            <i class="fas fa-arrow-left"></i> Salida de Productos
+        </a>
           <a href="#" class="btn btn-primary" wire:click='create'>
             <i class="fas fa-plus-circle"></i> Crear Usuario
           </a>
@@ -50,12 +53,12 @@
     </x-card>
 
 
- <x-modal modalId="modalDelivery" modalTitle="Repartidores">
+ <x-modal modalId="modalDelivery" modalTitle="Usuarios">
     <form wire:submit={{$Id==0 ? "store" : "update($Id)"}}>
         <div class="form-row">
             <div class="form-group col-12">
                 <label for="name">Nombre:</label>
-                <input wire:model='name' type="text" class="form-control" placeholder="Nombre repartidor" id="name">
+                <input wire:model='name' type="text" class="form-control" placeholder="Nombre Usuario" id="name">
                 @error('name')
                     <div class="alert alert-danger w-100 mt-2">{{$message}}</div>
                 @enderror

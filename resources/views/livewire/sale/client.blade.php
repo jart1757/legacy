@@ -3,7 +3,7 @@
       <div class="card-header">
           <h3 class="card-title">
             <i class="fas fa-user"></i>
-             <h5>CLIENTE:</h5>
+             <h5>Cliente:</h5>
              <span class="badge badge-success ">{{$nameClient}}</span>  
              <span class="badge badge-danger">{{$clientIdentificacion}}</span> 
              <span class="badge badge-primary">{{ $categoryName }}</span>

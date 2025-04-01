@@ -3,7 +3,9 @@
     <div class="card-header">
         <h3 class="card-title"><i class="fas fa-wallet"></i> Detalles </h3>
         <div class="card-tools d-flex justify-content-center align-self-center">
-            @livewire('sale.currency',['total'=>$total])
+            <a href="{{ route('deliveries') }}" class="btn bg-purple btn-sm">
+                Crear Usuario
+            </a>                     
         </div>
     </div>
     <div class="card-body">
@@ -96,6 +98,8 @@
         
     </div>
 </div>
+
+
 
 <script>
     // Datos de ejemplo para departamentos y provincias

@@ -18,6 +18,8 @@ class ProductRow extends Component
     public $category_id = null;
     public $search = ''; // Nueva variable para la búsqueda
     public $cant = 10; // Cantidad de registros a mostrar
+    public $categoryProducts = [];
+
 
     protected function getListeners(){
 
@@ -108,6 +110,15 @@ class ProductRow extends Component
         $this->category_id = $data['category_id'];
         $this->dispatch('refreshProducts'); // Refrescar productos
     }
+
+    public function showModal($productId)
+{
+    $product = Product::find($productId);
+    $this->categoryProducts = Product::where('category_id', $product->category_id)->get();
+    $this->dispatchBrowserEvent('show-modal');
+}
+
+    
 
 
     

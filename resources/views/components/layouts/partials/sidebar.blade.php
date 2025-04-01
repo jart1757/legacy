@@ -84,7 +84,7 @@
          <a href="{{route('deliveries')}}" class="nav-link {{$title=='Entregas'?'active':''}}">
           <i class="nav-icon fas fa-user"></i>
            <p>
-             Entregas
+             Usuarios
            </p>
          </a>
      </li>

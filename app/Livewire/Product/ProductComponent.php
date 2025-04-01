@@ -8,7 +8,6 @@ use App\Models\Category;
 use Livewire\WithPagination;
 use Livewire\WithFileUploads;
 use Livewire\Attributes\Title;
-use Livewire\Attributes\Computed;
 use Illuminate\Support\Facades\Storage;
 
 #[Title('Productos')]
@@ -44,7 +43,7 @@ class ProductComponent extends Component
     public function render()
     {
         $this->totalRegistros = Product::count();
-        $this->categories=Category::all();
+        $this->categories = Category::all();
 
         $products = Product::where('name', 'like', '%' . $this->search . '%')
             ->orderBy('id', 'desc')
@@ -52,7 +51,7 @@ class ProductComponent extends Component
 
         return view('livewire.product.product-component', [
             'products' => $products,
-            'categories' => Category::all()
+            'categories' => $this->categories
         ]);
     }
 
@@ -60,6 +59,26 @@ class ProductComponent extends Component
     {
         $this->Id = 0;
         $this->clean();
+        $this->dispatch('open-modal', 'modalProduct');
+    }
+
+    // Nuevo método para editar: carga los datos del producto en las propiedades
+    public function edit($id)
+    {
+        $product = Product::findOrFail($id);
+        $this->Id = $product->id;
+        $this->name = $product->name;
+        $this->descripcion = $product->descripcion;
+        $this->precio_compra = $product->precio_compra;
+        $this->precio_venta = $product->precio_venta;
+        $this->stock = $product->stock;
+        $this->stock_minimo = $product->stock_minimo;
+        $this->codigo_barras = $product->codigo_barras;
+        $this->fecha_vencimiento = $product->fecha_vencimiento;
+        $this->category_id = $product->category_id;
+        $this->active = $product->active;
+        $this->imageModel = $product->image ? $product->image->url : null;
+
         $this->dispatch('open-modal', 'modalProduct');
     }
 
@@ -102,7 +121,8 @@ class ProductComponent extends Component
         $this->clean();
     }
 
-    public function update(Product $product)
+    // Actualizado: se elimina el parámetro y se usa el $this->Id para obtener el producto
+    public function update()
     {
         $this->validate([
             'name' => 'required|min:2|max:255',
@@ -114,6 +134,8 @@ class ProductComponent extends Component
             'image' => 'image|max:1024|nullable',
             'category_id' => 'required|numeric',
         ]);
+
+        $product = Product::findOrFail($this->Id);
 
         $product->update([
             'name' => $this->name,
@@ -163,7 +185,20 @@ class ProductComponent extends Component
 
     public function clean()
     {
-        $this->reset(['Id', 'name', 'image', 'descripcion', 'precio_compra', 'precio_venta', 'stock', 'stock_minimo', 'codigo_barras', 'fecha_vencimiento', 'active', 'category_id']);
+        $this->reset([
+            'Id',
+            'name',
+            'image',
+            'descripcion',
+            'precio_compra',
+            'precio_venta',
+            'stock',
+            'stock_minimo',
+            'codigo_barras',
+            'fecha_vencimiento',
+            'active',
+            'category_id'
+        ]);
         $this->resetErrorBag();
     }
 }

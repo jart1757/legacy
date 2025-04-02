@@ -11,6 +11,7 @@ class ClientController extends Controller
 {
     $search = $request->search;
 
+    
     $clients = Client::where('name', 'like', "%{$search}%")
         ->orWhere('identificacion', 'like', "%{$search}%")
         ->orderBy('name')

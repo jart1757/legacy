@@ -38,7 +38,7 @@
                         <option value="0">Seleccionar descuento</option>
                         <option value="0.03">Bonificado (0.03)</option>
                         <option value="0.10">Mayorista (0.10)</option>
-                        <option value="280.04">Bonificado Alc (280.04)</option>
+                        <option value="0.02">Bonificado Alc (280.04)</option>
                     </select>
                     <input type="number" wire:model="descuento" class="form-control" id="descuento" placeholder="Ingrese descuento">
                 </div>

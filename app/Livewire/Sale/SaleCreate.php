@@ -328,8 +328,8 @@ class SaleCreate extends Component
     #[Computed]
     public function products()
     {
-        return Product::where('name', 'like', '%' . $this->search . '%')
-            ->orderBy('id', 'desc')
+        return Product::where('category_id', 'like', '%' . $this->search . '%')
+            ->orderBy('name', 'asc')
             ->paginate($this->cant);
     }
 

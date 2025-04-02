@@ -4,23 +4,47 @@
     </div>
 
     <div class="card-body">
-        <x-table>
-            <x-slot:thead>
-                <th scope="col">#</th>
-                <th scope="col">Nombre</th>
-                <th scope="col">Tipo</th>
-                <th scope="col">Stock</th>
-                <th scope="col">...</th>
-            </x-slot>
+        @if ($products->count())
+            <x-table>
+                <x-slot:thead>
+                    <tr>
+                        <th>Producto</th>
+                        @foreach ($products as $product)
+                            <th scope="col" class="text-center">{!!$product->name!!}</th>
+                        @endforeach
+                    </tr>
+                </x-slot>
 
-            @forelse ($products as $product)
-                <livewire:sale.product-row :product="$product" :wire:key="$product->id" />
-            @empty
                 <tr>
-                    <td colspan="5" class="text-center">Sin Registros</td>
-                </tr>                
-            @endforelse
-        </x-table>
+                    <td>Acción</td>
+                    @foreach ($products as $product)
+                        <td class="text-center">
+                            <button
+                                wire:click="addProduct({{ $product->id }})"
+                                class="btn btn-primary btn-sm"
+                                wire:loading.attr="disabled"
+                                wire:target="addProduct"
+                                title="Agregar">
+                                <i class="fas fa-plus-circle"></i>
+                            </button>
+                        </td>
+                    @endforeach
+                </tr>
+
+                <tr>
+                    <td>Cantidad</td>
+                    @foreach ($products as $product)
+                        <td scope="col" class="text-center">
+                            {!!$product->stocklabel!!}
+                        </td>
+                    @endforeach
+                </tr>
+
+              
+            </x-table>
+        @else
+            <div class="text-center">Sin Registros</div>
+        @endif
     </div>
 
     <div class="card-footer d-flex justify-content-center">

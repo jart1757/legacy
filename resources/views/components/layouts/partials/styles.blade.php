@@ -16,5 +16,6 @@
   <link rel="stylesheet" href="{{asset('css/styles.css')}}">
 
   <link rel="stylesheet" href="{{asset('css/dark.css')}}">
+  
 
   @yield('styles')

@@ -49,6 +49,7 @@
   <script src="{{ asset('plugins/select2/js/select2.full.min.js') }}"></script>
   <script>
     $(document).ready(function() {
+      // Inicializa select2
       $("#select2").select2({
         theme: "bootstrap4",
         ajax: {
@@ -71,12 +72,44 @@
           cache: true
         }
       });
-
-      $("#select2").on('change', function(){
+  
+      // Evento cuando cambia el select2
+      $("#select2").on('change', function() {
         Livewire.dispatch('client_id', { id: $(this).val() });
+      });
+  
+      // Escuchar el evento de Livewire para actualizar el select2
+      Livewire.on('refreshClients', function () {
+        // Destruir y reiniciar select2 para actualizar los clientes
+        $('#select2').select2('destroy').empty();
+        // Re-inicializa select2 después de actualizar
+        $("#select2").select2({
+          theme: "bootstrap4",
+          ajax: {
+            url: "{{ route('search.clients') }}",
+            dataType: 'json',
+            delay: 250,
+            data: function(params) {
+              return { search: params.term };
+            },
+            processResults: function(data) {
+              return {
+                results: $.map(data, function(client) {
+                  return { 
+                    id: client.id, 
+                    text: client.name + " - " + client.identificacion 
+                  };
+                })
+              };
+            },
+            cache: true
+          }
+        });
       });
     });
   </script>
+  
   @endsection
 
 </div>
+

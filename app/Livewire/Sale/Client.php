@@ -92,6 +92,7 @@ class Client extends Component
         $this->dispatch('close-modal', 'modalClient');
         $this->dispatch('msg', 'Cliente creado correctamente.');
         $this->dispatch('client_id', $client->id);
+        $this->dispatch('refreshClients');
 
         $this->resetModal();
     }
@@ -133,6 +134,8 @@ class Client extends Component
 
         $this->dispatch('close-modal', 'modalClient');
         $this->dispatch('msg', 'Cliente actualizado correctamente.');
+        $this->dispatch('refreshClients');
+
         $this->resetModal();
     }
 

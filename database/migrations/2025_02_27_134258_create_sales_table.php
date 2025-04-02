@@ -24,6 +24,7 @@ return new class extends Migration
             $table->string('provincia')->nullable();
             $table->foreignId('user_id')->constrained();
             $table->foreignId('client_id')->constrained();
+            $table->string('report_code')->nullable();
             $table->foreignId('delivery_id')->nullable()->constrained();
             $table->string('pedido_path')->nullable(); // Imagen del pedido
             $table->string('boleta_path')->nullable(); // Imagen de la boleta

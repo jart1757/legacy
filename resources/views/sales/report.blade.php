@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <title>Reporte de Ventas</title>
+    <title>Reporte Legacy</title>
     <style>
         body { font-family: Arial, sans-serif; font-size: 12px; }
         table { width: 100%; border-collapse: collapse; margin-top: 20px; }
@@ -24,6 +24,7 @@
     <div class="header">
         <h2>LEGACY</h2>
     </div>
+    
 
     <table style="width: 100%; margin-bottom: 20px; border-collapse: collapse; border: none;">
         <tr>

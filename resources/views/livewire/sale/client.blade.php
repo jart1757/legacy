@@ -4,9 +4,9 @@
           <h3 class="card-title">
             <i class="fas fa-user"></i>
              <h5>Cliente:</h5>
-             <span class="badge badge-success ">{{$nameClient}}</span>  
+             <span class="badge badge-success">{{$nameClient}}</span>  
              <span class="badge badge-danger">{{$clientIdentificacion}}</span> 
-             <span class="badge badge-primary">{{ $categoryName }}</span>
+             <span class="badge badge-primary">{{$categoryName}}</span>
           </h3>
           <div class="card-tools">
               <button wire:click="openModal" class="btn bg-purple btn-sm">Crear cliente</button>
@@ -26,8 +26,8 @@
                 <select wire:model="client" class="form-control" id="select2">
                   <option value="">Seleccione un cliente</option>
                   @foreach ($clients as $client)
-                    <option value="{{$client->id}}">
-                      {{$client->name}} - {{$client->identificacion}}
+                    <option value="{{ $client->id }}">
+                      {{ $client->name }} - {{ $client->identificacion }}
                     </option>
                   @endforeach
                 </select>
@@ -47,35 +47,34 @@
 
   @section('js')
   <script src="{{ asset('plugins/select2/js/select2.full.min.js') }}"></script>
-
   <script>
-    $("#select2").select2({
-      theme: "bootstrap4",
-      ajax: {
-        url: "{{ route('search.clients') }}", // Crea esta ruta en web.php
-        dataType: 'json',
-        delay: 250,
-        data: function(params) {
-          return {
-            search: params.term
-          };
-        },
-        processResults: function(data) {
-          return {
-            results: $.map(data, function(client) {
-              return {
-                id: client.id,
-                text: client.name + " - " + client.identificacion
-              };
-            })
-          };
-        },
-        cache: true
-      }
-    });
+    $(document).ready(function() {
+      $("#select2").select2({
+        theme: "bootstrap4",
+        ajax: {
+          url: "{{ route('search.clients') }}", // Ruta definida en web.php
+          dataType: 'json',
+          delay: 250,
+          data: function(params) {
+            return { search: params.term };
+          },
+          processResults: function(data) {
+            return {
+              results: $.map(data, function(client) {
+                return { 
+                  id: client.id, 
+                  text: client.name + " - " + client.identificacion 
+                };
+              })
+            };
+          },
+          cache: true
+        }
+      });
 
-    $("#select2").on('change', function(){
-      Livewire.dispatch('client_id', {id: $(this).val()});
+      $("#select2").on('change', function(){
+        Livewire.dispatch('client_id', { id: $(this).val() });
+      });
     });
   </script>
   @endsection

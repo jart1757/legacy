@@ -30,7 +30,7 @@ class SaleCreate extends Component
     public $devuelve = 0;
     public $updating = 0;
     public $client = 1;
-    public $category_id = null; // Agrega esta línea
+    public $category_id = null; // Se asignará desde el cliente
 
     // Propiedades adicionales
     public $fechaing;
@@ -48,11 +48,8 @@ class SaleCreate extends Component
     public $descuento = 0; // Valor inicial del descuento
     public $searchIdentification = ''; // Nueva propiedad para buscar por identificación
 
-
     public function render()
     {
-        
-        
         if ($this->search != '') {
             $this->resetPage();
         }
@@ -113,36 +110,30 @@ class SaleCreate extends Component
             $sale->descuento     = $this->descuento;
             $sale->save();
     
-      // Subida de imágenes
-      if ($this->pedido_path) {
-        $pedidoStoredPath = $this->pedido_path->store('pedidos');
-
-
-        $sale->pedido_path = $pedidoStoredPath;
-        $sale->save();
-        Image::create([
-            'url'            => $pedidoStoredPath,
-            'imageable_id'   => $sale->id,
-            'imageable_type' => Sale::class,
-            'type'           => 'pedido'
-        ]);
-    }
-
-    if ($this->boleta_path) {
-        $boletaStoredPath = $this->boleta_path->store('boletas');
-        $sale->boleta_path = $boletaStoredPath;
-        $sale->save();
-        Image::create([
-            'url'            => $boletaStoredPath,
-            'imageable_id'   => $sale->id,
-            'imageable_type' => Sale::class,
-            'type'           => 'boleta'
-        ]);
-    }
-
-
-            // (Opcional) Si quieres agrupar para otros fines, puedes dejar esta parte...
-            $deductions = [];
+            // Subida de imágenes
+            if ($this->pedido_path) {
+                $pedidoStoredPath = $this->pedido_path->store('pedidos');
+                $sale->pedido_path = $pedidoStoredPath;
+                $sale->save();
+                Image::create([
+                    'url'            => $pedidoStoredPath,
+                    'imageable_id'   => $sale->id,
+                    'imageable_type' => Sale::class,
+                    'type'           => 'pedido'
+                ]);
+            }
+    
+            if ($this->boleta_path) {
+                $boletaStoredPath = $this->boleta_path->store('boletas');
+                $sale->boleta_path = $boletaStoredPath;
+                $sale->save();
+                Image::create([
+                    'url'            => $boletaStoredPath,
+                    'imageable_id'   => $sale->id,
+                    'imageable_type' => Sale::class,
+                    'type'           => 'boleta'
+                ]);
+            }
     
             // Guardar los ítems de la venta
             foreach (\Cart::session(userID())->getContent() as $product) {
@@ -159,19 +150,7 @@ class SaleCreate extends Component
                     'qty'   => $product->quantity,
                     'fecha' => date('Y-m-d')
                 ]);
-    
-                // Agrupar la cantidad (si es que la necesitas para alguna otra lógica)
-                if (isset($deductions[$product->name])) {
-                    $deductions[$product->name] += $product->quantity;
-                } else {
-                    $deductions[$product->name] = $product->quantity;
-                }
             }
-    
-            // [Eliminar esta parte para evitar el doble descuento]
-            // foreach ($deductions as $name => $totalQty) {
-            //     Product::where('name', $name)->decrement('stock', $totalQty);
-            // }
     
             // Limpiar el carrito
             Cart::clear();
@@ -200,7 +179,6 @@ class SaleCreate extends Component
         });
     }
     
-
     #[On('client_id')]
     public function client_id($id = 1)
     {
@@ -227,25 +205,15 @@ class SaleCreate extends Component
 
     public function decrement($id)
     {
-        // Obtener el producto específico
         $product = Product::find($id);
-
         if (!$product) {
             return;
         }
-
-        // Obtener todos los productos con el mismo nombre
         $productos = Product::where('name', $product->name)->get();
-
-        // Aumentar stock en todos los productos con el mismo nombre
         foreach ($productos as $prod) {
             $prod->increment('stock');
         }
-
-        // Disminuir cantidad en el carrito
         Cart::decrement($id);
-
-        // Emitir evento para actualizar la vista
         $this->dispatch('refreshProducts');
     }
 
@@ -260,50 +228,31 @@ class SaleCreate extends Component
             return;
         }
 
-        // Obtener el producto específico
         $product = Product::find($id);
-
         if (!$product || $product->stock <= 0) {
             $this->dispatch('msg', "Stock insuficiente para {$product->name}", "danger");
             return;
         }
 
-        // Obtener todos los productos con el mismo nombre
         $productos = Product::where('name', $product->name)->get();
-
-        // Restar stock a todos los productos con el mismo nombre
         foreach ($productos as $prod) {
             $prod->decrement('stock');
         }
-
-        // Aumentar cantidad en el carrito
         Cart::increment($id);
-
-        // Emitir evento para actualizar la vista
         $this->dispatch('refreshProducts');
     }
 
     public function removeItem($id, $qty)
     {
-        // Obtener el producto específico
         $product = Product::find($id);
-
         if (!$product) {
             return;
         }
-
-        // Obtener todos los productos con el mismo nombre
         $productos = Product::where('name', $product->name)->get();
-
-        // Devolver stock a todos los productos con el mismo nombre
         foreach ($productos as $prod) {
             $prod->increment('stock', $qty);
         }
-
-        // Remover del carrito
         Cart::removeItem($id);
-
-        // Emitir evento para actualizar la vista
         $this->dispatch('refreshProducts');
     }
 
@@ -314,7 +263,7 @@ class SaleCreate extends Component
         $this->devuelve = 0;
         $this->dispatch('msg', 'Venta cancelada');
         $this->dispatch('refreshProducts');
-        $this->dispatch('resetDescuentoSelect'); // Restablecer selección de descuento
+        $this->dispatch('resetDescuentoSelect');
     }
 
     #[On('setPago')]
@@ -328,9 +277,18 @@ class SaleCreate extends Component
     #[Computed]
     public function products()
     {
-        return Product::where('category_id', 'like', '%' . $this->search . '%')
-            ->orderBy('name', 'asc')
-            ->paginate($this->cant);
+        $query = Product::query();
+
+        // Si se ha asignado una categoría desde el cliente, filtra por ella
+        if ($this->category_id) {
+            $query->where('category_id', $this->category_id);
+        } else if ($this->search != '') {
+            // En caso contrario, si se ingresa búsqueda, filtra por nombre
+            $query->where('name', 'like', '%' . $this->search . '%');
+        }
+
+        return $query->orderBy('name', 'asc')
+                     ->paginate($this->cant);
     }
 
     public function getMaxProductsByCategory()
@@ -338,7 +296,7 @@ class SaleCreate extends Component
         $client = \App\Models\Client::find($this->client);
 
         if (!$client) {
-            return 0; // Si no hay cliente, retorna un valor por defecto
+            return 0; // Valor por defecto si no hay cliente
         }
 
         return match ($client->category_id) {
@@ -346,28 +304,8 @@ class SaleCreate extends Component
             2 => 20, // Mayorista
             3 => 1,  // Preferente
             4 => 5,  // Reconsumo (5 cajas)
-            5=> 5,
+            5 => 5,
             default => 0,
         };
     }
-    
-    #[Computed]
-    public function getProducts()
-    {
-        $query = \App\Models\Product::query();
-
-        // Filtra por nombre si se ha ingresado una búsqueda
-        if ($this->search != '') {
-            $query->where('name', 'like', '%' . $this->search . '%');
-        }
-    
-        // Filtrar por la categoría del cliente seleccionado
-        if ($this->category_id) {
-            $query->where('category_id', $this->category_id);
-        }
-
-        return $query->paginate(19);
-    }
-
-
 }

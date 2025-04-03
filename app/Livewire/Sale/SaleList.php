@@ -29,16 +29,19 @@ class SaleList extends Component
     
         $salesQuery = Sale::query();
     
-        // Aplicar búsqueda por ID o por nombre de delivery
-        if ($this->search) {
-            $salesQuery->where(function ($query) {
-                $query->where('id', 'like', '%' . $this->search . '%')
-                    ->orWhereHas('delivery', function ($q) {
-                        $q->where('name', 'like', '%' . $this->search . '%');
-                    });
+     // Aplicar búsqueda por ID de venta, identificación del cliente o nombre de delivery
+if ($this->search) {
+    $salesQuery->where(function ($query) {
+        $query->where('id', 'like', '%' . $this->search . '%')
+            ->orWhereHas('client', function ($q) { // Relación con clients
+                $q->where('identificacion', 'like', '%' . $this->search . '%'); // Buscar por identificación del cliente
+            })
+            ->orWhereHas('delivery', function ($q) { // Relación con delivery
+                $q->where('name', 'like', '%' . $this->search . '%');
             });
-        }
-    
+    });
+}
+
         if (!empty($this->fechaInicio) && !empty($this->fechaFinal)) {
             $salesQuery->whereBetween('created_at', [
                 \Carbon\Carbon::parse($this->fechaInicio)->startOfDay(),

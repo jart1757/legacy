@@ -48,6 +48,13 @@ class SaleCreate extends Component
     public $descuento = 0; // Valor inicial del descuento
     public $searchIdentification = ''; // Nueva propiedad para buscar por identificación
 
+       // **Casts para asegurar que ciertas propiedades sean del tipo correcto**
+       protected $casts = [
+        'descuento' => 'float',
+        'pago'      => 'float',
+        'devuelve'  => 'float',
+    ];
+
     public function render()
     {
         if ($this->search != '') {

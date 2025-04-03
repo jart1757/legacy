@@ -40,7 +40,7 @@
                         <option value="0.10">Mayorista (0.10)</option>
                         <option value="0.02">Bonificado Alc (0.02)</option>
                     </select>
-                    <input type="number" wire:model="descuento" class="form-control" id="descuento" placeholder="Ingrese descuento">
+                    <input type="number" id="descuento" wire:model="descuento" step="any" onblur="actualizarDescuentoManual()" placeholder="Ingrese descuento">
                 </div>
             </div>
         </div>
@@ -195,3 +195,13 @@
         });
     });
 </script>
+<script>
+    function actualizarDescuentoManual() {
+        let descuentoInput = document.getElementById("descuento");
+        // Reemplazar coma por punto si el usuario lo usa
+        let valor = descuentoInput.value.replace(',', '.');
+        // Convertir a número; si no es válido, usa 0
+        @this.set('descuento', parseFloat(valor) || 0);
+    }
+</script>
+

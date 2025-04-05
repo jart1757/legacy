@@ -210,36 +210,39 @@
     <script src="{{asset('plugins/moment/moment.min.js')}}"></script>
 
     <script src="{{asset('plugins/daterangepicker/daterangepicker.js')}}"></script>
-
     <script>
-   
         $('#daterange-btn').daterangepicker(
             {
                 ranges   : {
-                'Default'       : [moment().startOf('year'), moment()],
-                'Hoy'       : [moment(), moment()],
-                'Ayer'   : [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
-                'Ultimos 7 Dias' : [moment().subtract(6, 'days'), moment()],
-                'Ultimos 30 Dias': [moment().subtract(29, 'days'), moment()],
-                'Este Mes'  : [moment().startOf('month'), moment().endOf('month')],
-                'Ultimos Mes'  : [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
+                    'Default'       : [moment().startOf('year'), moment()],
+                    'Hoy'           : [moment(), moment()],
+                    'Ayer'          : [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
+                    'Ultimos 7 Dias': [moment().subtract(6, 'days'), moment()],
+                    'Ultimos 30 Dias': [moment().subtract(29, 'days'), moment()],
+                    'Este Mes'      : [moment().startOf('month'), moment().endOf('month')],
+                    'Ultimos Mes'   : [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
                 },
                 startDate: moment().startOf('year'),
-                endDate  : moment()
+                endDate  : moment(),
+                timePicker: true, // Habilita el selector de hora
+                timePicker24Hour: true, // Formato de 24 horas
+                timePickerIncrement: 5, // Incremento de minutos (opcional)
+                locale: {
+                    format: 'DD-MM-YYYY HH:mm' // Incluye hora y minutos en el formato
+                }
             },
             function (start, end) {
-
-                dateStart = start.format('YYYY-MM-DD');
-                dateEnd = end.format('YYYY-MM-DD');
-
-                $('#daterange-btn span').html(start.format('DD-MM-YYYY') + ' - ' + end.format('DD-MM-YYYY'));
-
-                Livewire.dispatch('setDates',{fechaInicio: dateStart, fechaFinal: dateEnd});
-        }
-
-    );            
+                let dateStart = start.format('YYYY-MM-DD HH:mm:ss');
+                let dateEnd = end.format('YYYY-MM-DD HH:mm:ss');
     
+                $('#daterange-btn span').html(start.format('DD-MM-YYYY HH:mm') + ' - ' + end.format('DD-MM-YYYY HH:mm'));
+    
+                // Envía las fechas y horas seleccionadas a Livewire
+                Livewire.dispatch('setDates', {fechaInicio: dateStart, fechaFinal: dateEnd});
+            }
+        );
     </script>
+    
 
 @endsection
 </div>
